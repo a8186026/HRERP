@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.inventory.persist.InventoryCheckDao">
+	
+	<select id="get" parameterType="Integer" resultType="InventoryVO">
+		select *
+		from stock_inventory
+		where stock_info_id = #{id} 
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="getCheckList" parameterType="map" resultType="InventoryVO">
+		<if test="rows!=null and rows!=0">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null and rows!=0">
+			select *
+		</if>
+			from stock_inventory as sit, stock_info as si, pro_infoManage as pim, bas_departmentinfo as bdi
+		<where>
+				sit.inventory_check_status = 1
+				and sit.stock_info_id = si.stock_info_id 
+				and si.product_id = pim.product_id 
+				and si.stock_storage = bdi.department_id
+			<if test="inventory_ticket_id">
+				and inventory_ticket_id like #{inventory_ticket_id}
+			</if>
+			<if test="offset != null and offset !=0">
+				and sit.inventory_id not in(select top ${offset} sit.inventory_id 
+				from stock_inventory as sit, stock_info as si, pro_infoManage as pim, bas_departmentinfo as bdi
+				where sit.inventory_check_status = 1 and sit.stock_info_id = si.stock_info_id 
+				and si.product_id = pim.product_id 
+				and si.stock_storage = bdi.department_id	
+					<if test="inventory_ticket_id">
+						and inventory_ticket_id like #{inventory_ticket_id}
+					</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by sit.${sort} ${order}
+		</if>
+	</select>
+	
+	<!-- count    -->
+	<select id="count" parameterType="InventoryVO" resultType="int">
+		select count(inventory_id) as count 
+			from stock_inventory as sit, stock_info as si, pro_infoManage as pim, bas_departmentinfo as bdi
+			<where>
+				sit.inventory_check_status = 1
+				and sit.stock_info_id = si.stock_info_id 
+				and si.product_id = pim.product_id 
+				and si.stock_storage = bdi.department_id
+				<if test="inventory_ticket_id !=null">
+	            	inventory_ticket_id=#{inventory_ticket_id}
+	       		</if>
+			</where>
+	</select>	
+	
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="Inventory">
+		update stock_inventory
+		<set>
+			<if test="inventory_check_status != null">
+				inventory_check_status = #{inventory_check_status},
+			</if>
+			<if test="inventory_check_person != null">
+				inventory_check_person = #{inventory_check_person},
+			</if>
+		 	<if test="inventory_check_time != null">
+				inventory_check_time = #{inventory_check_time},
+			</if>
+		</set>
+		where inventory_id = #{inventory_id}
+	</update>
+</mapper> 

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysParameterDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="SysParameter">
+		select *
+		from sys_parameter
+		where param_id = #{param_id}
+	</select>
+
+	<!-- 获取用户 -->
+	<select id="getSub" parameterType="Integer" resultType="SysParameterSub">
+		select *
+		from sys_parameter_sub
+		where param_sub_id = #{param_sub_id}
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="mapList" parameterType="map" resultType="map">
+		select t2.* from (
+		select
+		convert(varchar,t.param_id) as param_id,
+		t.param_name,
+		t.param_code,
+		null as param_sub_value,
+		t. status,
+		t.note,
+		0 as param_parent,
+		0 as param_sub_id,
+		null as orders
+		from
+		sys_parameter t
+		where
+		t.status = 0
+		<if test="param_code != null">
+			and t.param_code like #{param_code}
+		</if>
+		union
+		select
+		convert(varchar,t1.param_parent)+'_'+convert(varchar,t1.param_sub_id),
+		t1.param_sub_name,
+		null,
+		t1.param_sub_value,
+		t1. status,
+		t1.param_sub_note,
+		t1.param_parent,
+		t1.param_sub_id,
+		t1.orders
+		from
+		sys_parameter_sub t1, sys_parameter t3
+		where
+		t1.param_parent = t3.param_id
+		and t1.status = 0
+		<if test="param_code != null">
+			and t3.param_code like #{param_code}
+		</if>
+		) t2
+		<where>
+			1 = 1
+			<if test="param_name != null">
+				and t2.param_name like #{param_name}
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by t2.${sort} ${order}
+		</if>
+	</select>
+
+	<!-- 按类别查询 -->
+	<select id="getByCode" parameterType="string" resultType="SysParameter">
+		select
+		*
+		from sys_parameter
+		where param_code = #{param_code}
+		and status = 0
+		order by orders asc
+	</select>
+
+	<!-- 查询发文类别 -->
+	<!-- <select id="getDocumentCodeType" parameterType="string" resultType="SysParameter"> -->
+	<!-- select p1.id, -->
+	<!-- p1.type, -->
+	<!-- p1.type_code, -->
+	<!-- p1.name, -->
+	<!-- p1.value, -->
+	<!-- p1.status, -->
+	<!-- p1.orders -->
+	<!-- from sys_parameter p1, sys_parameter p2 -->
+	<!-- where p1.name = p2.name -->
+	<!-- and p1.type_code = 'DOCUMENT_CODE_TYPE' -->
+	<!-- and p2.type_code = 'DOCUMENT_TYPE' -->
+	<!-- and p2.value = #{document_type} -->
+	<!-- </select> -->
+
+	<!-- 手动设置参数，查询系统参数对象 -->
+	<!-- <select id="getByParameterBean" parameterType="SysParameter" resultType="SysParameter"> -->
+	<!-- select id, -->
+	<!-- type, -->
+	<!-- type_code, -->
+	<!-- name, -->
+	<!-- value, -->
+	<!-- status, -->
+	<!-- orders -->
+	<!-- from sys_parameter -->
+	<!-- <where> -->
+	<!-- status = 0 -->
+	<!-- <if test="id != null"> -->
+	<!-- and id like #{id} -->
+	<!-- </if> -->
+	<!-- <if test="type != null"> -->
+	<!-- and type = #{type} -->
+	<!-- </if> -->
+	<!-- <if test="type_code != null"> -->
+	<!-- and type_code = #{type_code} -->
+	<!-- </if> -->
+	<!-- <if test="name != null"> -->
+	<!-- and name = #{name} -->
+	<!-- </if> -->
+	<!-- <if test="value != null"> -->
+	<!-- and value = #{value} -->
+	<!-- </if> -->
+	<!-- and status = 0 -->
+	<!-- </where> -->
+	<!-- order by orders asc -->
+	<!-- </select> -->
+
+	<!-- 按类别查询 -->
+	<!-- <select id="getByCodeAndValue" parameterType="map" resultType="SysParameter"> -->
+	<!-- select id, -->
+	<!-- type, -->
+	<!-- type_code, -->
+	<!-- name, -->
+	<!-- value, -->
+	<!-- status, -->
+	<!-- orders -->
+	<!-- from sys_parameter -->
+	<!-- where type_code = #{typeCode} -->
+	<!-- and value = #{value} -->
+	<!-- and status = 0 -->
+	<!-- </select> -->
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysParameter" useGeneratedKeys="true"
+		keyProperty="param_id">
+		insert into sys_parameter(param_name, param_code, note,
+		status, create_user, create_time, last_modify_user, last_modify_time)
+		values(#{param_name}, #{param_code}, #{note}, #{status},
+		#{create_user}, #{create_time}, #{last_modify_user},
+		#{last_modify_time});
+	</insert>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="saveSub" parameterType="SysParameterSub"
+		useGeneratedKeys="true" keyProperty="param_sub_id">
+		insert into
+		sys_parameter_sub(param_sub_name, param_sub_value, orders,
+		param_sub_note, param_parent, status, create_user, create_time,
+		last_modify_user, last_modify_time)
+		values(#{param_sub_name}, #{param_sub_value}, #{orders}, #{param_sub_note}, #{param_parent},
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user},
+		#{last_modify_time});
+	</insert>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysParameter">
+		update sys_parameter
+		<set>
+			<if test="param_name != null">
+				param_name = #{param_name},
+			</if>
+			<if test="param_code != null">
+				param_code = #{param_code},
+			</if>
+			<if test="note != null">
+				note = #{note},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where param_id = #{param_id}
+	</update>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="updateSub" parameterType="SysParameterSub">
+		update sys_parameter_sub
+		<set>
+			<if test="param_sub_name != null">
+				param_sub_name = #{param_sub_name},
+			</if>
+			<if test="param_sub_value != null">
+				param_sub_value = #{param_sub_value},
+			</if>
+			<if test="orders != null">
+				orders = #{orders},
+			</if>
+			<if test="param_sub_note != null">
+				param_sub_note = #{param_sub_note},
+			</if>
+			<if test="param_parent != null">
+				param_parent = #{param_parent},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where param_sub_id = #{param_sub_id}
+	</update>
+
+	<!-- 荣斌 2014-11-13日添加 -->
+	<!-- 根据系统参数主表的编码获得所有的子表信息 -->
+	<select id="getByParamCode" parameterType="string" resultType="SysParameterSub">
+		select sps.*
+		from sys_parameter sp, sys_parameter_sub sps
+		where sp.param_id = sps.param_parent
+		and sp.param_code = #{code}
+		and sp.status = 0
+		and sps.status = 0
+		order by sps.orders asc
+	</select>
+</mapper> 

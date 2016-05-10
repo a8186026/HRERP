@@ -1,0 +1,75 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>HRERP</title>
+<link href="images/logo_16.ico" mce_href="resources/images/logo_16.ico"
+	type="image/x-icon" rel="icon" />
+<script type="text/javascript" src="resources/js/goldcow-all.js"></script>
+<script type="text/javascript" src="resources/js/index.js"></script>
+</head>
+<body>
+	<div class="easyui-layout" fit="true"
+		style="width: 100%; height: 100%;">
+		<!--north(上) begin-->
+		<div data-options="region:'north',border:true,split:false"
+			class="headerDiv">
+			<div style="margin: 0; float: left;">
+				<img src="/HRERP/resources/images/logo.png">
+			</div>
+			<div class="top_right_con">
+				<div class="top_txt">
+					<ul class="top_txt_ul">
+						<li class="top_txt_ul_li1"></li>
+						<li class="top_txt_ul_li2" style="margin-top:5px;color:#fff"></li>
+					</ul>
+				</div>
+				<div class="top_right">
+					<ul class="top_right_ul">
+			
+						<li class="top_right_ul_li1"><a href="javascript:void(0)"
+							onclick="homePage();">主页</a></li>
+						<li class="top_right_ul_li2"><a href="javascript:void(0)">帮助</a></li>
+						<li class="top_right_ul_li3"><a href="javascript:void(0)"
+							onclick="logout();">退出系统</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--north(上) end-->
+		<!--west(左) begin-->
+		<div class="layout_menu"
+			data-options="title:'导航菜单',region:'west',border:true,split:true,collapsible:true,width:200,minWidth:50,maxWidth:500">
+			<div id="menuDiv" class="easyui-accordion" border="true" fit="true" style="overflow:scroll;"></div>
+		</div>
+		<!--west(左) end-->
+		<div id="tabMenu" class="easyui-menu" style="width: 150px;">
+			<div id="tab-refresh">刷新</div>
+			<div id="tab-close">关闭</div>
+			<div class="menu-sep"></div>
+			<div id="tab-closeall">关闭所有</div>
+			<div id="tab-closeother">关闭其他</div>
+			<div id="tab-closeleft">关闭左侧</div>
+			<div id="tab-closeright">关闭右侧</div>
+		</div>
+		<!--center(中) begin-->
+		<div data-options="region:'center',border:false"
+			style="overflow: hidden;">
+			<div id="tt" class="easyui-tabs" data-options="fit:true">
+				<div title="欢迎使用" style="padding: 0px; overflow: hidden;"
+					data-options="fit:true,border:false,closable:true">
+					<iframe style="width: 100%; height: 100%;" frameborder="0"
+						src="/HRERP/homePage"></iframe>
+				</div>
+			</div>
+		</div>
+		<!--center(中) end-->
+		<!--south(下) begin
+		<div data-options="region:'south',border:false,split:true" style="overflow: hidden; height:20px; background-color:#e5e5e5;">
+			<div class="footer">
+				版权所有：<a href="#">东北大学软件学院</a>
+			</div>
+		</div>-->
+		<!--south(下) end-->
+	</div>
+</body>
+</html>

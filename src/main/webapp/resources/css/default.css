@@ -1,0 +1,530 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+	font: 12px/1.5 Tahoma, Helvetica, Arial, sans-serif, "Microsoft YaHei",
+		"宋体";
+}
+
+body {
+	background: #fff;
+	overflow-x: auto !important;
+}
+
+#mainContent {
+	min-width: 816px;
+}
+
+a {
+	color: Black;
+	text-decoration: none;
+}
+
+a:hover {
+	color: Red;
+	text-decoration: underline;
+}
+
+th {
+	text-align: right;
+}
+
+.textbox03 {
+	border: #878787 1px solid;
+	padding: 4px 3px;
+	font: Verdana, Geneva, sans-serif, 宋体;
+	line-height: 14px;
+	background-color: #fff;
+	height: auto;
+	font-size: 14px;
+	font-weight: bold;
+	width: 190px;
+}
+
+.txt01 {
+	font: Verdana, Geneva, sans-serif, 宋体;
+	padding: 3px 2px 2px 2px;
+	border-width: 1px;
+	border-color: #ddd;
+	color: #000;
+}
+
+.txt {
+	border: #878787 1px solid;
+	padding: 4px 3px;
+	font: Verdana, Geneva, sans-serif, 宋体;
+	line-height: 14px;
+	background-color: #fff;
+	height: auto;
+	font-size: 14px;
+}
+
+.footer {
+	text-align: center;
+	color: #646464;
+	margin: 0px;
+	padding: 0px;
+	line-height: 18px;
+	width: 100%;
+	text-align: center;
+}
+
+.footer a {
+	color: #646464;
+	text-decoration: none;
+}
+
+.footer a:hover {
+	text-decoration: underline;
+}
+
+.head a {
+	color: White;
+	text-decoration: underline;
+}
+
+.navlist {
+	list-style-type: none;
+	margin: 0px;
+	padding: 6px;
+}
+
+.navlist li {
+	padding: 0px;
+	margin: 0;
+}
+
+.navlist li div a {
+	line-height: 24px;
+	text-decoration: none;
+}
+
+.navlist li div {
+	margin: 0px auto;
+	padding-left: 32px;
+	padding-top: 4px;
+	padding-top: 6px\9;
+	height: 25px;
+	height: 30px\9;
+	background: url(../images/arrow_blue.gif) no-repeat 15px 9px;
+	border-bottom: 1px dashed #cad5e3;
+}
+
+.navlist li div.hover {
+	border-bottom: 1px solid #f0d771;
+	background: url(../images/arrow_orange.gif) #fbf0b9 no-repeat 15px 9px;
+	cursor: pointer;
+}
+
+.navlist li div.hover a {
+	color: #384463;
+}
+
+.navlist li div.selected {
+	border-bottom: 1px solid #f0d771;
+	background: url(../images/arrow_orange.gif) #fbf0b9 no-repeat 0 0;
+	cursor: default;
+}
+
+.navlist li div.selected a {
+	color: #384463;
+	font-weight: bold;
+}
+
+.third_ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	display: none;
+}
+
+.third_ul li {
+	padding-left: 20px;
+}
+
+.icon {
+	background: url(../Images/tabicons.png) no-repeat;
+	width: 18px;
+	height: 29px;
+	line-height: 29px;
+	display: inline-block;
+}
+/* .icon-sys{ background-position:0px -200px;} */
+/* .icon-set{ background-position:-380px -200px;} */
+/* .icon-add{background-position: -20px 0px;} */
+
+/* .icon-nav{background-position: -100px -20px; } */
+/* .icon-users{background-position: -100px -480px;} */
+/* .icon-role{background-position: -360px -200px;} */
+/* .icon-set{background-position: -380px -200px;} */
+/* .icon-log{background-position: -380px -80px;} */
+
+/* .icon-delete{ background-position:-140px -120px;} */
+/* .icon-edit{ background-position:-380px -320px;} */
+/* .icon-magic{ background-position:0px -500px;} */
+/* .icon-database{ background-position:-20px -140px;} */
+/* .icon-arrow{ background:url('../Images/arrow.gif') no-repeat right;} */
+/* /* by : 肖文舟 */
+/*      针对easyUi 提供的tabicons.png图片 进行切割. */
+/*  */
+
+	/* .icon-xwz1{ background-position:-300px -80px;}  */
+	/* .icon-xwz2{ background-position:-280px   0px;}  */
+	/* .icon-xwz3{ background-position:-360px -200px;}  */
+	/* .icon-xwz4{ background-position:-160px -480px;}  */
+	/* .icon-xwz5{ background-position:-140px -380px;}  */
+	/* .icon-xwz6{ background-position:-180px -480px;}  */
+	/* .icon-xwz7{ background-position: 0px -100px;}  */
+	/* .icon-xwz8{ background-position:-100px -480px;}  */
+	/* .icon-xwz9{ background-position:-340px -260px;}  */
+
+	/*BUTTON*/ 
+.btn-search,.btn-search-over,.btn-search-down,.btn-empty,.btn-empty-over,.btn-empty-down,.btn-save,.btn-unsaveable,.btn-save-over,.btn-save-down,.btn-cancel,.btn-cancel-over,.btn-cancel-down,.btn-unsave
+	{
+	background-image: url(../images/btn-77x22.png);
+	background-color: transparent;
+	background-repeat: no-repeat;
+	width: 77px;
+	height: 22px;
+	border-width: 0;
+	cursor: pointer;
+}
+/*查询*/
+.btn-search {
+	background-position: 0 0;
+}
+
+.btn-search-over,.btn-search-down {
+	background-position: 0 -22px;
+}
+
+.btn-search,.btn-search-over,.btn-search-down {
+	margin-top: 7px;
+}
+/*清空*/
+.btn-empty {
+	background-position: 0 -44px;
+}
+
+.btn-empty-over,.btn-empty-down {
+	background-position: 0 -66px;
+}
+
+.btn-empty,.btn-empty-over,.btn-empty-down {
+	margin-top: 7px;
+	margin-left: 10px;
+}
+/*取消*/
+.btn-cancel {
+	background-position: 0 -88px;
+}
+
+.btn-cancel-over,.btn-cancel-down {
+	background-position: 0 -110px;
+}
+/*保存*/
+.btn-save {
+	background-position: 0 -132px;
+}
+.btn-unsave{
+	background-position: 0 -484px;
+}
+.btn-unsaveable {
+	background-position: 0 -484px;
+}
+.btn-save-over,.btn-save-down {
+	background-position: 0 -154px;
+}
+
+.add-element,.del-element{
+	background-image: url(../images/tools-sprites-trans.png);
+	background-color: transparent;
+	background-repeat: no-repeat;
+	width: 20px;
+	height: 17px;
+	border-width: 0;
+	cursor: pointer;
+}
+.add-element{
+	background-position: -15.5px -240.5px;
+}
+.del-element{
+	background-position: -15.5px -255.5px;
+}
+/*Search*/
+.l-panel-search {
+	/*background:#eeeeee;
+	border-top:#fff 1px solid;
+    border-bottom:1px solid #d1d1d1;*/
+	height: auto;
+	width: auto;
+	min-height: 28px;
+	max-height: 308px;
+	padding: 4px 0px 5px 0px;
+}
+
+.l-panel-search-cond {
+	width: auto;
+	height: auto;
+	min-height: 28px;
+	max-height: 308px;
+	/*min-width:530px;*/
+	text-align: left;
+	position: relative;
+	left: 0;
+	top: 0;
+	padding-left: 10px;
+	/*margin-right:240px;*/
+	min-width: 480px;
+}
+
+.l-panel-search-cond .float-l {
+	float: left;
+	white-space: nowrap;
+}
+
+.l-panel-search-title {
+	float: left;
+	height: 26px;
+	line-height: 26px;
+	width: 60px;
+	text-align: right;
+}
+
+.l-panel-search-item {
+	float: left;
+	margin-left: 8px;
+	margin-right: 12px;
+	height: 26px;
+	padding: 3px 0 0 0;
+}
+
+.l-panel-search-item input {
+	width: 182px;
+	width: 180px\9;
+}
+
+.l-panel-search-item select {
+	width: 184px;
+}
+
+.centertoolbar-w1 {
+	width: 816px;
+	position: relative;
+}
+
+.centertoolbar-w2 {
+	width: 544px;
+	position: relative;
+}
+
+.centertoolbar-w1 .l-panel-search-btn {
+	position: relative;
+	width: auto;
+	height: 24px;
+	bottom: 4px;
+	right: 30px;
+	text-align: left;
+	clear: both;
+	float: right;
+}
+
+.centertoolbar-w2 .l-panel-search-btn {
+	position: relative;
+	width: auto;
+	height: 24px;
+	bottom: 4px;
+	right: 24px;
+	text-align: left;
+	clear: both;
+	float: right;
+}
+
+.clearboth {
+	clear: both;
+}
+
+.clearfix:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: ".";
+	clear: both;
+	height: 0;
+} /*-----for FF,Chrome-----*/
+* html .clearfix {
+	zoom: 1;
+} /*----for ie6----*/
+*:first-child+html .clearfix {
+	zoom: 1;
+}
+
+/*--FORM--*/
+* input,select {
+	border: #abadb3 1px solid;
+	color: #383b40;
+	text-indent: 2px;
+}
+
+* input {
+	height: 18px;
+	width: 182px;
+	line-height: 18px;
+}
+
+* select {
+	height: 20px;
+	width: 184px;
+	vertical-align: middle;
+	padding: 1px;
+	border: #abadb3 1px solid;
+}
+
+* textarea {
+	border: #abadb3 1px solid;
+	color: #383b40;
+	line-height: 20px;
+	width: 133px;
+	height: 44px;
+}
+
+.radio1 {
+	width: auto;
+	border: 0px solid;
+	vertical-align: middle;
+	position: relative;
+	bottom: 2px;
+}
+
+.redStar {
+	color: red;
+	margin-right: 2px;
+}
+
+.readOnly {
+	background-color: #f2f3f5;
+	color: #888c94;
+}
+
+/*------Dialog-----*/
+.Dialog-formDiv {
+	height: auto;
+	width: auto;
+	margin: 5px auto;
+	padding: 0;
+	white-space: nowrap;
+	position: relative;
+}
+
+.float-l {
+	float: left;
+	white-space: nowrap;
+}
+
+.Dialog-form-title {
+	float: left;
+	margin-right: 8px;
+	height: 26px;
+	margin-left: 5px;
+	margin-top: 5px;
+	line-height: 26px;
+	text-align: right;
+	width: 90px;
+}
+
+.Dialog-check-title {
+	float: left;
+	margin-right: 8px;
+	height: 26px;
+	margin-left: 0px;
+	margin-top: 5px;
+	line-height: 26px;
+	text-align: right;
+	width: 90px;
+}
+.Dialog-form-item {
+	float: left;
+	margin-left: 0;
+	margin-right: 19px;
+	margin-top: 5px;
+	min-height: 26px;
+	line-height: 26px;
+	padding: 0;
+}
+.Dialog-check-item {
+	float: left;
+	margin-left: 0;
+	margin-right: 5px;
+	margin-top: 5px;
+	min-height: 26px;
+	line-height: 26px;
+	padding: 0;
+}
+
+
+.Dialog-formDiv .Dialog-form-item input {
+	width: 150px;
+	text-indent: 2px;
+}
+
+.Dialog-formDiv .Dialog-form-item .radio1 {
+	width: auto;
+	border: 0px solid;
+	vertical-align: middle;
+	position: relative;
+	bottom: 2px;
+	padding-top: 2px;
+}
+
+.textareaW1 {
+	width: 415px;
+	height: 120px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.textareaW2 {
+	width: 415px;
+	height: 80px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.textareaW3 {
+	width: 200px;
+	height: 120px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+.Dialog-Bg {
+	padding: 10px;
+	background: #fff;
+	border-bottom: 1px solid #cad5e3;
+}
+
+.Dialog-footer {
+	background: #f0f4fa;
+	text-align: right;
+}
+
+.Dialog-formDiv .panel-header {
+	border: 1px solid #cad5e3;
+}
+
+.Detail {
+	height: 26px;
+}
+
+.Detaillabel {
+	font-size: 14px;
+}
+
+.Detailtextarea {
+	width: 415px;
+	height: 120px;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	font-size: 14px;
+}
+
+.SelectAll input{vertical-align:middle; margin-bottom:2px; *margin-bottom:2px;}

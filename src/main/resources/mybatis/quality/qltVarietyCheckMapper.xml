@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.quality.persist.QltVarietyCheckDao">
+	<select id="get" parameterType="Integer" resultType="QltVarietyCheck">
+		select *
+		from qlt_variety_check
+		where variety_checkId = #{id}
+		and status = 0
+	</select>
+	
+	<select id="getVOById" parameterType="Integer" resultType="QltVarietyCheckVO">
+		select *
+		from qlt_variety_check as qvc , pro_infoManage as pi
+		where variety_checkId = #{id} and qvc.product_id = pi.product_id
+		and qvc.status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="QltVarietyCheckVO" resultType="QltVarietyCheckVO">
+		<if test="rows != null and rows !=0">
+			select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+			select *
+		</if>
+			from qlt_variety_check as qvc , pro_infoManage as pi
+		<where>
+			qvc.status = 0 and qvc.product_id = pi.product_id
+			<if test="product_code != null">
+				and pi.product_code like #{product_code}
+			</if>
+			
+			<if test="offset != null and offset !=0">
+				and qvc.variety_checkId not in(select top ${offset} variety_checkId from qlt_variety_check as qvc,pro_infoManage as pi
+				where qvc.status = 0
+				and qvc.product_id = pi.product_id
+				<if test="product_code != null">
+				and pi.product_code like #{product_code}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="QltVarietyCheckVO" resultType="int">
+		select
+		count(variety_checkId) as count
+		from
+		qlt_variety_check as qvc , pro_infoManage as pi
+		<where>
+			qvc.status = 0 and qvc.product_id = pi.product_id
+			<if test="product_code != null">
+				and pi.product_code like #{product_code}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="QltVarietyCheck" useGeneratedKeys="true" keyProperty="variety_checkId">
+	 insert into qlt_variety_check(
+		product_id, variety_checkTime, variety_checkPerson, variety_checkReason, variety_majorMaintain, 
+		variety_remark, variety_startTime, variety_endTime, create_user, create_time, 
+		last_modify_user, last_modify_time, status)
+	values(
+		#{product_id}, #{variety_checkTime}, #{variety_checkPerson}, #{variety_checkReason}, #{variety_majorMaintain}, 
+		#{variety_remark}, #{variety_startTime}, #{variety_endTime}, #{create_user}, #{create_time}, 
+		#{last_modify_user}, #{last_modify_time}, #{status});
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="QltVarietyCheck">
+	 update qlt_variety_check
+	<set>
+		<if test="product_id != null">
+		product_id = #{product_id},
+		</if>
+		<if test="variety_checkTime != null">
+		variety_checkTime = #{variety_checkTime},
+		</if>
+		<if test="variety_checkPerson != null">
+		variety_checkPerson = #{variety_checkPerson},
+		</if>
+		<if test="variety_checkReason != null">
+		variety_checkReason = #{variety_checkReason},
+		</if>
+		<if test="variety_majorMaintain != null">
+		variety_majorMaintain = #{variety_majorMaintain},
+		</if>
+		<if test="variety_remark != null">
+		variety_remark = #{variety_remark},
+		</if>
+		<if test="variety_startTime != null">
+		variety_startTime = #{variety_startTime},
+		</if>
+		<if test="variety_endTime != null">
+		variety_endTime = #{variety_endTime},
+		</if>
+		<if test="create_user != null">
+		create_user = #{create_user},
+		</if>
+		<if test="create_time != null">
+		create_time = #{create_time},
+		</if>
+		<if test="last_modify_user != null">
+		last_modify_user = #{last_modify_user},
+		</if>
+		<if test="last_modify_time != null">
+		last_modify_time = #{last_modify_time},
+		</if>
+		<if test="status != null">
+		status = #{status},
+		</if>
+	</set>where variety_checkId = #{variety_checkId}
+	
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update qlt_variety_check set
+		status = 9 where variety_checkId = #{variety_checkId}
+	</delete>
+	
+</mapper> 

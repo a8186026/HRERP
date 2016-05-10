@@ -1,0 +1,1055 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.product.persist.ProInfoManageDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="ProInfoManage">
+		select *
+		from pro_infoManage
+		where product_id = #{id}
+		and status = 0
+	</select>
+	
+	<select id="getIDByProCode" parameterType="String" resultType="Integer">
+		select product_id
+		from pro_infoManage
+		where product_code = #{product_code}
+	</select>
+
+	<select id="getMaxProductCode" parameterType="String" resultType="Integer">
+		select max(cast(SUBSTRING(product_code,len(product_code)-2,len(product_code)) as INT))
+		from pro_infoManage 
+		where 
+		SUBSTRING(product_code,1,len(product_code)-3) =#{ticketNumber}
+	</select>
+	
+	<!-- 相似产品查询 -->
+	<select id="listSimilar" resultType="ProInfoManage" parameterType="ProInfoManage">
+		select * 
+		from pro_infoManage
+		<where>
+			status = 0 and product_check = #{product_check} and product_id != #{product_id}
+			<if test="product_chnpy != null">
+					and product_chnpy like #{product_chnpy}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" resultType="ProInfoManage">
+		<if test="bean.rows != null and bean.rows !=0">
+		select top ${bean.rows}*
+		</if>
+		<if test="bean.rows == null or bean.rows ==0">
+		select *
+		</if>
+		from pro_infoManage
+		<where>
+			status = 0
+			<if test="bean.product_code!=null">
+				and product_code like #{bean.product_code}
+			</if>
+			<if test="code!=null">
+				and product_code like #{code}
+			</if>
+			<if test="bean.product_check != null">
+					and product_check = #{bean.product_check}
+			</if>
+			<if test="bean.product_chnpy != null">
+					and product_chnpy like #{bean.product_chnpy}
+			</if>
+			<if test="bean.product_name != null">
+				and product_name like #{bean.product_name}
+			</if>
+			<if test="bean.product_medinsuvariety != null">
+				and product_medinsuvariety = #{bean.product_medinsuvariety}
+			</if>
+			<if test="bean.product_dsurveillanceid != null">
+				<if test="bean.product_dsurveillanceid == -1">
+					and product_dsurveillanceid is null
+				</if>
+				<if test="bean.product_dsurveillanceid == -2">
+					and product_dsurveillanceid >0
+				</if>
+			</if>
+			<if test="bean.product_immaintain != null">
+				and product_immaintain = #{bean.product_immaintain}
+			</if>
+			<if test="bean.offset != null and bean.offset !=0">
+				and product_id not in(select top ${bean.offset} product_id from pro_infoManage where status = 0
+				<if test="bean.product_code!=null">
+					and product_code like #{bean.product_code}
+				</if>
+				<if test="code!=null">
+					and product_code like #{code}
+				</if>
+				<if test="bean.product_check != null">
+					and product_check = #{bean.product_check}
+				</if>
+				<if test="bean.product_chnpy != null">
+					and product_chnpy like #{bean.product_chnpy}
+				</if>
+				<if test="bean.product_name != null">
+					and product_name like #{bean.product_name}
+				</if>
+				<if test="bean.product_medinsuvariety != null">
+					and product_medinsuvariety = #{bean.product_medinsuvariety}
+				</if>
+				<if test="bean.product_dsurveillanceid != null">
+					<if test="bean.product_dsurveillanceid == -1">
+						and product_dsurveillanceid is null
+					</if>
+					<if test="bean.product_dsurveillanceid == -2">
+						and product_dsurveillanceid >0
+					</if>
+				</if>
+				<if test="bean.product_immaintain != null">
+					and product_immaintain = #{bean.product_immaintain}
+				</if>
+				<if test="bean.sort != null and bean.order != null">
+					order by ${bean.sort} ${bean.order}
+				</if>
+			)
+			</if>			
+		</where>
+		<if test="bean.sort != null and bean.order != null">
+			order by ${bean.sort} ${bean.order}
+		</if>
+	</select>
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+		<select id="count" parameterType="ProInfoManage" resultType="int">
+		select count(product_id) as count 
+		from pro_infoManage
+		<where>
+			status = 0
+			<if test="product_code != null">
+				and product_code like #{product_code}
+			</if>
+			<if test="product_check != null">
+				and product_check = #{product_check}
+			</if>
+			<if test="product_dsurveillanceid != null">
+				and product_dsurveillanceid = #{product_dsurveillanceid}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="ProInfoManage" useGeneratedKeys="true"
+		keyProperty="product_id">
+		insert into pro_infoManage(
+		product_medicine_id, product_factory_id, product_check, product_code, product_barcode, 
+		product_filingtime, product_category, product_category2, product_category3, product_category4, 
+		product_category5, product_othercategory, product_othercategory2, product_othercategory3, product_othercategory4, 
+		product_othercategory5, product_commonname,product_commonnametype, product_dosagetype, product_name, product_proname, 
+		product_chnpy, product_specification, product_unit, product_productarea, product_factorychnpy, 
+		product_approvalname, product_approvalnum, product_dsurveillanceno, product_dsurveillanceid, product_taxrate, product_procedure, 
+		product_middlepacking, product_packingamount, product_packingunit, product_cartonsize, product_shiphandlingnum, 
+		product_articleno, product_groupno, product_regtrademark, product_buyer, product_description, 
+		product_basremark, product_cancel, product_other, product_other1, product_other2, 
+		product_other3, product_consignmentvariety, product_statisticsvariety, product_cashsettlevariety, product_essentialvar, 
+		product_bidvariety, product_medinsuvariety, product_acvariety, product_promotionvariety, product_specialvariety, 
+		product_maintainvariety, product_prescriptiondrug, product_nationalbasmed, product_basmedicine, product_emergencymed, 
+		product_instockinvoice, product_outstockinvoice, product_mbernointegral, product_membernodis, product_containspecialmed, 
+		product_lowpricemedicine, product_tradeprice, product_wsalelprice, product_lowsalelprice, product_dealwsaleprice, 
+		product_saleprice1, product_saleprice2, product_saleprice3, product_saleprice4, product_marketprice, 
+		product_retailprice, product_retaillprice, product_lretaillprice, product_dealretailprice, product_memberprice, 
+		product_proretailprice, product_basmedbidprice1, product_basmedbidprice2, product_basmedbidprice3, product_bidprice, 
+		product_retailcommission, product_invoicecom, product_wholesalecom, product_businesscom, product_nationallprice, 
+		product_dealprice, product_tinynum, product_dealcustomer, product_priceremark, product_supplier_id, 
+		product_lastprice, product_minnunmber, product_maxnunmber, product_purchasenum, product_highpurprice, 
+		product_lowpurprice, product_GMPcertify, product_certificationtime, product_licensevaliddate, product_licensevenddate,product_remindday, 
+		product_licenseremark, product_licensevalidtime, product_filenumber, product_filelocation, product_quotanum, 
+		product_memberlimit, product_bidno, product_bidno2, product_bidno3, product_instocklday, 
+		product_outstocklday, product_outstockrday, product_internationcode, product_nationaldscode, product_quanlitystandard, 
+		product_storagecondition, product_storeplace, product_lowtemperature, product_hightemperature, product_effect, 
+		product_performance, product_medcondition, product_instruction, product_qualityremark, product_stoppurchase, 
+		product_salestop, product_stopdistribution, product_immaintain, product_dsscancode, product_qacprint, 
+		product_printreceipt, product_printtype, product_doublecheck, product_inputbatchnum, product_inputvalidtime, product_inputproductdate, 
+		product_sterilizationbnum, product_sterilizationtime, product_inputappnum, product_checktime, product_checkperson, 
+		product_managecetagory, product_managecetagory2, product_managecetagory3, product_managecetagory4, product_managecetagory5, 
+		product_serialno, product_department, product_group, product_staff, product_keeper, 
+		product_contractno, product_contactperson, product_examiner, product_receive, product_receiveno, 
+		product_receivepackage, product_createtime, product_invaliddate, product_stocknum, product_lower, 
+		product_remoneyday, product_catagoryABC, product_laber, product_stockposition, product_policynum, 
+		product_giftnum, product_majorfunction, product_majordetail, product_proareacode, product_medinsucategory, 
+		product_newbarcode, product_oldbarcode, product_brandlcertify, product_barcodecertify, product_OTCcertify, 
+		product_proapproval, product_priceapproval, product_packingapproval, product_pinspectionreport, product_inspectionreport, 
+		product_integral, product_bargain, product_gift, product_discount, product_shiphandling, 
+		product_storesalestop, product_firststocktime, product_medinsuno, product_medinsuclassify, product_medinsustatus, 
+		product_planstop, product_medinsuupload, product_medinsuuploadtime, product_laststocktime, product_giftspecialbatch, 
+		product_comgspecialbatch, product_ftqgspecialbatch, product_createperson, product_oldstorecode, product_factoryname, 
+		product_pricetime, product_updatetime, product_approvalform, product_validdate, product_picname, product_picremark, product_picture, 
+		status, create_user, create_time, last_modify_user, last_modify_time,product_musthave,product_amountFormat,product_numberFormat,product_moneyPerPoint)
+		
+		values(
+		#{product_medicine_id}, #{product_factory_id}, #{product_check}, #{product_code}, #{product_barcode}, 
+		#{product_filingtime}, #{product_category}, #{product_category2}, #{product_category3}, #{product_category4}, 
+		#{product_category5}, #{product_othercategory}, #{product_othercategory2}, #{product_othercategory3}, #{product_othercategory4}, 
+		#{product_othercategory5}, #{product_commonname},#{product_commonnametype}, #{product_dosagetype}, #{product_name}, #{product_proname}, 
+		#{product_chnpy}, #{product_specification}, #{product_unit}, #{product_productarea}, #{product_factorychnpy}, 
+		#{product_approvalname}, #{product_approvalnum}, #{product_dsurveillanceno}, #{product_dsurveillanceid}, #{product_taxrate}, #{product_procedure}, 
+		#{product_middlepacking}, #{product_packingamount}, #{product_packingunit}, #{product_cartonsize}, #{product_shiphandlingnum}, 
+		#{product_articleno}, #{product_groupno}, #{product_regtrademark}, #{product_buyer}, #{product_description}, 
+		#{product_basremark}, #{product_cancel}, #{product_other}, #{product_other1}, #{product_other2}, 
+		#{product_other3}, #{product_consignmentvariety}, #{product_statisticsvariety}, #{product_cashsettlevariety}, #{product_essentialvar}, 
+		#{product_bidvariety}, #{product_medinsuvariety}, #{product_acvariety}, #{product_promotionvariety}, #{product_specialvariety}, 
+		#{product_maintainvariety}, #{product_prescriptiondrug}, #{product_nationalbasmed}, #{product_basmedicine}, #{product_emergencymed}, 
+		#{product_instockinvoice}, #{product_outstockinvoice}, #{product_mbernointegral}, #{product_membernodis}, #{product_containspecialmed}, 
+		#{product_lowpricemedicine}, #{product_tradeprice}, #{product_wsalelprice}, #{product_lowsalelprice}, #{product_dealwsaleprice}, 
+		#{product_saleprice1}, #{product_saleprice2}, #{product_saleprice3}, #{product_saleprice4}, #{product_marketprice}, 
+		#{product_retailprice}, #{product_retaillprice}, #{product_lretaillprice}, #{product_dealretailprice}, #{product_memberprice}, 
+		#{product_proretailprice}, #{product_basmedbidprice1}, #{product_basmedbidprice2}, #{product_basmedbidprice3}, #{product_bidprice}, 
+		#{product_retailcommission}, #{product_invoicecom}, #{product_wholesalecom}, #{product_businesscom}, #{product_nationallprice}, 
+		#{product_dealprice}, #{product_tinynum}, #{product_dealcustomer}, #{product_priceremark}, #{product_supplier_id}, 
+		#{product_lastprice}, #{product_minnunmber}, #{product_maxnunmber}, #{product_purchasenum}, #{product_highpurprice}, 
+		#{product_lowpurprice}, #{product_GMPcertify}, #{product_certificationtime}, #{product_licensevaliddate}, #{product_licensevenddate},  #{product_remindday}, 
+		#{product_licenseremark}, #{product_licensevalidtime}, #{product_filenumber}, #{product_filelocation}, #{product_quotanum}, 
+		#{product_memberlimit}, #{product_bidno}, #{product_bidno2}, #{product_bidno3}, #{product_instocklday}, 
+		#{product_outstocklday}, #{product_outstockrday}, #{product_internationcode}, #{product_nationaldscode}, #{product_quanlitystandard}, 
+		#{product_storagecondition}, #{product_storeplace}, #{product_lowtemperature}, #{product_hightemperature}, #{product_effect}, 
+		#{product_performance}, #{product_medcondition}, #{product_instruction}, #{product_qualityremark}, #{product_stoppurchase}, 
+		#{product_salestop}, #{product_stopdistribution}, #{product_immaintain}, #{product_dsscancode}, #{product_qacprint}, 
+		#{product_printreceipt}, #{product_printtype}, #{product_doublecheck}, #{product_inputbatchnum}, #{product_inputvalidtime}, #{product_inputproductdate}, 
+		#{product_sterilizationbnum}, #{product_sterilizationtime}, #{product_inputappnum}, #{product_checktime}, #{product_checkperson}, 
+		#{product_managecetagory}, #{product_managecetagory2}, #{product_managecetagory3}, #{product_managecetagory4}, #{product_managecetagory5}, 
+		#{product_serialno}, #{product_department}, #{product_group}, #{product_staff}, #{product_keeper}, 
+		#{product_contractno}, #{product_contactperson}, #{product_examiner}, #{product_receive}, #{product_receiveno}, 
+		#{product_receivepackage}, #{product_createtime}, #{product_invaliddate}, #{product_stocknum}, #{product_lower}, 
+		#{product_remoneyday}, #{product_catagoryABC}, #{product_laber}, #{product_stockposition}, #{product_policynum}, 
+		#{product_giftnum}, #{product_majorfunction}, #{product_majordetail}, #{product_proareacode}, #{product_medinsucategory}, 
+		#{product_newbarcode}, #{product_oldbarcode}, #{product_brandlcertify}, #{product_barcodecertify}, #{product_OTCcertify}, 
+		#{product_proapproval}, #{product_priceapproval}, #{product_packingapproval}, #{product_pinspectionreport}, #{product_inspectionreport}, 
+		#{product_integral}, #{product_bargain}, #{product_gift}, #{product_discount}, #{product_shiphandling}, 
+		#{product_storesalestop}, #{product_firststocktime}, #{product_medinsuno}, #{product_medinsuclassify}, #{product_medinsustatus}, 
+		#{product_planstop}, #{product_medinsuupload}, #{product_medinsuuploadtime}, #{product_laststocktime}, #{product_giftspecialbatch}, 
+		#{product_comgspecialbatch}, #{product_ftqgspecialbatch}, #{product_createperson}, #{product_oldstorecode}, #{product_factoryname}, 
+		#{product_pricetime}, #{product_updatetime}, #{product_approvalform}, #{product_validdate}, #{product_picname}, #{product_picremark}, #{product_picture}, 
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time},#{product_musthave},#{product_amountFormat},#{product_numberFormat},#{product_moneyPerPoint});
+	</insert>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addlog" parameterType="ProInfoManage" useGeneratedKeys="true"
+		keyProperty="product_log_id">
+		insert into pro_infoManage_log(product_id,
+		product_medicine_id, product_factory_id, product_check, product_code, product_barcode, 
+		product_filingtime, product_category, product_category2, product_category3, product_category4, 
+		product_category5, product_othercategory, product_othercategory2, product_othercategory3, product_othercategory4, 
+		product_othercategory5, product_commonname,product_commonnametype, product_dosagetype, product_name, product_proname, 
+		product_chnpy, product_specification, product_unit, product_productarea, product_factorychnpy, 
+		product_approvalname, product_approvalnum, product_dsurveillanceno, product_dsurveillanceid, product_taxrate, product_procedure, 
+		product_middlepacking, product_packingamount, product_packingunit, product_cartonsize, product_shiphandlingnum, 
+		product_articleno, product_groupno, product_regtrademark, product_buyer, product_description, 
+		product_basremark, product_cancel, product_other, product_other1, product_other2, 
+		product_other3, product_consignmentvariety, product_statisticsvariety, product_cashsettlevariety, product_essentialvar, 
+		product_bidvariety, product_medinsuvariety, product_acvariety, product_promotionvariety, product_specialvariety, 
+		product_maintainvariety, product_prescriptiondrug, product_nationalbasmed, product_basmedicine, product_emergencymed, 
+		product_instockinvoice, product_outstockinvoice, product_mbernointegral, product_membernodis, product_containspecialmed, 
+		product_lowpricemedicine, product_tradeprice, product_wsalelprice, product_lowsalelprice, product_dealwsaleprice, 
+		product_saleprice1, product_saleprice2, product_saleprice3, product_saleprice4, product_marketprice, 
+		product_retailprice, product_retaillprice, product_lretaillprice, product_dealretailprice, product_memberprice, 
+		product_proretailprice, product_basmedbidprice1, product_basmedbidprice2, product_basmedbidprice3, product_bidprice, 
+		product_retailcommission, product_invoicecom, product_wholesalecom, product_businesscom, product_nationallprice, 
+		product_dealprice, product_tinynum, product_dealcustomer, product_priceremark, product_supplier_id, 
+		product_lastprice, product_minnunmber, product_maxnunmber, product_purchasenum, product_highpurprice, 
+		product_lowpurprice, product_GMPcertify, product_certificationtime, product_licensevaliddate, product_licensevenddate,product_remindday, 
+		product_licenseremark, product_licensevalidtime, product_filenumber, product_filelocation, product_quotanum, 
+		product_memberlimit, product_bidno, product_bidno2, product_bidno3, product_instocklday, 
+		product_outstocklday, product_outstockrday, product_internationcode, product_nationaldscode, product_quanlitystandard, 
+		product_storagecondition, product_storeplace, product_lowtemperature, product_hightemperature, product_effect, 
+		product_performance, product_medcondition, product_instruction, product_qualityremark, product_stoppurchase, 
+		product_salestop, product_stopdistribution, product_immaintain, product_dsscancode, product_qacprint, 
+		product_printreceipt, product_printtype, product_doublecheck, product_inputbatchnum, product_inputvalidtime, product_inputproductdate, 
+		product_sterilizationbnum, product_sterilizationtime, product_inputappnum, product_checktime, product_checkperson, 
+		product_managecetagory, product_managecetagory2, product_managecetagory3, product_managecetagory4, product_managecetagory5, 
+		product_serialno, product_department, product_group, product_staff, product_keeper, 
+		product_contractno, product_contactperson, product_examiner, product_receive, product_receiveno, 
+		product_receivepackage, product_createtime, product_invaliddate, product_stocknum, product_lower, 
+		product_remoneyday, product_catagoryABC, product_laber, product_stockposition, product_policynum, 
+		product_giftnum, product_majorfunction, product_majordetail, product_proareacode, product_medinsucategory, 
+		product_newbarcode, product_oldbarcode, product_brandlcertify, product_barcodecertify, product_OTCcertify, 
+		product_proapproval, product_priceapproval, product_packingapproval, product_pinspectionreport, product_inspectionreport, 
+		product_integral, product_bargain, product_gift, product_discount, product_shiphandling, 
+		product_storesalestop, product_firststocktime, product_medinsuno, product_medinsuclassify, product_medinsustatus, 
+		product_planstop, product_medinsuupload, product_medinsuuploadtime, product_laststocktime, product_giftspecialbatch, 
+		product_comgspecialbatch, product_ftqgspecialbatch, product_createperson, product_oldstorecode, product_factoryname, 
+		product_pricetime, product_updatetime, product_approvalform, product_validdate, product_picname, product_picremark, product_picture, 
+		status, create_user, create_time, last_modify_user, last_modify_time,product_musthave,product_amountFormat,product_numberFormat,product_moneyPerPoint)
+		
+		values(
+		#{product_id}, #{product_medicine_id}, #{product_factory_id}, #{product_check}, #{product_code}, #{product_barcode}, 
+		#{product_filingtime}, #{product_category}, #{product_category2}, #{product_category3}, #{product_category4}, 
+		#{product_category5}, #{product_othercategory}, #{product_othercategory2}, #{product_othercategory3}, #{product_othercategory4}, 
+		#{product_othercategory5}, #{product_commonname},#{product_commonnametype}, #{product_dosagetype}, #{product_name}, #{product_proname}, 
+		#{product_chnpy}, #{product_specification}, #{product_unit}, #{product_productarea}, #{product_factorychnpy}, 
+		#{product_approvalname}, #{product_approvalnum}, #{product_dsurveillanceno}, #{product_dsurveillanceid}, #{product_taxrate}, #{product_procedure}, 
+		#{product_middlepacking}, #{product_packingamount}, #{product_packingunit}, #{product_cartonsize}, #{product_shiphandlingnum}, 
+		#{product_articleno}, #{product_groupno}, #{product_regtrademark}, #{product_buyer}, #{product_description}, 
+		#{product_basremark}, #{product_cancel}, #{product_other}, #{product_other1}, #{product_other2}, 
+		#{product_other3}, #{product_consignmentvariety}, #{product_statisticsvariety}, #{product_cashsettlevariety}, #{product_essentialvar}, 
+		#{product_bidvariety}, #{product_medinsuvariety}, #{product_acvariety}, #{product_promotionvariety}, #{product_specialvariety}, 
+		#{product_maintainvariety}, #{product_prescriptiondrug}, #{product_nationalbasmed}, #{product_basmedicine}, #{product_emergencymed}, 
+		#{product_instockinvoice}, #{product_outstockinvoice}, #{product_mbernointegral}, #{product_membernodis}, #{product_containspecialmed}, 
+		#{product_lowpricemedicine}, #{product_tradeprice}, #{product_wsalelprice}, #{product_lowsalelprice}, #{product_dealwsaleprice}, 
+		#{product_saleprice1}, #{product_saleprice2}, #{product_saleprice3}, #{product_saleprice4}, #{product_marketprice}, 
+		#{product_retailprice}, #{product_retaillprice}, #{product_lretaillprice}, #{product_dealretailprice}, #{product_memberprice}, 
+		#{product_proretailprice}, #{product_basmedbidprice1}, #{product_basmedbidprice2}, #{product_basmedbidprice3}, #{product_bidprice}, 
+		#{product_retailcommission}, #{product_invoicecom}, #{product_wholesalecom}, #{product_businesscom}, #{product_nationallprice}, 
+		#{product_dealprice}, #{product_tinynum}, #{product_dealcustomer}, #{product_priceremark}, #{product_supplier_id}, 
+		#{product_lastprice}, #{product_minnunmber}, #{product_maxnunmber}, #{product_purchasenum}, #{product_highpurprice}, 
+		#{product_lowpurprice}, #{product_GMPcertify}, #{product_certificationtime}, #{product_licensevaliddate}, #{product_licensevenddate},  #{product_remindday}, 
+		#{product_licenseremark}, #{product_licensevalidtime}, #{product_filenumber}, #{product_filelocation}, #{product_quotanum}, 
+		#{product_memberlimit}, #{product_bidno}, #{product_bidno2}, #{product_bidno3}, #{product_instocklday}, 
+		#{product_outstocklday}, #{product_outstockrday}, #{product_internationcode}, #{product_nationaldscode}, #{product_quanlitystandard}, 
+		#{product_storagecondition}, #{product_storeplace}, #{product_lowtemperature}, #{product_hightemperature}, #{product_effect}, 
+		#{product_performance}, #{product_medcondition}, #{product_instruction}, #{product_qualityremark}, #{product_stoppurchase}, 
+		#{product_salestop}, #{product_stopdistribution}, #{product_immaintain}, #{product_dsscancode}, #{product_qacprint}, 
+		#{product_printreceipt}, #{product_printtype}, #{product_doublecheck}, #{product_inputbatchnum}, #{product_inputvalidtime}, #{product_inputproductdate}, 
+		#{product_sterilizationbnum}, #{product_sterilizationtime}, #{product_inputappnum}, #{product_checktime}, #{product_checkperson}, 
+		#{product_managecetagory}, #{product_managecetagory2}, #{product_managecetagory3}, #{product_managecetagory4}, #{product_managecetagory5}, 
+		#{product_serialno}, #{product_department}, #{product_group}, #{product_staff}, #{product_keeper}, 
+		#{product_contractno}, #{product_contactperson}, #{product_examiner}, #{product_receive}, #{product_receiveno}, 
+		#{product_receivepackage}, #{product_createtime}, #{product_invaliddate}, #{product_stocknum}, #{product_lower}, 
+		#{product_remoneyday}, #{product_catagoryABC}, #{product_laber}, #{product_stockposition}, #{product_policynum}, 
+		#{product_giftnum}, #{product_majorfunction}, #{product_majordetail}, #{product_proareacode}, #{product_medinsucategory}, 
+		#{product_newbarcode}, #{product_oldbarcode}, #{product_brandlcertify}, #{product_barcodecertify}, #{product_OTCcertify}, 
+		#{product_proapproval}, #{product_priceapproval}, #{product_packingapproval}, #{product_pinspectionreport}, #{product_inspectionreport}, 
+		#{product_integral}, #{product_bargain}, #{product_gift}, #{product_discount}, #{product_shiphandling}, 
+		#{product_storesalestop}, #{product_firststocktime}, #{product_medinsuno}, #{product_medinsuclassify}, #{product_medinsustatus}, 
+		#{product_planstop}, #{product_medinsuupload}, #{product_medinsuuploadtime}, #{product_laststocktime}, #{product_giftspecialbatch}, 
+		#{product_comgspecialbatch}, #{product_ftqgspecialbatch}, #{product_createperson}, #{product_oldstorecode}, #{product_factoryname}, 
+		#{product_pricetime}, #{product_updatetime}, #{product_approvalform}, #{product_validdate}, #{product_picname}, #{product_picremark}, #{product_picture}, 
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time},#{product_musthave},#{product_amountFormat},#{product_numberFormat},#{product_moneyPerPoint});
+	</insert>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="ProInfoManage">
+	update pro_infoManage
+	<set>
+		<if test="product_medicine_id != null">
+			product_medicine_id = #{product_medicine_id},
+		</if>
+		<if test="product_factory_id != null">
+			product_factory_id = #{product_factory_id},
+		</if>
+		<if test="product_check != null">
+			product_check = #{product_check},
+		</if>
+		<if test="product_code != null">
+			product_code = #{product_code},
+		</if>
+		<if test="product_barcode != null">
+			product_barcode = #{product_barcode},
+		</if>
+		<if test="product_filingtime != null">
+			product_filingtime = #{product_filingtime},
+		</if>
+		<if test="product_category != null">
+			product_category = #{product_category},
+		</if>
+		<if test="product_category2 != null">
+			product_category2 = #{product_category2},
+		</if>
+		<if test="product_category3 != null">
+			product_category3 = #{product_category3},
+		</if>
+		<if test="product_category4 != null">
+			product_category4 = #{product_category4},
+		</if>
+		<if test="product_category5 != null">
+			product_category5 = #{product_category5},
+		</if>
+		<if test="product_othercategory != null">
+			product_othercategory = #{product_othercategory},
+		</if>
+		<if test="product_othercategory2 != null">
+			product_othercategory2 = #{product_othercategory2},
+		</if>
+		<if test="product_othercategory3 != null">
+			product_othercategory3 = #{product_othercategory3},
+		</if>
+		<if test="product_othercategory4 != null">
+			product_othercategory4 = #{product_othercategory4},
+		</if>
+		<if test="product_othercategory5 != null">
+			product_othercategory5 = #{product_othercategory5},
+		</if>
+		<if test="product_commonname != null">
+			product_commonname = #{product_commonname},
+		</if>
+		<if test="product_commonnametype != null">
+			product_commonnametype = #{product_commonnametype},
+		</if>
+		<if test="product_dosagetype != null">
+			product_dosagetype = #{product_dosagetype},
+		</if>
+		<if test="product_name != null">
+			product_name = #{product_name},
+		</if>
+		<if test="product_proname != null">
+			product_proname = #{product_proname},
+		</if>
+		<if test="product_chnpy != null">
+			product_chnpy = #{product_chnpy},
+		</if>
+		<if test="product_specification != null">
+			product_specification = #{product_specification},
+		</if>
+		<if test="product_unit != null">
+			product_unit = #{product_unit},
+		</if>
+		<if test="product_productarea != null">
+			product_productarea = #{product_productarea},
+		</if>
+		<if test="product_factorychnpy != null">
+			product_factorychnpy = #{product_factorychnpy},
+		</if>
+		<if test="product_approvalname != null">
+			product_approvalname = #{product_approvalname},
+		</if>
+		<if test="product_approvalnum != null">
+			product_approvalnum = #{product_approvalnum},
+		</if>
+		<if test="product_dsurveillanceno != null">
+			product_dsurveillanceno = #{product_dsurveillanceno},
+		</if>
+		<if test="product_dsurveillanceid != null">
+			product_dsurveillanceid = #{product_dsurveillanceid},
+		</if>
+		<if test="product_taxrate != null">
+			product_taxrate = #{product_taxrate},
+		</if>
+		<if test="product_procedure != null">
+			product_procedure = #{product_procedure},
+		</if>
+		<if test="product_middlepacking != null">
+			product_middlepacking = #{product_middlepacking},
+		</if>
+		<if test="product_packingamount != null">
+			product_packingamount = #{product_packingamount},
+		</if>
+		<if test="product_packingunit != null">
+			product_packingunit = #{product_packingunit},
+		</if>
+		<if test="product_cartonsize != null">
+			product_cartonsize = #{product_cartonsize},
+		</if>
+		<if test="product_shiphandlingnum != null">
+			product_shiphandlingnum = #{product_shiphandlingnum},
+		</if>
+		<if test="product_articleno != null">
+			product_articleno = #{product_articleno},
+		</if>
+		<if test="product_groupno != null">
+			product_groupno = #{product_groupno},
+		</if>
+		<if test="product_regtrademark != null">
+			product_regtrademark = #{product_regtrademark},
+		</if>
+		<if test="product_buyer != null">
+			product_buyer = #{product_buyer},
+		</if>
+		<if test="product_description != null">
+			product_description = #{product_description},
+		</if>
+		<if test="product_basremark != null">
+			product_basremark = #{product_basremark},
+		</if>
+		<if test="product_cancel != null">
+			product_cancel = #{product_cancel},
+		</if>
+		<if test="product_other != null">
+			product_other = #{product_other},
+		</if>
+		<if test="product_other1 != null">
+			product_other1 = #{product_other1},
+		</if>
+		<if test="product_other2 != null">
+			product_other2 = #{product_other2},
+		</if>
+		<if test="product_other3 != null">
+			product_other3 = #{product_other3},
+		</if>
+		<if test="product_consignmentvariety != null">
+			product_consignmentvariety = #{product_consignmentvariety},
+		</if>
+		<if test="product_statisticsvariety != null">
+			product_statisticsvariety = #{product_statisticsvariety},
+		</if>
+		<if test="product_cashsettlevariety != null">
+			product_cashsettlevariety = #{product_cashsettlevariety},
+		</if>
+		<if test="product_essentialvar != null">
+			product_essentialvar = #{product_essentialvar},
+		</if>
+		<if test="product_bidvariety != null">
+			product_bidvariety = #{product_bidvariety},
+		</if>
+		<if test="product_medinsuvariety != null">
+			product_medinsuvariety = #{product_medinsuvariety},
+		</if>
+		<if test="product_acvariety != null">
+			product_acvariety = #{product_acvariety},
+		</if>
+		<if test="product_promotionvariety != null">
+			product_promotionvariety = #{product_promotionvariety},
+		</if>
+		<if test="product_specialvariety != null">
+			product_specialvariety = #{product_specialvariety},
+		</if>
+		<if test="product_maintainvariety != null">
+			product_maintainvariety = #{product_maintainvariety},
+		</if>
+		<if test="product_prescriptiondrug != null">
+			product_prescriptiondrug = #{product_prescriptiondrug},
+		</if>
+		<if test="product_nationalbasmed != null">
+			product_nationalbasmed = #{product_nationalbasmed},
+		</if>
+		<if test="product_basmedicine != null">
+			product_basmedicine = #{product_basmedicine},
+		</if>
+		<if test="product_emergencymed != null">
+			product_emergencymed = #{product_emergencymed},
+		</if>
+		<if test="product_instockinvoice != null">
+			product_instockinvoice = #{product_instockinvoice},
+		</if>
+		<if test="product_outstockinvoice != null">
+			product_outstockinvoice = #{product_outstockinvoice},
+		</if>
+		<if test="product_mbernointegral != null">
+			product_mbernointegral = #{product_mbernointegral},
+		</if>
+		<if test="product_membernodis != null">
+			product_membernodis = #{product_membernodis},
+		</if>
+		<if test="product_containspecialmed != null">
+			product_containspecialmed = #{product_containspecialmed},
+		</if>
+		<if test="product_lowpricemedicine != null">
+			product_lowpricemedicine = #{product_lowpricemedicine},
+		</if>
+		<if test="product_tradeprice != null">
+			product_tradeprice = #{product_tradeprice},
+		</if>
+		<if test="product_wsalelprice != null">
+			product_wsalelprice = #{product_wsalelprice},
+		</if>
+		<if test="product_lowsalelprice != null">
+			product_lowsalelprice = #{product_lowsalelprice},
+		</if>
+		<if test="product_dealwsaleprice != null">
+			product_dealwsaleprice = #{product_dealwsaleprice},
+		</if>
+		<if test="product_saleprice1 != null">
+			product_saleprice1 = #{product_saleprice1},
+		</if>
+		<if test="product_saleprice2 != null">
+			product_saleprice2 = #{product_saleprice2},
+		</if>
+		<if test="product_saleprice3 != null">
+			product_saleprice3 = #{product_saleprice3},
+		</if>
+		<if test="product_saleprice4 != null">
+			product_saleprice4 = #{product_saleprice4},
+		</if>
+		<if test="product_marketprice != null">
+			product_marketprice = #{product_marketprice},
+		</if>
+		<if test="product_retailprice != null">
+			product_retailprice = #{product_retailprice},
+		</if>
+		<if test="product_retaillprice != null">
+			product_retaillprice = #{product_retaillprice},
+		</if>
+		<if test="product_lretaillprice != null">
+			product_lretaillprice = #{product_lretaillprice},
+		</if>
+		<if test="product_dealretailprice != null">
+			product_dealretailprice = #{product_dealretailprice},
+		</if>
+		<if test="product_memberprice != null">
+			product_memberprice = #{product_memberprice},
+		</if>
+		<if test="product_proretailprice != null">
+			product_proretailprice = #{product_proretailprice},
+		</if>
+		<if test="product_basmedbidprice1 != null">
+			product_basmedbidprice1 = #{product_basmedbidprice1},
+		</if>
+		<if test="product_basmedbidprice2 != null">
+			product_basmedbidprice2 = #{product_basmedbidprice2},
+		</if>
+		<if test="product_basmedbidprice3 != null">
+			product_basmedbidprice3 = #{product_basmedbidprice3},
+		</if>
+		<if test="product_bidprice != null">
+			product_bidprice = #{product_bidprice},
+		</if>
+		<if test="product_retailcommission != null">
+			product_retailcommission = #{product_retailcommission},
+		</if>
+		<if test="product_invoicecom != null">
+			product_invoicecom = #{product_invoicecom},
+		</if>
+		<if test="product_wholesalecom != null">
+			product_wholesalecom = #{product_wholesalecom},
+		</if>
+		<if test="product_businesscom != null">
+			product_businesscom = #{product_businesscom},
+		</if>
+		<if test="product_nationallprice != null">
+			product_nationallprice = #{product_nationallprice},
+		</if>
+		<if test="product_dealprice != null">
+			product_dealprice = #{product_dealprice},
+		</if>
+		<if test="product_tinynum != null">
+			product_tinynum = #{product_tinynum},
+		</if>
+		<if test="product_dealcustomer != null">
+			product_dealcustomer = #{product_dealcustomer},
+		</if>
+		<if test="product_priceremark != null">
+			product_priceremark = #{product_priceremark},
+		</if>
+		<if test="product_supplier_id != null">
+			product_supplier_id = #{product_supplier_id},
+		</if>
+		<if test="product_lastprice != null">
+			product_lastprice = #{product_lastprice},
+		</if>
+		<if test="product_minnunmber != null">
+			product_minnunmber = #{product_minnunmber},
+		</if>
+		<if test="product_maxnunmber != null">
+			product_maxnunmber = #{product_maxnunmber},
+		</if>
+		<if test="product_purchasenum != null">
+			product_purchasenum = #{product_purchasenum},
+		</if>
+		<if test="product_highpurprice != null">
+			product_highpurprice = #{product_highpurprice},
+		</if>
+		<if test="product_lowpurprice != null">
+			product_lowpurprice = #{product_lowpurprice},
+		</if>
+		<if test="product_GMPcertify != null">
+			product_GMPcertify = #{product_GMPcertify},
+		</if>
+		<if test="product_certificationtime != null">
+			product_certificationtime = #{product_certificationtime},
+		</if>
+		<if test="product_licensevaliddate != null">
+			product_licensevaliddate = #{product_licensevaliddate},
+		</if>
+		<if test="product_licensevenddate != null">
+			product_licensevenddate = #{product_licensevenddate},
+		</if>
+		<if test="product_remindday != null">
+			product_remindday = #{product_remindday},
+		</if>
+		<if test="product_licenseremark != null">
+			product_licenseremark = #{product_licenseremark},
+		</if>
+		<if test="product_licensevalidtime != null">
+			product_licensevalidtime = #{product_licensevalidtime},
+		</if>
+		<if test="product_filenumber != null">
+			product_filenumber = #{product_filenumber},
+		</if>
+		<if test="product_filelocation != null">
+			product_filelocation = #{product_filelocation},
+		</if>
+		<if test="product_quotanum != null">
+			product_quotanum = #{product_quotanum},
+		</if>
+		<if test="product_memberlimit != null">
+			product_memberlimit = #{product_memberlimit},
+		</if>
+		<if test="product_bidno != null">
+			product_bidno = #{product_bidno},
+		</if>
+		<if test="product_bidno2 != null">
+			product_bidno2 = #{product_bidno2},
+		</if>
+		<if test="product_bidno3 != null">
+			product_bidno3 = #{product_bidno3},
+		</if>
+		<if test="product_instocklday != null">
+			product_instocklday = #{product_instocklday},
+		</if>
+		<if test="product_outstocklday != null">
+			product_outstocklday = #{product_outstocklday},
+		</if>
+		<if test="product_outstockrday != null">
+			product_outstockrday = #{product_outstockrday},
+		</if>
+		<if test="product_internationcode != null">
+			product_internationcode = #{product_internationcode},
+		</if>
+		<if test="product_nationaldscode != null">
+			product_nationaldscode = #{product_nationaldscode},
+		</if>
+		<if test="product_quanlitystandard != null">
+			product_quanlitystandard = #{product_quanlitystandard},
+		</if>
+		<if test="product_storagecondition != null">
+			product_storagecondition = #{product_storagecondition},
+		</if>
+		<if test="product_storeplace != null">
+			product_storeplace = #{product_storeplace},
+		</if>
+		<if test="product_lowtemperature != null">
+			product_lowtemperature = #{product_lowtemperature},
+		</if>
+		<if test="product_hightemperature != null">
+			product_hightemperature = #{product_hightemperature},
+		</if>
+		<if test="product_effect != null">
+			product_effect = #{product_effect},
+		</if>
+		<if test="product_performance != null">
+			product_performance = #{product_performance},
+		</if>
+		<if test="product_medcondition != null">
+			product_medcondition = #{product_medcondition},
+		</if>
+		<if test="product_instruction != null">
+			product_instruction = #{product_instruction},
+		</if>
+		<if test="product_qualityremark != null">
+			product_qualityremark = #{product_qualityremark},
+		</if>
+		<if test="product_stoppurchase != null">
+			product_stoppurchase = #{product_stoppurchase},
+		</if>
+		<if test="product_salestop != null">
+			product_salestop = #{product_salestop},
+		</if>
+		<if test="product_stopdistribution != null">
+			product_stopdistribution = #{product_stopdistribution},
+		</if>
+		<if test="product_immaintain != null">
+			product_immaintain = #{product_immaintain},
+		</if>
+		<if test="product_dsscancode != null">
+			product_dsscancode = #{product_dsscancode},
+		</if>
+		<if test="product_qacprint != null">
+			product_qacprint = #{product_qacprint},
+		</if>
+		<if test="product_printreceipt != null">
+			product_printreceipt = #{product_printreceipt},
+		</if>
+		<if test="product_printtype != null">
+			product_printtype = #{product_printtype},
+		</if>
+		<if test="product_doublecheck != null">
+			product_doublecheck = #{product_doublecheck},
+		</if>
+		<if test="product_inputbatchnum != null">
+			product_inputbatchnum = #{product_inputbatchnum},
+		</if>
+		<if test="product_inputvalidtime != null">
+			product_inputvalidtime = #{product_inputvalidtime},
+		</if>
+		<if test="product_inputproductdate != null">
+			product_inputproductdate = #{product_inputproductdate},
+		</if>
+		<if test="product_sterilizationbnum != null">
+			product_sterilizationbnum = #{product_sterilizationbnum},
+		</if>
+		<if test="product_sterilizationtime != null">
+			product_sterilizationtime = #{product_sterilizationtime},
+		</if>
+		<if test="product_inputappnum != null">
+			product_inputappnum = #{product_inputappnum},
+		</if>
+		<if test="product_checktime != null">
+			product_checktime = #{product_checktime},
+		</if>
+		<if test="product_checkperson != null">
+			product_checkperson = #{product_checkperson},
+		</if>
+		<if test="product_managecetagory != null">
+			product_managecetagory = #{product_managecetagory},
+		</if>
+		<if test="product_managecetagory2 != null">
+			product_managecetagory2 = #{product_managecetagory2},
+		</if>
+		<if test="product_managecetagory3 != null">
+			product_managecetagory3 = #{product_managecetagory3},
+		</if>
+		<if test="product_managecetagory4 != null">
+			product_managecetagory4 = #{product_managecetagory4},
+		</if>
+		<if test="product_managecetagory5 != null">
+			product_managecetagory5 = #{product_managecetagory5},
+		</if>
+		<if test="product_serialno != null">
+			product_serialno = #{product_serialno},
+		</if>
+		<if test="product_department != null">
+			product_department = #{product_department},
+		</if>
+		<if test="product_group != null">
+			product_group = #{product_group},
+		</if>
+		<if test="product_staff != null">
+			product_staff = #{product_staff},
+		</if>
+		<if test="product_keeper != null">
+			product_keeper = #{product_keeper},
+		</if>
+		<if test="product_contractno != null">
+			product_contractno = #{product_contractno},
+		</if>
+		<if test="product_contactperson != null">
+			product_contactperson = #{product_contactperson},
+		</if>
+		<if test="product_examiner != null">
+			product_examiner = #{product_examiner},
+		</if>
+		<if test="product_receive != null">
+			product_receive = #{product_receive},
+		</if>
+		<if test="product_receiveno != null">
+			product_receiveno = #{product_receiveno},
+		</if>
+		<if test="product_receivepackage != null">
+			product_receivepackage = #{product_receivepackage},
+		</if>
+		<if test="product_createtime != null">
+			product_createtime = #{product_createtime},
+		</if>
+		<if test="product_invaliddate != null">
+			product_invaliddate = #{product_invaliddate},
+		</if>
+		<if test="product_stocknum != null">
+			product_stocknum = #{product_stocknum},
+		</if>
+		<if test="product_lower != null">
+			product_lower = #{product_lower},
+		</if>
+		<if test="product_remoneyday != null">
+			product_remoneyday = #{product_remoneyday},
+		</if>
+		<if test="product_catagoryABC != null">
+			product_catagoryABC = #{product_catagoryABC},
+		</if>
+		<if test="product_laber != null">
+			product_laber = #{product_laber},
+		</if>
+		<if test="product_stockposition != null">
+			product_stockposition = #{product_stockposition},
+		</if>
+		<if test="product_policynum != null">
+			product_policynum = #{product_policynum},
+		</if>
+		<if test="product_giftnum != null">
+			product_giftnum = #{product_giftnum},
+		</if>
+		<if test="product_majorfunction != null">
+			product_majorfunction = #{product_majorfunction},
+		</if>
+		<if test="product_majordetail != null">
+			product_majordetail = #{product_majordetail},
+		</if>
+		<if test="product_proareacode != null">
+			product_proareacode = #{product_proareacode},
+		</if>
+		<if test="product_medinsucategory != null">
+			product_medinsucategory = #{product_medinsucategory},
+		</if>
+		<if test="product_newbarcode != null">
+			product_newbarcode = #{product_newbarcode},
+		</if>
+		<if test="product_oldbarcode != null">
+			product_oldbarcode = #{product_oldbarcode},
+		</if>
+		<if test="product_brandlcertify != null">
+			product_brandlcertify = #{product_brandlcertify},
+		</if>
+		<if test="product_barcodecertify != null">
+			product_barcodecertify = #{product_barcodecertify},
+		</if>
+		<if test="product_OTCcertify != null">
+			product_OTCcertify = #{product_OTCcertify},
+		</if>
+		<if test="product_proapproval != null">
+			product_proapproval = #{product_proapproval},
+		</if>
+		<if test="product_priceapproval != null">
+			product_priceapproval = #{product_priceapproval},
+		</if>
+		<if test="product_packingapproval != null">
+			product_packingapproval = #{product_packingapproval},
+		</if>
+		<if test="product_pinspectionreport != null">
+			product_pinspectionreport = #{product_pinspectionreport},
+		</if>
+		<if test="product_inspectionreport != null">
+			product_inspectionreport = #{product_inspectionreport},
+		</if>
+		<if test="product_integral != null">
+			product_integral = #{product_integral},
+		</if>
+		<if test="product_bargain != null">
+			product_bargain = #{product_bargain},
+		</if>
+		<if test="product_gift != null">
+			product_gift = #{product_gift},
+		</if>
+		<if test="product_discount != null">
+			product_discount = #{product_discount},
+		</if>
+		<if test="product_shiphandling != null">
+			product_shiphandling = #{product_shiphandling},
+		</if>
+		<if test="product_storesalestop != null">
+			product_storesalestop = #{product_storesalestop},
+		</if>
+		<if test="product_firststocktime != null">
+			product_firststocktime = #{product_firststocktime},
+		</if>
+		<if test="product_medinsuno != null">
+			product_medinsuno = #{product_medinsuno},
+		</if>
+		<if test="product_medinsuclassify != null">
+			product_medinsuclassify = #{product_medinsuclassify},
+		</if>
+		<if test="product_medinsustatus != null">
+			product_medinsustatus = #{product_medinsustatus},
+		</if>
+		<if test="product_planstop != null">
+			product_planstop = #{product_planstop},
+		</if>
+		<if test="product_medinsuupload != null">
+			product_medinsuupload = #{product_medinsuupload},
+		</if>
+		<if test="product_medinsuuploadtime != null">
+			product_medinsuuploadtime = #{product_medinsuuploadtime},
+		</if>
+		<if test="product_laststocktime != null">
+			product_laststocktime = #{product_laststocktime},
+		</if>
+		<if test="product_giftspecialbatch != null">
+			product_giftspecialbatch = #{product_giftspecialbatch},
+		</if>
+		<if test="product_comgspecialbatch != null">
+			product_comgspecialbatch = #{product_comgspecialbatch},
+		</if>
+		<if test="product_ftqgspecialbatch != null">
+			product_ftqgspecialbatch = #{product_ftqgspecialbatch},
+		</if>
+		<if test="product_createperson != null">
+			product_createperson = #{product_createperson},
+		</if>
+		<if test="product_oldstorecode != null">
+			product_oldstorecode = #{product_oldstorecode},
+		</if>
+		<if test="product_factoryname != null">
+			product_factoryname = #{product_factoryname},
+		</if>
+		<if test="product_pricetime != null">
+			product_pricetime = #{product_pricetime},
+		</if>
+		<if test="product_updatetime != null">
+			product_updatetime = #{product_updatetime},
+		</if>
+		<if test="product_approvalform != null">
+			product_approvalform = #{product_approvalform},
+		</if>
+		<if test="product_validdate != null">
+			product_validdate = #{product_validdate},
+		</if>
+		<if test="product_picname != null">
+			product_picname = #{product_picname},
+		</if>
+		<if test="product_picremark != null">
+			product_picremark = #{product_picremark},
+		</if>
+		<if test="product_picture != null">
+			product_picture = #{product_picture},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+		<if test="create_user != null">
+			create_user = #{create_user},
+		</if>
+		<if test="create_time != null">
+			create_time = #{create_time},
+		</if>
+		<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+		</if>
+		<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+		</if>
+		<if test="product_musthave != null">
+			product_musthave = #{product_musthave},
+		</if>
+		<if test="product_amountFormat != null">
+			product_amountFormat = #{product_amountFormat},
+		</if>
+		<if test="product_numberFormat != null">
+			product_numberFormat = #{product_numberFormat},
+		</if>
+		<if test="product_moneyPerPoint != null">
+			product_moneyPerPoint = #{product_moneyPerPoint},
+		</if>
+		
+	</set>
+		where product_id = #{product_id}
+	</update>
+
+	<update id="delete" parameterType="int">
+		update pro_infoManage
+		<set>
+				status = 9,
+		</set>
+		where product_id = #{product_id}
+	</update>
+
+	<select id="listRuleProduct" resultType="ProInfoManage" parameterType="Integer">
+		select * from pro_infoManage where not exists 
+			(select product_id from  pmn_rule_product 
+			where pro_infoManage.product_id = pmn_rule_product.product_id 
+			and pmn_rule_product.rule_id = #{rule_id} 
+			and pmn_rule_product.status = 0)
+			and pro_infoManage.product_check = 0
+			and pro_infoManage.status = 0
+			
+			<if test="bean.product_code!=null">
+				and product_code like #{bean.product_code}
+			</if>
+			<if test="bean.product_chnpy != null">
+					and product_chnpy like #{bean.product_chnpy}
+			</if>
+			<if test="bean.product_name != null">
+				and product_name like #{bean.product_name}
+			</if>
+	</select>
+	
+  	<select id="listRuleProductInfo" resultType="ProInfoManage" parameterType="Integer">
+		select * from pro_infoManage 
+			LEFT JOIN pmn_rule_product ON 
+			pro_infoManage.product_id = pmn_rule_product.product_id 
+			where pmn_rule_product.rule_id = #{rule_id} 
+			and pmn_rule_product.status = 0
+	</select>  
+	
+	<select id="listBatchProductInfo" parameterType="Integer" resultType="ProInfoManage">
+			select * from
+			pro_infoManage
+			where
+			product_id = #{product_id}
+	</select>
+	
+</mapper> 

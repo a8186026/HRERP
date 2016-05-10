@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.retail.persist.RetailOrderBatchDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="RetailOrderBatch">
+		select *
+		from retail_order_batch
+		where order_batch_id = #{id} 
+	</select>
+
+
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="RetailOrderBatch">
+
+			select *
+			from retail_order_batch
+		<where>
+			<if test="order_batch_id!=null">
+			and order_batch_id like #{order_batch_id}
+			</if>
+			<if test="retail_order_ticketId!=null">
+			and retail_order_ticketId like #{retail_order_ticketId}
+			</if>
+			<if test="order_productId!=null">
+			and order_productId like #{order_productId}
+			</if>
+			<if test="order_batch_smallNumber!=null">
+			and order_batch_smallNumber like #{order_batch_smallNumber}
+			</if>
+			<if test="stock_info_id!=null">
+			and stock_info_id like #{stock_info_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="stock_storage!=null">
+			and stock_storage like #{stock_storage}
+			</if>
+			<if test="stock_packunit!=null">
+			and stock_packunit like #{stock_packunit}
+			</if>
+			<if test="stock_batchCode!=null">
+			and stock_batchCode like #{stock_batchCode}
+			</if>
+			<if test="stock_invalidDate!=null">
+			and stock_invalidDate like #{stock_invalidDate}
+			</if>
+			<if test="product_barcode!=null">
+			and product_barcode like #{product_barcode}
+			</if>
+			<if test="stock_storageNumber!=null">
+			and stock_storageNumber like #{stock_storageNumber}
+			</if>
+			<if test="stock_purchasePrice!=null">
+			and stock_purchasePrice like #{stock_purchasePrice}
+			</if>
+			<if test="stock_settlementPrice!=null">
+			and stock_settlementPrice like #{stock_settlementPrice}
+			</if>
+			<if test="stock_intakeTicket!=null">
+			and stock_intakeTicket like #{stock_intakeTicket}
+			</if>
+			<if test="stock_intakeSmallNumber!=null">
+			and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+			</if>
+			<if test="order_batch_quantity!=null">
+			and order_batch_quantity like #{order_batch_quantity}
+			</if>
+			<if test="order_batch_unitPrice!=null">
+			and order_batch_unitPrice like #{order_batch_unitPrice}
+			</if>
+			<if test="order_batch_cutDifference!=null">
+			and order_batch_cutDifference like #{order_batch_cutDifference}
+			</if>
+			<if test="order_batch_amount!=null">
+			and order_batch_amount like #{order_batch_amount}
+			</if>
+			<if test="order_batch_grossProfit!=null">
+			and order_batch_grossProfit like #{order_batch_grossProfit}
+			</if>
+			<if test="order_batch_refundQuantity!=null">
+			and order_batch_refundQuantity like #{order_batch_refundQuantity}
+			</if>
+			<if test="order_batch_date!=null">
+			and order_batch_date like #{order_batch_date}
+			</if>
+			<if test="order_batch_discountAmount!=null">
+			and order_batch_discountAmount like #{order_batch_discountAmount}
+			</if>
+			<if test="order_batch_brokerage!=null">
+			and order_batch_brokerage like #{order_batch_brokerage}
+			</if>
+			<if test="order_batch_brokerage2!=null">
+			and order_batch_brokerage2 like #{order_batch_brokerage2}
+			</if>
+			<if test="order_batch_promotionVariety!=null">
+			and order_batch_promotionVariety like #{order_batch_promotionVariety}
+			</if>
+			<if test="order_batch_retailCommission!=null">
+			and order_batch_retailCommission like #{order_batch_retailCommission}
+			</if>
+			<if test="order_batch_mbernointegral!=null">
+			and order_batch_mbernointegral like #{order_batch_mbernointegral}
+			</if>
+			<if test="order_batch_documentGroupNum!=null">
+			and order_batch_documentGroupNum like #{order_batch_documentGroupNum}
+			</if>
+			<if test="order_batch_point!=null">
+			and order_batch_point like #{order_batch_point}
+			</if>
+			<if test="order_batch_pointMutiple!=null">
+			and order_batch_pointMutiple like #{order_batch_pointMutiple}
+			</if>
+			<if test="order_batch_pointAmount!=null">
+			and order_batch_pointAmount like #{order_batch_pointAmount}
+			</if>
+			<if test="order_batch_originalDeliverySmallNum!=null">
+			and order_batch_originalDeliverySmallNum like #{order_batch_originalDeliverySmallNum}
+			</if>
+			<if test="order_batch_allowReturn!=null">
+			and order_batch_allowReturn like #{order_batch_allowReturn}
+			</if>
+			<if test="order_batch_allowReturnPerson!=null">
+			and order_batch_allowReturnPerson like #{order_batch_allowReturnPerson}
+			</if>
+			<if test="order_batch_allowReturnTime!=null">
+			and order_batch_allowReturnTime like #{order_batch_allowReturnTime}
+			</if>
+			<if test="order_batch_aloowReturnReason!=null">
+			and order_batch_aloowReturnReason like #{order_batch_aloowReturnReason}
+			</if>
+			<if test="order_batch_othercategory2!=null">
+			and order_batch_othercategory2 like #{order_batch_othercategory2}
+			</if>
+			<if test="order_batch_saleId!=null">
+			and order_batch_saleId like #{order_batch_saleId}
+			</if>
+			<if test="order_batch_saleType!=null">
+			and order_batch_saleType like #{order_batch_saleType}
+			</if>
+			<if test="order_batch_member!=null">
+			and order_batch_member like #{order_batch_member}
+			</if>
+			<if test="order_batch_storePrice!=null">
+			and order_batch_storePrice like #{order_batch_storePrice}
+			</if>
+			<if test="order_batch_fullGiftAmount!=null">
+			and order_batch_fullGiftAmount like #{order_batch_fullGiftAmount}
+			</if>
+			<if test="order_batch_fullGiftExchange!=null">
+			and order_batch_fullGiftExchange like #{order_batch_fullGiftExchange}
+			</if>
+			<if test="order_batch_singleDiscountAuthoPerson!=null">
+			and order_batch_singleDiscountAuthoPerson like #{order_batch_singleDiscountAuthoPerson}
+			</if>
+			<if test="order_batch_singleDiscountAuthoReason!=null">
+			and order_batch_singleDiscountAuthoReason like #{order_batch_singleDiscountAuthoReason}
+			</if>
+			<if test="order_batch_intakeBrief!=null">
+			and order_batch_intakeBrief like #{order_batch_intakeBrief}
+			</if>
+			<if test="order_batch_receive!=null">
+			and order_batch_receive like #{order_batch_receive}
+			</if>
+			<if test="order_batch_dismounting!=null">
+			and order_batch_dismounting like #{order_batch_dismounting}
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="RetailOrderBatch" resultType="int">
+		select count(order_batch_id) as count 
+		from retail_order_batch
+		<where>
+			<if test="order_batch_id!=null">
+			and order_batch_id like #{order_batch_id}
+			</if>
+			<if test="retail_order_ticketId!=null">
+			and retail_order_ticketId like #{retail_order_ticketId}
+			</if>
+			<if test="order_productId!=null">
+			and order_productId like #{order_productId}
+			</if>
+			<if test="order_batch_smallNumber!=null">
+			and order_batch_smallNumber like #{order_batch_smallNumber}
+			</if>
+			
+			<if test="stock_info_id!=null">
+			and stock_info_id like #{stock_info_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="stock_storage!=null">
+			and stock_storage like #{stock_storage}
+			</if>
+			<if test="stock_packunit!=null">
+			and stock_packunit like #{stock_packunit}
+			</if>
+			<if test="stock_batchCode!=null">
+			and stock_batchCode like #{stock_batchCode}
+			</if>
+			<if test="stock_invalidDate!=null">
+			and stock_invalidDate like #{stock_invalidDate}
+			</if>
+			<if test="product_barcode!=null">
+			and product_barcode like #{product_barcode}
+			</if>
+			<if test="stock_storageNumber!=null">
+			and stock_storageNumber like #{stock_storageNumber}
+			</if>
+			<if test="stock_purchasePrice!=null">
+			and stock_purchasePrice like #{stock_purchasePrice}
+			</if>
+			<if test="stock_settlementPrice!=null">
+			and stock_settlementPrice like #{stock_settlementPrice}
+			</if>
+			<if test="stock_intakeTicket!=null">
+			and stock_intakeTicket like #{stock_intakeTicket}
+			</if>
+			<if test="stock_intakeSmallNumber!=null">
+			and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+			</if>
+			<if test="order_batch_quantity!=null">
+			and order_batch_quantity like #{order_batch_quantity}
+			</if>
+			<if test="order_batch_unitPrice!=null">
+			and order_batch_unitPrice like #{order_batch_unitPrice}
+			</if>
+			<if test="order_batch_cutDifference!=null">
+			and order_batch_cutDifference like #{order_batch_cutDifference}
+			</if>
+			<if test="order_batch_amount!=null">
+			and order_batch_amount like #{order_batch_amount}
+			</if>
+			<if test="order_batch_grossProfit!=null">
+			and order_batch_grossProfit like #{order_batch_grossProfit}
+			</if>
+			<if test="order_batch_refundQuantity!=null">
+			and order_batch_refundQuantity like #{order_batch_refundQuantity}
+			</if>
+			<if test="order_batch_date!=null">
+			and order_batch_date like #{order_batch_date}
+			</if>
+			<if test="order_batch_discountAmount!=null">
+			and order_batch_discountAmount like #{order_batch_discountAmount}
+			</if>
+			<if test="order_batch_brokerage!=null">
+			and order_batch_brokerage like #{order_batch_brokerage}
+			</if>
+			<if test="order_batch_brokerage2!=null">
+			and order_batch_brokerage2 like #{order_batch_brokerage2}
+			</if>
+			<if test="order_batch_promotionVariety!=null">
+			and order_batch_promotionVariety like #{order_batch_promotionVariety}
+			</if>
+			<if test="order_batch_retailCommission!=null">
+			and order_batch_retailCommission like #{order_batch_retailCommission}
+			</if>
+			<if test="order_batch_mbernointegral!=null">
+			and order_batch_mbernointegral like #{order_batch_mbernointegral}
+			</if>
+			<if test="order_batch_documentGroupNum!=null">
+			and order_batch_documentGroupNum like #{order_batch_documentGroupNum}
+			</if>
+			<if test="order_batch_point!=null">
+			and order_batch_point like #{order_batch_point}
+			</if>
+			<if test="order_batch_pointMutiple!=null">
+			and order_batch_pointMutiple like #{order_batch_pointMutiple}
+			</if>
+			<if test="order_batch_pointAmount!=null">
+			and order_batch_pointAmount like #{order_batch_pointAmount}
+			</if>
+			<if test="order_batch_originalDeliverySmallNum!=null">
+			and order_batch_originalDeliverySmallNum like #{order_batch_originalDeliverySmallNum}
+			</if>
+			<if test="order_batch_allowReturn!=null">
+			and order_batch_allowReturn like #{order_batch_allowReturn}
+			</if>
+			<if test="order_batch_allowReturnPerson!=null">
+			and order_batch_allowReturnPerson like #{order_batch_allowReturnPerson}
+			</if>
+			<if test="order_batch_allowReturnTime!=null">
+			and order_batch_allowReturnTime like #{order_batch_allowReturnTime}
+			</if>
+			<if test="order_batch_aloowReturnReason!=null">
+			and order_batch_aloowReturnReason like #{order_batch_aloowReturnReason}
+			</if>
+			<if test="order_batch_othercategory2!=null">
+			and order_batch_othercategory2 like #{order_batch_othercategory2}
+			</if>
+			<if test="order_batch_saleId!=null">
+			and order_batch_saleId like #{order_batch_saleId}
+			</if>
+			<if test="order_batch_saleType!=null">
+			and order_batch_saleType like #{order_batch_saleType}
+			</if>
+			<if test="order_batch_member!=null">
+			and order_batch_member like #{order_batch_member}
+			</if>
+			<if test="order_batch_storePrice!=null">
+			and order_batch_storePrice like #{order_batch_storePrice}
+			</if>
+			<if test="order_batch_fullGiftAmount!=null">
+			and order_batch_fullGiftAmount like #{order_batch_fullGiftAmount}
+			</if>
+			<if test="order_batch_fullGiftExchange!=null">
+			and order_batch_fullGiftExchange like #{order_batch_fullGiftExchange}
+			</if>
+			<if test="order_batch_singleDiscountAuthoPerson!=null">
+			and order_batch_singleDiscountAuthoPerson like #{order_batch_singleDiscountAuthoPerson}
+			</if>
+			<if test="order_batch_singleDiscountAuthoReason!=null">
+			and order_batch_singleDiscountAuthoReason like #{order_batch_singleDiscountAuthoReason}
+			</if>
+			<if test="order_batch_intakeBrief!=null">
+			and order_batch_intakeBrief like #{order_batch_intakeBrief}
+			</if>
+			<if test="order_batch_receive!=null">
+			and order_batch_receive like #{order_batch_receive}
+			</if>
+			<if test="order_batch_dismounting!=null">
+			and order_batch_dismounting like #{order_batch_dismounting}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="RetailOrderBatch" useGeneratedKeys="true" keyProperty="order_batch_id">
+		 insert into retail_order_batch(
+		retail_order_ticketId, order_productId, order_batch_smallNumber, stock_info_id,product_id, stock_storage, 
+		stock_packunit, stock_batchCode, stock_invalidDate, product_barcode, stock_storageNumber, 
+		stock_purchasePrice, stock_settlementPrice, stock_intakeTicket, stock_intakeSmallNumber, order_batch_quantity, 
+		order_batch_unitPrice, order_batch_cutDifference, order_batch_amount, order_batch_grossProfit, order_batch_refundQuantity, 
+		order_batch_date, order_batch_discountAmount, order_batch_brokerage, order_batch_brokerage2, order_batch_promotionVariety, 
+		order_batch_retailCommission, order_batch_mbernointegral, order_batch_documentGroupNum, order_batch_point, order_batch_pointMutiple, 
+		order_batch_pointAmount, order_batch_originalDeliverySmallNum, order_batch_allowReturn, order_batch_allowReturnPerson, order_batch_allowReturnTime, 
+		order_batch_aloowReturnReason, order_batch_othercategory2, order_batch_saleId, order_batch_saleType, order_batch_member, 
+		order_batch_storePrice, order_batch_fullGiftAmount, order_batch_fullGiftExchange, order_batch_singleDiscountAuthoPerson, order_batch_singleDiscountAuthoReason, 
+		order_batch_intakeBrief, order_batch_receive, order_batch_dismounting)
+		values(
+		#{retail_order_ticketId}, #{order_productId}, #{order_batch_smallNumber}, #{stock_info_id}, #{product_id}, #{stock_storage}, 
+		#{stock_packunit}, #{stock_batchCode}, #{stock_invalidDate}, #{product_barcode}, #{stock_storageNumber}, 
+		#{stock_purchasePrice}, #{stock_settlementPrice}, #{stock_intakeTicket}, #{stock_intakeSmallNumber}, #{order_batch_quantity}, 
+		#{order_batch_unitPrice}, #{order_batch_cutDifference}, #{order_batch_amount}, #{order_batch_grossProfit}, #{order_batch_refundQuantity}, 
+		#{order_batch_date,jdbcType=TIMESTAMP}, #{order_batch_discountAmount}, #{order_batch_brokerage}, #{order_batch_brokerage2}, #{order_batch_promotionVariety}, 
+		#{order_batch_retailCommission}, #{order_batch_mbernointegral}, #{order_batch_documentGroupNum}, #{order_batch_point}, #{order_batch_pointMutiple}, 
+		#{order_batch_pointAmount}, #{order_batch_originalDeliverySmallNum}, #{order_batch_allowReturn}, #{order_batch_allowReturnPerson}, #{order_batch_allowReturnTime,jdbcType=TIMESTAMP}, 
+		#{order_batch_aloowReturnReason}, #{order_batch_othercategory2}, #{order_batch_saleId}, #{order_batch_saleType}, #{order_batch_member}, 
+		#{order_batch_storePrice}, #{order_batch_fullGiftAmount}, #{order_batch_fullGiftExchange}, #{order_batch_singleDiscountAuthoPerson}, #{order_batch_singleDiscountAuthoReason}, 
+		#{order_batch_intakeBrief}, #{order_batch_receive}, #{order_batch_dismounting});
+	</insert>
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="RetailOrderBatch">
+		 update retail_order_batch
+		<set>
+			<if test="retail_order_ticketId != null">
+			retail_order_ticketId = #{retail_order_ticketId},
+			</if>
+			<if test="order_productId != null">
+			order_productId = #{order_productId},
+			</if>
+			<if test="order_batch_smallNumber != null">
+			order_batch_smallNumber = #{order_batch_smallNumber},
+			</if>
+			<if test="stock_info_id != null">
+			stock_info_id = #{stock_info_id},
+			</if>
+			<if test="product_id != null">
+			product_id = #{product_id},
+			</if>
+			<if test="stock_storage != null">
+			stock_storage = #{stock_storage},
+			</if>
+			<if test="stock_packunit != null">
+			stock_packunit = #{stock_packunit},
+			</if>
+			<if test="stock_batchCode != null">
+			stock_batchCode = #{stock_batchCode},
+			</if>
+			<if test="stock_invalidDate != null">
+			stock_invalidDate = #{stock_invalidDate},
+			</if>
+			<if test="product_barcode != null">
+			product_barcode = #{product_barcode},
+			</if>
+			<if test="stock_storageNumber != null">
+			stock_storageNumber = #{stock_storageNumber},
+			</if>
+			<if test="stock_purchasePrice != null">
+			stock_purchasePrice = #{stock_purchasePrice},
+			</if>
+			<if test="stock_settlementPrice != null">
+			stock_settlementPrice = #{stock_settlementPrice},
+			</if>
+			<if test="stock_intakeTicket != null">
+			stock_intakeTicket = #{stock_intakeTicket},
+			</if>
+			<if test="stock_intakeSmallNumber != null">
+			stock_intakeSmallNumber = #{stock_intakeSmallNumber},
+			</if>
+			<if test="order_batch_quantity != null">
+			order_batch_quantity = #{order_batch_quantity},
+			</if>
+			<if test="order_batch_unitPrice != null">
+			order_batch_unitPrice = #{order_batch_unitPrice},
+			</if>
+			<if test="order_batch_cutDifference != null">
+			order_batch_cutDifference = #{order_batch_cutDifference},
+			</if>
+			<if test="order_batch_amount != null">
+			order_batch_amount = #{order_batch_amount},
+			</if>
+			<if test="order_batch_grossProfit != null">
+			order_batch_grossProfit = #{order_batch_grossProfit},
+			</if>
+			<if test="order_batch_refundQuantity != null">
+			order_batch_refundQuantity = #{order_batch_refundQuantity},
+			</if>
+			<if test="order_batch_date != null">
+			order_batch_date = #{order_batch_date},
+			</if>
+			<if test="order_batch_discountAmount != null">
+			order_batch_discountAmount = #{order_batch_discountAmount},
+			</if>
+			<if test="order_batch_brokerage != null">
+			order_batch_brokerage = #{order_batch_brokerage},
+			</if>
+			<if test="order_batch_brokerage2 != null">
+			order_batch_brokerage2 = #{order_batch_brokerage2},
+			</if>
+			<if test="order_batch_promotionVariety != null">
+			order_batch_promotionVariety = #{order_batch_promotionVariety},
+			</if>
+			<if test="order_batch_retailCommission != null">
+			order_batch_retailCommission = #{order_batch_retailCommission},
+			</if>
+			<if test="order_batch_mbernointegral != null">
+			order_batch_mbernointegral = #{order_batch_mbernointegral},
+			</if>
+			<if test="order_batch_documentGroupNum != null">
+			order_batch_documentGroupNum = #{order_batch_documentGroupNum},
+			</if>
+			<if test="order_batch_point != null">
+			order_batch_point = #{order_batch_point},
+			</if>
+			<if test="order_batch_pointMutiple != null">
+			order_batch_pointMutiple = #{order_batch_pointMutiple},
+			</if>
+			<if test="order_batch_pointAmount != null">
+			order_batch_pointAmount = #{order_batch_pointAmount},
+			</if>
+			<if test="order_batch_originalDeliverySmallNum != null">
+			order_batch_originalDeliverySmallNum = #{order_batch_originalDeliverySmallNum},
+			</if>
+			<if test="order_batch_allowReturn != null">
+			order_batch_allowReturn = #{order_batch_allowReturn},
+			</if>
+			<if test="order_batch_allowReturnPerson != null">
+			order_batch_allowReturnPerson = #{order_batch_allowReturnPerson},
+			</if>
+			<if test="order_batch_allowReturnTime != null">
+			order_batch_allowReturnTime = #{order_batch_allowReturnTime},
+			</if>
+			<if test="order_batch_aloowReturnReason != null">
+			order_batch_aloowReturnReason = #{order_batch_aloowReturnReason},
+			</if>
+			<if test="order_batch_othercategory2 != null">
+			order_batch_othercategory2 = #{order_batch_othercategory2},
+			</if>
+			<if test="order_batch_saleId != null">
+			order_batch_saleId = #{order_batch_saleId},
+			</if>
+			<if test="order_batch_saleType != null">
+			order_batch_saleType = #{order_batch_saleType},
+			</if>
+			<if test="order_batch_member != null">
+			order_batch_member = #{order_batch_member},
+			</if>
+			<if test="order_batch_storePrice != null">
+			order_batch_storePrice = #{order_batch_storePrice},
+			</if>
+			<if test="order_batch_fullGiftAmount != null">
+			order_batch_fullGiftAmount = #{order_batch_fullGiftAmount},
+			</if>
+			<if test="order_batch_fullGiftExchange != null">
+			order_batch_fullGiftExchange = #{order_batch_fullGiftExchange},
+			</if>
+			<if test="order_batch_singleDiscountAuthoPerson != null">
+			order_batch_singleDiscountAuthoPerson = #{order_batch_singleDiscountAuthoPerson},
+			</if>
+			<if test="order_batch_singleDiscountAuthoReason != null">
+			order_batch_singleDiscountAuthoReason = #{order_batch_singleDiscountAuthoReason},
+			</if>
+			<if test="order_batch_intakeBrief != null">
+			order_batch_intakeBrief = #{order_batch_intakeBrief},
+			</if>
+			<if test="order_batch_receive != null">
+			order_batch_receive = #{order_batch_receive},
+			</if>
+			<if test="order_batch_dismounting != null">
+			order_batch_dismounting = #{order_batch_dismounting},
+			</if>
+	</set>where order_batch_id = #{order_batch_id}
+	</update>
+
+	<!-- 根据id删除表中数据,同时增加库存 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  retail_order_batch
+		where order_batch_id = #{id};
+		
+
+	</delete>
+
+	<!-- 根据id删除表中数据,同时增加库存 -->
+	<delete id="deleteAndAdd" parameterType="RetailOrderBatch">
+		delete from  retail_order_batch
+		where order_batch_id = #{order_batch_id};
+		
+		update stock_info
+		set stock_storageNumber +=#{order_batch_quantity}
+		where stock_info_id = #{stock_info_id}
+	</delete>
+	
+		<!-- 依据订单产品序号查询最大的批次小号 -->
+	<select id="getMaxOrderBatchId" parameterType="RetailOrderVO"  resultType="Integer">
+		select max(order_batch_smallNumber)
+		from retail_order_batch
+		where retail_order_ticketId = #{retail_order_ticketId} and  order_productId = #{order_productId} 
+	</select>
+	
+	<update id="updateOrderBatch" parameterType="map">
+		<foreach collection="list" item="item" index="index" open="" separator=";" close="" > 
+			update retail_order_batch
+			set order_batch_fullGiftExchange = order_batch_fullGiftAmount
+			where retail_order_ticketId = #{ticket_id} and product_id = #{item}
+		</foreach>
+	</update>
+</mapper> 

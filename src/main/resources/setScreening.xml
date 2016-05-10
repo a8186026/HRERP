@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classes>
+	<class id="ProInfoManage">
+		<field id="status">
+			<name>状态</name>
+			<type>Integer</type>
+			<value>0</value>
+			<realation>971</realation><!-- 971表示等于关系 -->
+			<contact>and</contact>
+		</field>
+		<field id="product_check">
+			<name>审核状态</name>
+			<type>Integer</type>
+			<value>0</value>
+			<realation>971</realation>
+			<contact>and</contact>
+		</field>
+	</class>
+</classes>

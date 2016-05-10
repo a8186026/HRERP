@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.CompanyInfoDao">
+
+	<!-- 获取公司档案信息 -->
+	<select id="get" parameterType="Integer" resultType="CompanyInfo">
+		select *
+		from company_info
+		where company_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="BasAccount" resultType="CompanyInfo">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from company_info
+		<where>
+			status = 0
+			<if test="company_fullName != null">
+				and company_fullName like #{company_fullName}
+			</if>
+			<if test="company_lisenceCode != null">
+				and company_lisenceCode like #{company_lisenceCode}
+			</if>
+			<if test="company_code != null">
+				and company_code like #{company_code}
+			</if>
+			<if test="company_drugCode != null">
+				and company_drugCode like #{company_drugCode}
+			</if>
+			<if test="offset != null and offset !=0">
+				and company_id not in(select top ${offset} company_id from company_info where status = 0
+				<if test="company_fullName != null">
+				and company_fullName like #{company_fullName}
+				</if>
+				<if test="company_lisenceCode != null">
+					and company_lisenceCode like #{company_lisenceCode}
+				</if>
+				<if test="company_code != null">
+					and company_code like #{company_code}
+				</if>
+				<if test="company_drugCode != null">
+					and company_drugCode like #{company_drugCode}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="CompanyInfo" resultType="int">
+		select
+		count(company_id) as count
+		from company_info
+		<where>
+			status = 0
+			<if test="company_fullName != null">
+				and company_fullName like #{company_fullName}
+			</if>
+			<if test="company_lisenceCode != null">
+				and company_lisenceCode like #{company_lisenceCode}
+			</if>
+			<if test="company_code != null">
+				and company_code like #{company_code}
+			</if>
+			<if test="company_drugCode != null">
+				and company_drugCode like #{company_drugCode}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="CompanyInfo" useGeneratedKeys="true"
+		keyProperty="company_id">
+		insert into company_info(
+		company_fullName, company_lisenceCode, company_code, company_drugCode, company_forbidDrug, company_ticketStart,
+		create_user, create_time, last_modify_user, last_modify_time, status)
+		values(#{company_fullName},#{company_lisenceCode},#{company_code},#{company_drugCode},#{company_forbidDrug},#{company_ticketStart},
+		#{create_user},#{create_time},#{last_modify_user},#{last_modify_time},#{status});
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="BasAccount">
+		update company_info
+		<set>
+			<if test="company_fullName != null">
+				company_fullName = #{company_fullName},
+			</if>
+			<if test="company_lisenceCode != null">
+				company_lisenceCode = #{company_lisenceCode},
+			</if>
+		 	<if test="company_code != null">
+				company_code = #{company_code},
+			</if>
+			<if test="company_drugCode != null">
+				company_drugCode = #{company_drugCode},
+			</if>
+			<if test="company_forbidDrug != null">
+				company_forbidDrug = #{company_forbidDrug},
+			</if>
+			<if test="company_ticketStart != null">
+				company_ticketStart = #{company_ticketStart},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+		</set>
+		where company_id = #{company_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update company_info set
+		status = 9 where company_id = #{company_id}
+	</delete>
+	 
+</mapper> 

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.promotion.persist.PmnGiftSaleDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="PmnGiftSale">
+		select *
+		from pmn_gift_sale 
+		where gift_sal_id = #{id} 
+	</select>	
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="PmnGiftSale">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+			from pmn_gift_sale
+		<where>
+			 1 = 1
+			<if test="gift_sal_id!=null">
+			and gift_sal_id like #{gift_sal_id}
+			</if>
+			<if test="gift_sal_code!=null">
+			and gift_sal_code like #{gift_sal_code}
+			</if>
+			<if test="gift_sal_name!=null">
+			and gift_sal_name like #{gift_sal_name}
+			</if>
+			<if test="gift_sal_retailPrice!=null">
+			and gift_sal_retailPrice like #{gift_sal_retailPrice}
+			</if>
+			<if test="gift_sal_memberPrice!=null">
+			and gift_sal_memberPrice like #{gift_sal_memberPrice}
+			</if>
+			<if test="gift_sal_commission!=null">
+			and gift_sal_commission like #{gift_sal_commission}
+			</if>
+			<if test="gift_sal_chn!=null">
+			and gift_sal_chn like #{gift_sal_chn}
+			</if>
+			<if test="gift_sal_joinDepartment!=null">
+			and gift_sal_joinDepartment like #{gift_sal_joinDepartment}
+			</if>
+			<if test="gift_sal_joinProductId!=null">
+			and gift_sal_joinProductId like #{gift_sal_joinProductId}
+			</if>
+			<if test="gift_sal_introduction!=null">
+			and gift_sal_introduction like #{gift_sal_introduction}
+			</if>
+			<if test="gift_sal_fullGiveCoefficient!=null">
+			and gift_sal_fullGiveCoefficient like #{gift_sal_fullGiveCoefficient}
+			</if>
+			<if test="gift_sal_onlyMemberJoin!=null">
+			and gift_sal_onlyMemberJoin like #{gift_sal_onlyMemberJoin}
+			</if>
+			<if test="gift_sal_productPoint!=null">
+			and gift_sal_productPoint like #{gift_sal_productPoint}
+			</if>
+			<if test="gift_sal_activityTitle!=null">
+			and gift_sal_activityTitle like #{gift_sal_activityTitle}
+			</if>
+			<if test="gift_sal_startDate!=null">
+			and DATEDIFF(day, gift_sal_startDate , #{gift_sal_startDate})&lt; 0
+			</if>
+			<if test="gift_sal_endDate!=null">
+			and DATEDIFF(day, gift_sal_endDate , #{gift_sal_endDate}) &gt;0
+			</if>
+			<if test="offset != null and offset !=0">
+			and gift_sal_id not in(select top ${offset} gift_sal_id from pmn_gift_sale where 0 = 0
+				<if test="gift_sal_id!=null">
+				and gift_sal_id like #{gift_sal_id}
+				</if>
+				<if test="gift_sal_code!=null">
+				and gift_sal_code like #{gift_sal_code}
+				</if>
+				<if test="gift_sal_name!=null">
+				and gift_sal_name like #{gift_sal_name}
+				</if>
+				<if test="gift_sal_retailPrice!=null">
+				and gift_sal_retailPrice like #{gift_sal_retailPrice}
+				</if>
+				<if test="gift_sal_memberPrice!=null">
+				and gift_sal_memberPrice like #{gift_sal_memberPrice}
+				</if>
+				<if test="gift_sal_commission!=null">
+				and gift_sal_commission like #{gift_sal_commission}
+				</if>
+				<if test="gift_sal_chn!=null">
+				and gift_sal_chn like #{gift_sal_chn}
+				</if>
+				<if test="gift_sal_joinDepartment!=null">
+				and gift_sal_joinDepartment like #{gift_sal_joinDepartment}
+				</if>
+				<if test="gift_sal_joinProductId!=null">
+				and gift_sal_joinProductId like #{gift_sal_joinProductId}
+				</if>
+				<if test="gift_sal_introduction!=null">
+				and gift_sal_introduction like #{gift_sal_introduction}
+				</if>
+				<if test="gift_sal_fullGiveCoefficient!=null">
+				and gift_sal_fullGiveCoefficient like #{gift_sal_fullGiveCoefficient}
+				</if>
+				<if test="gift_sal_onlyMemberJoin!=null">
+				and gift_sal_onlyMemberJoin like #{gift_sal_onlyMemberJoin}
+				</if>
+				<if test="gift_sal_productPoint!=null">
+				and gift_sal_productPoint like #{gift_sal_productPoint}
+				</if>
+				<if test="gift_sal_activityTitle!=null">
+				and gift_sal_activityTitle like #{gift_sal_activityTitle}
+				</if>
+				<if test="gift_sal_startDate!=null">
+				and DATEDIFF(day, gift_sal_startDate , #{gift_sal_startDate})&lt; 0
+				</if>
+				<if test="gift_sal_endDate!=null">
+				and DATEDIFF(day, gift_sal_endDate , #{gift_sal_endDate}) &gt;0
+				</if>				
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+
+
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="PmnGiftSale" resultType="int">
+		select count(gift_sal_id) as count 
+		from pmn_gift_sale
+		<where>
+			<if test="gift_sal_id!=null">
+			and gift_sal_id like #{gift_sal_id}
+			</if>
+			<if test="gift_sal_code!=null">
+			and gift_sal_code like #{gift_sal_code}
+			</if>
+			<if test="gift_sal_name!=null">
+			and gift_sal_name like #{gift_sal_name}
+			</if>
+			<if test="gift_sal_retailPrice!=null">
+			and gift_sal_retailPrice like #{gift_sal_retailPrice}
+			</if>
+			<if test="gift_sal_memberPrice!=null">
+			and gift_sal_memberPrice like #{gift_sal_memberPrice}
+			</if>
+			<if test="gift_sal_commission!=null">
+			and gift_sal_commission like #{gift_sal_commission}
+			</if>
+			<if test="gift_sal_chn!=null">
+			and gift_sal_chn like #{gift_sal_chn}
+			</if>
+			<if test="gift_sal_joinDepartment!=null">
+			and gift_sal_joinDepartment like #{gift_sal_joinDepartment}
+			</if>
+			<if test="gift_sal_joinProductId!=null">
+			and gift_sal_joinProductId like #{gift_sal_joinProductId}
+			</if>
+			<if test="gift_sal_introduction!=null">
+			and gift_sal_introduction like #{gift_sal_introduction}
+			</if>
+			<if test="gift_sal_fullGiveCoefficient!=null">
+			and gift_sal_fullGiveCoefficient like #{gift_sal_fullGiveCoefficient}
+			</if>
+			<if test="gift_sal_onlyMemberJoin!=null">
+			and gift_sal_onlyMemberJoin like #{gift_sal_onlyMemberJoin}
+			</if>
+			<if test="gift_sal_productPoint!=null">
+			and gift_sal_productPoint like #{gift_sal_productPoint}
+			</if>
+			<if test="gift_sal_activityTitle!=null">
+			and gift_sal_activityTitle like #{gift_sal_activityTitle}
+			</if>
+			<if test="gift_sal_startDate!=null">
+			and DATEDIFF(day, gift_sal_startDate , #{gift_sal_startDate})&lt; 0
+			</if>
+			<if test="gift_sal_endDate!=null">
+			and DATEDIFF(day, gift_sal_endDate , #{gift_sal_endDate}) &gt;0
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="PmnGiftSale" useGeneratedKeys="true" keyProperty="gift_sal_id">
+		insert into pmn_gift_sale(
+		gift_sal_code, gift_sal_name,gift_sal_retailPrice, gift_sal_memberPrice, gift_sal_commission, gift_sal_chn, 
+		gift_sal_joinDepartment, gift_sal_joinProductId, gift_sal_startDate, gift_sal_endDate, gift_sal_introduction, 
+		gift_sal_fullGiveCoefficient, gift_sal_onlyMemberJoin, gift_sal_productPoint, gift_sal_activityTitle)
+		values(
+		#{gift_sal_code}, #{gift_sal_name}, #{gift_sal_retailPrice}, #{gift_sal_memberPrice}, #{gift_sal_commission}, #{gift_sal_chn}, 
+		#{gift_sal_joinDepartment}, #{gift_sal_joinProductId}, #{gift_sal_startDate}, #{gift_sal_endDate}, #{gift_sal_introduction}, 
+		#{gift_sal_fullGiveCoefficient}, #{gift_sal_onlyMemberJoin}, #{gift_sal_productPoint}, #{gift_sal_activityTitle});
+	</insert>
+
+
+
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="PmnGiftSale">
+	 	update pmn_gift_sale
+		<set>
+			<if test="gift_sal_code != null">
+			gift_sal_code = #{gift_sal_code},
+			</if>
+			<if test="gift_sal_name != null">
+			gift_sal_name = #{gift_sal_name},
+			</if>
+			<if test="gift_sal_retailPrice != null">
+			gift_sal_retailPrice = #{gift_sal_retailPrice},
+			</if>
+			<if test="gift_sal_memberPrice != null">
+			gift_sal_memberPrice = #{gift_sal_memberPrice},
+			</if>
+			<if test="gift_sal_commission != null">
+			gift_sal_commission = #{gift_sal_commission},
+			</if>
+			<if test="gift_sal_chn != null">
+			gift_sal_chn = #{gift_sal_chn},
+			</if>
+			<if test="gift_sal_joinDepartment != null">
+			gift_sal_joinDepartment = #{gift_sal_joinDepartment},
+			</if>
+			<if test="gift_sal_joinProductId != null">
+			gift_sal_joinProductId = #{gift_sal_joinProductId},
+			</if>
+			<if test="gift_sal_startDate != null">
+			gift_sal_startDate = #{gift_sal_startDate},
+			</if>
+			<if test="gift_sal_endDate != null">
+			gift_sal_endDate = #{gift_sal_endDate},
+			</if>
+			<if test="gift_sal_introduction != null">
+			gift_sal_introduction = #{gift_sal_introduction},
+			</if>
+			<if test="gift_sal_fullGiveCoefficient != null">
+			gift_sal_fullGiveCoefficient = #{gift_sal_fullGiveCoefficient},
+			</if>
+			<if test="gift_sal_onlyMemberJoin != null">
+			gift_sal_onlyMemberJoin = #{gift_sal_onlyMemberJoin},
+			</if>
+			<if test="gift_sal_productPoint != null">
+			gift_sal_productPoint = #{gift_sal_productPoint},
+			</if>
+			<if test="gift_sal_activityTitle != null">
+			gift_sal_activityTitle = #{gift_sal_activityTitle},
+			</if>
+		</set>where gift_sal_id = #{gift_sal_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  pmn_gift_sale
+		where gift_sal_id = #{id}
+	</delete>
+	
+	<select id="getMaxGiftSaleCode"  resultType="Integer">
+		select max(cast (gift_sal_code as INT))
+		from pmn_gift_sale 
+	</select>
+	
+	<!-- 获取买赠活动 -->
+	<select id="getGiftSales" parameterType="map" resultType="PmnGiftSale">
+		select *
+		from pmn_gift_sale pgs
+		<if test="list.size()>0">
+			,pmn_gift_info pgi
+		</if>
+		where pgs.gift_sal_onlyMemberJoin >= #{bean.gift_sal_onlyMemberJoin} 
+		and DATEDIFF (second, pgs.gift_sal_startDate, getDate())  >= 0
+		and DATEDIFF (second,getDate(),pgs.gift_sal_endDate)  >= 0
+		and pgs.gift_sal_joinDepartment like #{bean.gift_sal_joinDepartment}
+		<if test="list.size()>0">
+			and pgi.gift_sal_id = pgs.gift_sal_id and pgi.gift_productId in
+			<foreach collection="list" item="joinPro" index="index" open="(" separator="," close=")" >
+				#{joinPro} 
+			</foreach>
+		</if>
+		
+	</select>
+	
+	
+</mapper> 

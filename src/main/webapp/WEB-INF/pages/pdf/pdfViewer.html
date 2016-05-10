@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport"
+	content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width" />
+<title></title>
+<script src="/HRERP/resources/js/goldcow-all.js" type="text/javascript"></script>
+<style type="text/css">
+html,body {
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
+}
+</style>
+<script type="text/javascript">
+    $(function () {
+    	var id = $.query.get("id");
+		if (id != null) {
+			var pdffile = getFile(id);
+			var filePath = pdffile.currentfilepathName;
+			filePath = '/../..' + filePath.substring(filePath.indexOf("oaOfficialdocument") - 1).replace(/\\/g, "/");
+			$('#PDFFile').attr('href', filePath);
+			$('#PDFFile').html(pdffile.oldFileName);
+			$('#PDFFile').media({ width: 800, height: 800 });
+		}
+    });
+</script>
+</head>
+<body>
+	<form id="form1" runat="server">
+		<div id="main">
+			<a class="media" href="../../灾害性天气典型个例/暴雨/河套西部一次局地大暴雨成因分析.pdf"
+				id="PDFFile"></a>
+		</div>
+	</form>
+</body>
+</html>

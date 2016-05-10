@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.quality.persist.QltDefectsInfoDao">
+	<select id="get" parameterType="Integer" resultType="QltDefectsInfo">
+		select *
+		from qlt_defects_info
+		where defects_id = #{id}
+		and status = 0
+	</select>
+	
+	<select id="getVOById" parameterType="Integer" resultType="QltDefectsInfoVO">
+		select *
+		from qlt_defects_info as qdi , pro_infoManage as pi , stock_info as si
+		where defects_id = #{id} and qdi.product_id = pi.product_id and qdi.product_id = si.product_id 
+		and si.stock_info_id = qdi.stock_info_id and qdi.status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="QltDefectsInfoVO" resultType="QltDefectsInfoVO">
+		<if test="rows != null and rows !=0">
+			select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+			select *
+		</if>
+			from qlt_defects_info as qdi , pro_infoManage as pi , stock_info as si
+		<where>
+			qdi.status = 0 and qdi.product_id = pi.product_id and qdi.product_id = si.product_id and si.stock_info_id = qdi.stock_info_id
+			<if test="product_name != null">
+				and pi.product_name like #{product_name} 
+			</if>
+			<if test="defects_check != null">
+				and qdi.defects_check = #{defects_check} 
+			</if>
+			<if test="defects_profitLoss != null">
+				and qdi.defects_profitLoss = #{defects_profitLoss} 
+			</if>
+			<if test="defects_destruction != null">
+				and qdi.defects_destruction = #{defects_destruction} 
+			</if>
+			<if test="defects_breakage!=null">
+				and qdi.defects_breakage = #{defects_breakage}
+			</if>
+			<if test="defects_profitTicketNo!=null">
+				and qdi.defects_profitTicketNo like #{defects_profitTicketNo}
+			</if>
+			<if test="defects_destrucTicketNo!=null">
+				and qdi.defects_destrucTicketNo like #{defects_destrucTicketNo}
+			</if>
+			<if test="defects_breakageTicketNo!=null">
+				and qdi.defects_breakageTicketNo like #{defects_breakageTicketNo}
+			</if>
+			
+			<if test="defects_purchasedCheck!=null">
+				and qdi.defects_purchasedCheck = #{defects_purchasedCheck}
+			</if>
+			<if test="defects_purchasedPerson!=null">
+				and qdi.defects_purchasedPerson like #{defects_purchasedPerson}
+			</if>
+			
+			<if test="defects_qualitycdCheck!=null">
+				and qdi.defects_qualitycdCheck = #{defects_qualitycdCheck}
+			</if>
+			<if test="defects_qualitycdPerson!=null">
+				and qdi.defects_qualitycdPerson like #{defects_qualitycdPerson}
+			</if>
+			
+			<if test="defects_storagetdCheck!=null">
+				and qdi.defects_storagetdCheck = #{defects_storagetdCheck}
+			</if>
+			<if test="defects_storagetdPerson!=null">
+				and qdi.defects_storagetdPerson like #{defects_storagetdPerson}
+			</if>
+			
+			<if test="defects_qaCheck!=null">
+				and qdi.defects_qaCheck = #{defects_qaCheck}
+			</if>
+			<if test="defects_qaPerson!=null">
+				and qdi.defects_qaPerson like #{defects_qaPerson}
+			</if>
+			
+			<if test="defects_financialdCheck!=null">
+				and qdi.defects_financialdCheck = #{defects_financialdCheck}
+			</if>
+			<if test="defects_financialdPerson!=null">
+				and qdi.defects_financialdPerson like #{defects_financialdPerson}
+			</if>
+			
+			<if test="defects_managerCheck!=null">
+				and qdi.defects_managerCheck = #{defects_managerCheck}
+			</if>
+			<if test="defects_managerPerson!=null">
+				and qdi.defects_managerPerson like #{defects_managerPerson}
+			</if>
+			
+			<if test="defects_printTicketNo!=null">
+				and qdi.defects_printTicketNo like #{defects_printTicketNo}
+			</if>
+			<if test="defects_print!=null">
+				and qdi.defects_print = #{defects_print}
+			</if>
+			<if test="defects_destructionPrint!=null">
+				and qdi.defects_destructionPrint = #{defects_destructionPrint}
+			</if>	
+			<if test="defects_draft!=null">
+				and qdi.defects_draft = #{defects_draft}
+			</if>	
+			
+			<if test="offset != null and offset !=0">
+				and qdi.defects_id not in(select top ${offset} defects_id from qlt_defects_info as qdi ,pro_infoManage as pi
+				where qdi.status = 0
+				and qdi.product_id = pi.product_id
+				<if test="product_name != null">
+				and pi.product_name like #{product_name} 
+				</if>
+				<if test="defects_check != null">
+					and qdi.defects_check = #{defects_check} 
+				</if>
+				<if test="defects_profitLoss != null">
+					and qdi.defects_profitLoss = #{defects_profitLoss} 
+				</if>
+				<if test="defects_destruction != null">
+					and qdi.defects_destruction = #{defects_destruction} 
+				</if>
+				<if test="defects_breakage!=null">
+					and qdi.defects_breakage = #{defects_breakage}
+				</if>
+				<if test="defects_profitTicketNo!=null">
+					and qdi.defects_profitTicketNo like #{defects_profitTicketNo}
+				</if>
+				<if test="defects_destrucTicketNo!=null">
+					and qdi.defects_destrucTicketNo like #{defects_destrucTicketNo}
+				</if>
+				<if test="defects_breakageTicketNo!=null">
+					and qdi.defects_breakageTicketNo like #{defects_breakageTicketNo}
+				</if>
+				
+				<if test="defects_purchasedCheck!=null">
+					and qdi.defects_purchasedCheck = #{defects_purchasedCheck}
+				</if>
+				<if test="defects_purchasedPerson!=null">
+					and qdi.defects_purchasedPerson like #{defects_purchasedPerson}
+				</if>
+				
+				
+				<if test="defects_qualitycdCheck!=null">
+					and qdi.defects_qualitycdCheck = #{defects_qualitycdCheck}
+				</if>
+				<if test="defects_qualitycdPerson!=null">
+					and qdi.defects_qualitycdPerson like #{defects_qualitycdPerson}
+				</if>
+				
+				<if test="defects_storagetdCheck!=null">
+					and qdi.defects_storagetdCheck = #{defects_storagetdCheck}
+				</if>
+				<if test="defects_storagetdPerson!=null">
+					and qdi.defects_storagetdPerson like #{defects_storagetdPerson}
+				</if>
+				
+				<if test="defects_qaCheck!=null">
+					and qdi.defects_qaCheck = #{defects_qaCheck}
+				</if>
+				<if test="defects_qaPerson!=null">
+					and qdi.defects_qaPerson like #{defects_qaPerson}
+				</if>
+				
+				<if test="defects_financialdCheck!=null">
+					and qdi.defects_financialdCheck = #{defects_financialdCheck}
+				</if>
+				<if test="defects_financialdPerson!=null">
+					and qdi.defects_financialdPerson like #{defects_financialdPerson}
+				</if>
+				
+				<if test="defects_managerCheck!=null">
+					and qdi.defects_managerCheck = #{defects_managerCheck}
+				</if>
+				<if test="defects_managerPerson!=null">
+					and qdi.defects_managerPerson like #{defects_managerPerson}
+				</if>
+				
+				<if test="defects_printTicketNo!=null">
+					and qdi.defects_printTicketNo like #{defects_printTicketNo}
+				</if>
+				<if test="defects_print!=null">
+					and qdi.defects_print = #{defects_print}
+				</if>
+				<if test="defects_destructionPrint!=null">
+					and qdi.defects_destructionPrint = #{defects_destructionPrint}
+				</if>	
+				<if test="defects_draft!=null">
+					and qdi.defects_draft = #{defects_draft}
+				</if>	
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="QltDefectsInfoVO" resultType="int">
+		select
+		count(defects_id) as count
+		from
+		qlt_defects_info as qdi, pro_infoManage as pi
+		<where>
+			qdi.status = 0 and qdi.product_id = pi.product_id 
+			<if test="product_name != null">
+				and pi.product_name like #{product_name} 
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="QltDefectsInfo" useGeneratedKeys="true" keyProperty="defects_id">
+		 insert into qlt_defects_info(
+			product_id, stock_info_id, department_id, defects_date, defects_number, 
+			defects_storagePlace, defects_suggestion, defects_result, defects_remark, defects_person, 
+			defects_ticketNo, defects_reason, defects_quality, defects_check, defects_checkPerson, 
+			defects_checkTime, defects_checkSuggestion, defects_profitLoss, defects_profitLossTime, defects_profitReason, 
+			defects_destruction, defects_destructionTime, defects_destructionReason, defects_destructionWay, defects_destructionPlace, 
+			defects_destructionDate, defects_destructionSituation, defects_transMode, defects_transPerson, defects_destructionPerson, 
+			defects_destructionExecutor, defects_destructionCustodian, defects_profitTicketNo, defects_destrucTicketNo, defects_breakageTicketNo, 
+			defects_breakage, defects_breakagePerson, defects_breakageTime, defects_breakageReason, defects_purchasedCheck, 
+			defects_purchasedPerson, defects_purchasedTime, defects_purchasedOpinion, defects_qualitycdCheck, defects_qualitycdPerson, 
+			defects_qualitycdTime, defects_qualitycdOpinion, defects_storagetdCheck, defects_storagetdPerson, defects_storagetdTime, 
+			defects_storagetdOpinion, defects_qaCheck, defects_qaPerson, defects_qaTime, defects_qaOpinion, 
+			defects_financialdCheck, defects_financialdPerson, defects_financialdTime, defects_financialdOpinion, defects_managerCheck, 
+			defects_managerPerson, defects_managerTime, defects_managerOpinion, defects_printTicketNo, defects_print, 
+			defects_printTime, defects_printPerson, defects_destructionPrint, defects_destructionPrintPerson, defects_destructionPrintTime, 
+			defects_destrucApplyReason, create_user, create_time, last_modify_user, last_modify_time, status, defects_draft)
+		values(
+			#{product_id}, #{stock_info_id}, #{department_id}, #{defects_date}, #{defects_number}, 
+			#{defects_storagePlace}, #{defects_suggestion}, #{defects_result}, #{defects_remark}, #{defects_person}, 
+			#{defects_ticketNo}, #{defects_reason}, #{defects_quality}, #{defects_check}, #{defects_checkPerson}, 
+			#{defects_checkTime}, #{defects_checkSuggestion}, #{defects_profitLoss}, #{defects_profitLossTime}, #{defects_profitReason}, 
+			#{defects_destruction}, #{defects_destructionTime}, #{defects_destructionReason}, #{defects_destructionWay}, #{defects_destructionPlace}, 
+			#{defects_destructionDate}, #{defects_destructionSituation}, #{defects_transMode}, #{defects_transPerson}, #{defects_destructionPerson}, 
+			#{defects_destructionExecutor}, #{defects_destructionCustodian}, #{defects_profitTicketNo}, #{defects_destrucTicketNo}, #{defects_breakageTicketNo}, 
+			#{defects_breakage}, #{defects_breakagePerson}, #{defects_breakageTime}, #{defects_breakageReason}, #{defects_purchasedCheck}, 
+			#{defects_purchasedPerson}, #{defects_purchasedTime}, #{defects_purchasedOpinion}, #{defects_qualitycdCheck}, #{defects_qualitycdPerson}, 
+			#{defects_qualitycdTime}, #{defects_qualitycdOpinion}, #{defects_storagetdCheck}, #{defects_storagetdPerson}, #{defects_storagetdTime}, 
+			#{defects_storagetdOpinion}, #{defects_qaCheck}, #{defects_qaPerson}, #{defects_qaTime}, #{defects_qaOpinion}, 
+			#{defects_financialdCheck}, #{defects_financialdPerson}, #{defects_financialdTime}, #{defects_financialdOpinion}, #{defects_managerCheck}, 
+			#{defects_managerPerson}, #{defects_managerTime}, #{defects_managerOpinion}, #{defects_printTicketNo}, #{defects_print}, 
+			#{defects_printTime}, #{defects_printPerson}, #{defects_destructionPrint}, #{defects_destructionPrintPerson}, #{defects_destructionPrintTime}, 
+			#{defects_destrucApplyReason}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, #{status}, #{defects_draft});
+	</insert>
+	
+	<!-- 添加日志 -->
+	<insert id="addLog" parameterType="QltDefectsInfo" useGeneratedKeys="true" keyProperty="defects_log_id">
+		 insert into qlt_defects_info_log(
+			defects_id, product_id, stock_info_id, department_id, defects_date, defects_number, 
+			defects_storagePlace, defects_suggestion, defects_result, defects_remark, defects_person, 
+			defects_ticketNo, defects_reason, defects_quality, defects_check, defects_checkPerson, 
+			defects_checkTime, defects_checkSuggestion, defects_profitLoss, defects_profitLossTime, defects_profitReason, 
+			defects_destruction, defects_destructionTime, defects_destructionReason, defects_destructionWay, defects_destructionPlace, 
+			defects_destructionDate, defects_destructionSituation, defects_transMode, defects_transPerson, defects_destructionPerson, 
+			defects_destructionExecutor, defects_destructionCustodian, defects_profitTicketNo, defects_destrucTicketNo, defects_breakageTicketNo, 
+			defects_breakage, defects_breakagePerson, defects_breakageTime, defects_breakageReason, defects_purchasedCheck, 
+			defects_purchasedPerson, defects_purchasedTime, defects_purchasedOpinion, defects_qualitycdCheck, defects_qualitycdPerson, 
+			defects_qualitycdTime, defects_qualitycdOpinion, defects_storagetdCheck, defects_storagetdPerson, defects_storagetdTime, 
+			defects_storagetdOpinion, defects_qaCheck, defects_qaPerson, defects_qaTime, defects_qaOpinion, 
+			defects_financialdCheck, defects_financialdPerson, defects_financialdTime, defects_financialdOpinion, defects_managerCheck, 
+			defects_managerPerson, defects_managerTime, defects_managerOpinion, defects_printTicketNo, defects_print, 
+			defects_printTime, defects_printPerson, defects_destructionPrint, defects_destructionPrintPerson, defects_destructionPrintTime, 
+			defects_destrucApplyReason, create_user, create_time, last_modify_user, last_modify_time, status, defects_draft)
+		values(
+			#{defects_id}, #{product_id}, #{stock_info_id}, #{department_id}, #{defects_date}, #{defects_number}, 
+			#{defects_storagePlace}, #{defects_suggestion}, #{defects_result}, #{defects_remark}, #{defects_person}, 
+			#{defects_ticketNo}, #{defects_reason}, #{defects_quality}, #{defects_check}, #{defects_checkPerson}, 
+			#{defects_checkTime}, #{defects_checkSuggestion}, #{defects_profitLoss}, #{defects_profitLossTime}, #{defects_profitReason}, 
+			#{defects_destruction}, #{defects_destructionTime}, #{defects_destructionReason}, #{defects_destructionWay}, #{defects_destructionPlace}, 
+			#{defects_destructionDate}, #{defects_destructionSituation}, #{defects_transMode}, #{defects_transPerson}, #{defects_destructionPerson}, 
+			#{defects_destructionExecutor}, #{defects_destructionCustodian}, #{defects_profitTicketNo}, #{defects_destrucTicketNo}, #{defects_breakageTicketNo}, 
+			#{defects_breakage}, #{defects_breakagePerson}, #{defects_breakageTime}, #{defects_breakageReason}, #{defects_purchasedCheck}, 
+			#{defects_purchasedPerson}, #{defects_purchasedTime}, #{defects_purchasedOpinion}, #{defects_qualitycdCheck}, #{defects_qualitycdPerson}, 
+			#{defects_qualitycdTime}, #{defects_qualitycdOpinion}, #{defects_storagetdCheck}, #{defects_storagetdPerson}, #{defects_storagetdTime}, 
+			#{defects_storagetdOpinion}, #{defects_qaCheck}, #{defects_qaPerson}, #{defects_qaTime}, #{defects_qaOpinion}, 
+			#{defects_financialdCheck}, #{defects_financialdPerson}, #{defects_financialdTime}, #{defects_financialdOpinion}, #{defects_managerCheck}, 
+			#{defects_managerPerson}, #{defects_managerTime}, #{defects_managerOpinion}, #{defects_printTicketNo}, #{defects_print}, 
+			#{defects_printTime}, #{defects_printPerson}, #{defects_destructionPrint}, #{defects_destructionPrintPerson}, #{defects_destructionPrintTime}, 
+			#{defects_destrucApplyReason}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, #{status}, #{defects_draft});
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="QltDefectsInfo">
+		 update qlt_defects_info
+			<set>
+				<if test="product_id != null">
+					product_id = #{product_id},
+				</if>
+				<if test="stock_info_id != null">
+					stock_info_id = #{stock_info_id},
+				</if>
+				<if test="department_id != null">
+					department_id = #{department_id},
+				</if>
+				<if test="defects_date != null">
+					defects_date = #{defects_date},
+				</if>
+				<if test="defects_number != null">
+					defects_number = #{defects_number},
+				</if>
+				<if test="defects_storagePlace != null">
+					defects_storagePlace = #{defects_storagePlace},
+				</if>
+				<if test="defects_suggestion != null">
+					defects_suggestion = #{defects_suggestion},
+				</if>
+				<if test="defects_result != null">
+					defects_result = #{defects_result},
+				</if>
+				<if test="defects_remark != null">
+					defects_remark = #{defects_remark},
+				</if>
+				<if test="defects_person != null">
+					defects_person = #{defects_person},
+				</if>
+				<if test="defects_ticketNo != null">
+					defects_ticketNo = #{defects_ticketNo},
+				</if>
+				<if test="defects_reason != null">
+					defects_reason = #{defects_reason},
+				</if>
+				<if test="defects_quality != null">
+					defects_quality = #{defects_quality},
+				</if>
+				<if test="defects_check != null">
+					defects_check = #{defects_check},
+				</if>
+				<if test="defects_checkPerson != null">
+					defects_checkPerson = #{defects_checkPerson},
+				</if>
+				<if test="defects_checkTime != null">
+					defects_checkTime = #{defects_checkTime},
+				</if>
+				<if test="defects_checkSuggestion != null">
+					defects_checkSuggestion = #{defects_checkSuggestion},
+				</if>
+				<if test="defects_profitLoss != null">
+					defects_profitLoss = #{defects_profitLoss},
+				</if>
+				<if test="defects_profitLossTime != null">
+					defects_profitLossTime = #{defects_profitLossTime},
+				</if>
+				<if test="defects_profitReason != null">
+					defects_profitReason = #{defects_profitReason},
+				</if>
+				<if test="defects_destruction != null">
+					defects_destruction = #{defects_destruction},
+				</if>
+				<if test="defects_destructionTime != null">
+					defects_destructionTime = #{defects_destructionTime},
+				</if>
+				<if test="defects_destructionReason != null">
+					defects_destructionReason = #{defects_destructionReason},
+				</if>
+				<if test="defects_destructionWay != null">
+					defects_destructionWay = #{defects_destructionWay},
+				</if>
+				<if test="defects_destructionPlace != null">
+					defects_destructionPlace = #{defects_destructionPlace},
+				</if>
+				<if test="defects_destructionDate != null">
+					defects_destructionDate = #{defects_destructionDate},
+				</if>
+				<if test="defects_destructionSituation != null">
+					defects_destructionSituation = #{defects_destructionSituation},
+				</if>
+				<if test="defects_transMode != null">
+					defects_transMode = #{defects_transMode},
+				</if>
+				<if test="defects_transPerson != null">
+					defects_transPerson = #{defects_transPerson},
+				</if>
+				<if test="defects_destructionPerson != null">
+					defects_destructionPerson = #{defects_destructionPerson},
+				</if>
+				<if test="defects_destructionExecutor != null">
+					defects_destructionExecutor = #{defects_destructionExecutor},
+				</if>
+				<if test="defects_destructionCustodian != null">
+					defects_destructionCustodian = #{defects_destructionCustodian},
+				</if>
+				<if test="defects_profitTicketNo != null">
+					defects_profitTicketNo = #{defects_profitTicketNo},
+				</if>
+				<if test="defects_destrucTicketNo != null">
+					defects_destrucTicketNo = #{defects_destrucTicketNo},
+				</if>
+				<if test="defects_breakageTicketNo != null">
+					defects_breakageTicketNo = #{defects_breakageTicketNo},
+				</if>
+				<if test="defects_breakage != null">
+					defects_breakage = #{defects_breakage},
+				</if>
+				<if test="defects_breakagePerson != null">
+					defects_breakagePerson = #{defects_breakagePerson},
+				</if>
+				<if test="defects_breakageTime != null">
+					defects_breakageTime = #{defects_breakageTime},
+				</if>
+				<if test="defects_breakageReason != null">
+					defects_breakageReason = #{defects_breakageReason},
+				</if>
+				<if test="defects_purchasedCheck != null">
+					defects_purchasedCheck = #{defects_purchasedCheck},
+				</if>
+				<if test="defects_purchasedPerson != null">
+					defects_purchasedPerson = #{defects_purchasedPerson},
+				</if>
+				<if test="defects_purchasedTime != null">
+					defects_purchasedTime = #{defects_purchasedTime},
+				</if>
+				<if test="defects_purchasedOpinion != null">
+					defects_purchasedOpinion = #{defects_purchasedOpinion},
+				</if>
+				<if test="defects_qualitycdCheck != null">
+					defects_qualitycdCheck = #{defects_qualitycdCheck},
+				</if>
+				<if test="defects_qualitycdPerson != null">
+					defects_qualitycdPerson = #{defects_qualitycdPerson},
+				</if>
+				<if test="defects_qualitycdTime != null">
+					defects_qualitycdTime = #{defects_qualitycdTime},
+				</if>
+				<if test="defects_qualitycdOpinion != null">
+					defects_qualitycdOpinion = #{defects_qualitycdOpinion},
+				</if>
+				<if test="defects_storagetdCheck != null">
+					defects_storagetdCheck = #{defects_storagetdCheck},
+				</if>
+				<if test="defects_storagetdPerson != null">
+					defects_storagetdPerson = #{defects_storagetdPerson},
+				</if>
+				<if test="defects_storagetdTime != null">
+					defects_storagetdTime = #{defects_storagetdTime},
+				</if>
+				<if test="defects_storagetdOpinion != null">
+					defects_storagetdOpinion = #{defects_storagetdOpinion},
+				</if>
+				<if test="defects_qaCheck != null">
+					defects_qaCheck = #{defects_qaCheck},
+				</if>
+				<if test="defects_qaPerson != null">
+					defects_qaPerson = #{defects_qaPerson},
+				</if>
+				<if test="defects_qaTime != null">
+					defects_qaTime = #{defects_qaTime},
+				</if>
+				<if test="defects_qaOpinion != null">
+					defects_qaOpinion = #{defects_qaOpinion},
+				</if>
+				<if test="defects_financialdCheck != null">
+					defects_financialdCheck = #{defects_financialdCheck},
+				</if>
+				<if test="defects_financialdPerson != null">
+					defects_financialdPerson = #{defects_financialdPerson},
+				</if>
+				<if test="defects_financialdTime != null">
+					defects_financialdTime = #{defects_financialdTime},
+				</if>
+				<if test="defects_financialdOpinion != null">
+					defects_financialdOpinion = #{defects_financialdOpinion},
+				</if>
+				<if test="defects_managerCheck != null">
+					defects_managerCheck = #{defects_managerCheck},
+				</if>
+				<if test="defects_managerPerson != null">
+					defects_managerPerson = #{defects_managerPerson},
+				</if>
+				<if test="defects_managerTime != null">
+					defects_managerTime = #{defects_managerTime},
+				</if>
+				<if test="defects_managerOpinion != null">
+					defects_managerOpinion = #{defects_managerOpinion},
+				</if>
+				<if test="defects_printTicketNo != null">
+					defects_printTicketNo = #{defects_printTicketNo},
+				</if>
+				<if test="defects_print != null">
+					defects_print = #{defects_print},
+				</if>
+				<if test="defects_printTime != null">
+					defects_printTime = #{defects_printTime},
+				</if>
+				<if test="defects_printPerson != null">
+					defects_printPerson = #{defects_printPerson},
+				</if>
+				<if test="defects_destructionPrint != null">
+					defects_destructionPrint = #{defects_destructionPrint},
+				</if>
+				<if test="defects_destructionPrintPerson != null">
+					defects_destructionPrintPerson = #{defects_destructionPrintPerson},
+				</if>
+				<if test="defects_destructionPrintTime != null">
+					defects_destructionPrintTime = #{defects_destructionPrintTime},
+				</if>
+				<if test="defects_destrucApplyReason != null">
+					defects_destrucApplyReason = #{defects_destrucApplyReason},
+				</if>
+				<if test="create_user != null">
+					create_user = #{create_user},
+				</if>
+				<if test="create_time != null">
+					create_time = #{create_time},
+				</if>
+				<if test="last_modify_user != null">
+					last_modify_user = #{last_modify_user},
+				</if>
+				<if test="last_modify_time != null">
+					last_modify_time = #{last_modify_time},
+				</if>
+				<if test="status != null">
+					status = #{status},
+				</if>
+				<if test="defects_draft != null">
+					defects_draft = #{defects_draft},
+				</if>
+			</set>where defects_id = #{defects_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update qlt_defects_info set
+		status = 9 where defects_id = #{defects_id}
+	</delete>
+	
+	<!-- 返回当前数据库表中最大不合格品种票号 -->
+	<!-- <select id="getMaxDefectsTicket"  resultType="Integer">
+		select max(cast(substring(defects_ticketNo,9,4) as INT)) 
+		from qlt_defects_info
+		where substring(defects_ticketNo,1,8) = #{date}
+	</select> -->
+	
+	<!-- 返回当前数据库表中最大不合格品种票号 -->
+	<select id="getMaxDefectsTicket"  resultType="Integer">
+		select max(cast(substring(defects_ticketNo,10,14) as INT)) 
+		from qlt_defects_info
+		where substring(defects_ticketNo,2,8) = #{date}
+	</select>
+	
+	<!-- 返回当前数据库表中最大不合格品种报损票号 -->
+	<select id="getMaxDefectsProfitTicket"  resultType="Integer">
+		select max(cast(substring(defects_profitTicketNo,10,14) as INT)) 
+		from qlt_defects_info
+		where substring(defects_profitTicketNo,2,8) = #{date}
+	</select>
+	
+	<!-- 返回当前数据库表中最大不合格品种损益票号 -->
+	<select id="getMaxDefectsBreakageTicket"  resultType="Integer">
+		select max(cast(substring(defects_breakageTicketNo,10,14) as INT)) 
+		from qlt_defects_info
+		where substring(defects_breakageTicketNo,2,8) = #{date}
+	</select>
+	
+	<!-- 返回当前数据库表中最大不合格品种销毁票号 -->
+	<select id="getMaxDefectsDestructionTicket"  resultType="Integer">
+		select max(cast(substring(defects_destrucTicketNo,10,14) as INT)) 
+		from qlt_defects_info
+		where substring(defects_destrucTicketNo,2,8) = #{date}
+	</select>
+	
+	<!-- 批量更新表中不合格品种信息 -->
+	<update id="updateDefectsInfos" parameterType="map">
+		 update qlt_defects_info
+		  	<set>
+				defects_ticketNo = #{defects_ticketNo},
+				defects_draft = #{defects_draft},
+			</set>
+			where defects_id in
+				<foreach collection="list" item="item" index="index" open="(" separator="," close=")" > 
+				 	#{item} 
+	   			</foreach>  
+	</update>  
+</mapper> 

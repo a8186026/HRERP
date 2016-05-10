@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.accept.persist.PurAcceptRejectDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="PurAcceptReject">
+		select *
+		from pur_accept_reject
+		where reject_id = #{id}
+	</select>
+	
+	<!-- 返回当前数据库表中最大拒收票号  -->
+	<select id="getMaxRejectTicket"  resultType="Integer">
+		select max(cast(substring(reject_ticket,15,19) as INT)) 
+		from pur_accept_reject
+		where substring(reject_ticket,7,8) = #{date}
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="PurAcceptReject" resultType="PurAcceptRejectVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from pur_accept_reject as par,pro_infoManage as pim,sup_infoManage as sim,sys_user as su
+		<where>
+			par.reject_status = 1 and par.product_id = pim.product_id and par.sup_id = sim.sup_id and par.reject_person = su.user_id
+			<if test="reject_id != null">
+				and reject_id = #{reject_id}
+			</if>
+			<if test="offset != null and offset !=0">
+				and reject_id not in(select top ${offset} reject_id 
+				from pur_accept_reject as par,pro_infoManage as pim,sup_infoManage as sim,sys_user as su
+				where
+					par.reject_status = 1 and par.product_id = pim.product_id and par.sup_id = sim.sup_id and par.reject_person = su.user_id
+					<if test="reject_id != null">
+					and reject_id = #{reject_id}
+					</if>
+					)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="PurAcceptReject" resultType="int">
+		select
+		count(reject_id) as count
+		from pur_accept_reject as par,pro_infoManage as pim,sup_infoManage as sim,sys_user as su
+		<where>
+			par.reject_status = 1 and par.product_id = pim.product_id and par.sup_id = sim.sup_id and par.reject_person = su.user_id
+			<!-- <if test="acc_name != null">
+				and acc_name like #{acc_name}
+			</if>
+			<if test="acc_bank != null">
+				and acc_bank like #{acc_bank}
+			</if>
+			<if test="acc_no != null">
+				and acc_no like #{acc_no}
+			</if>
+			<if test="acc_type != null">
+				and acc_type = #{acc_type}
+			</if>
+			<if test="acc_type_id != null">
+				and acc_type_id = #{acc_type_id}
+			</if> -->
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="PurAcceptReject" useGeneratedKeys="true"
+		keyProperty="reject_id">
+		insert into pur_accept_reject(
+		product_id, sup_id, reject_batchnum, reject_validtime, reject_productdate, reject_num,
+		reject_price, reject_time, reject_reason, reject_quality, reject_ticket,reject_status,reject_person)
+		
+		values(#{product_id},#{sup_id},#{reject_batchnum},#{reject_validtime},#{reject_productdate},#{reject_num},
+		#{reject_price},#{reject_time},#{reject_reason},#{reject_quality},#{reject_ticket},#{reject_status},#{reject_person});
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="PurAcceptReject">
+		update pur_accept_reject
+		<set>
+			<if test="reject_batchnum != null">
+				reject_batchnum = #{reject_batchnum},
+			</if>
+			<if test="reject_num != null">
+				reject_num = #{reject_num},
+			</if>
+		 	<if test="reject_price != null">
+				reject_price = #{reject_price},
+			</if>
+			<if test="reject_time != null">
+				reject_time = #{reject_time},
+			</if>
+			<if test="reject_reason != null">
+				reject_reason = #{reject_reason},
+			</if>
+			<if test="reject_status != null">
+				reject_status = #{reject_status},
+			</if>
+ 		 	<if test="reject_person != null">
+				reject_person = #{reject_person},
+			</if>
+			<if test="reject_validtime != null">
+				reject_validtime = #{reject_validtime},
+			</if>
+ 		 	<if test="reject_productdate != null">
+				reject_productdate = #{reject_productdate},
+			</if>
+			<if test="reject_ticket != null">
+				reject_ticket = #{reject_ticket},
+			</if>
+		</set>
+		where reject_id = #{reject_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from pur_accept_reject 
+		where reject_id = #{id}
+	</delete>
+	 
+</mapper> 

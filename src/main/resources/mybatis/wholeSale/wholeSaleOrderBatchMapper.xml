@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.wholeSale.persist.WholeSaleOrderBatchDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="WholeSaleOrderBatch">
+		select *
+		from wholeSale_order_batch
+		where wholeSale_batch_id = #{id} 
+	</select>
+
+
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="WholeSaleOrderBatch">
+		select *
+		from wholeSale_order_batch
+		<where>
+			<if test="wholeSale_batch_id!=null">
+			and wholeSale_batch_id like #{wholeSale_batch_id}
+			</if>
+			<if test="wholeSale_order_ticketId!=null">
+			and wholeSale_order_ticketId like #{wholeSale_order_ticketId}
+			</if>
+			<if test="wholeSale_productId!=null">
+			and wholeSale_productId like #{wholeSale_productId}
+			</if>
+			<if test="wholeSale_batch_smallNumber!=null">
+			and wholeSale_batch_smallNumber like #{wholeSale_batch_smallNumber}
+			</if>
+			<if test="stock_info_id!=null">
+			and stock_info_id like #{stock_info_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="stock_storage!=null">
+			and stock_storage like #{stock_storage}
+			</if>
+			<if test="stock_packunit!=null">
+			and stock_packunit like #{stock_packunit}
+			</if>
+			<if test="stock_batchCode!=null">
+			and stock_batchCode like #{stock_batchCode}
+			</if>
+			<if test="stock_invalidDate!=null">
+			and stock_invalidDate like #{stock_invalidDate}
+			</if>
+			<if test="product_barcode!=null">
+			and product_barcode like #{product_barcode}
+			</if>
+			<if test="stock_storageNumber!=null">
+			and stock_storageNumber like #{stock_storageNumber}
+			</if>
+			<if test="stock_purchasePrice!=null">
+			and stock_purchasePrice like #{stock_purchasePrice}
+			</if>
+			<if test="stock_settlementPrice!=null">
+			and stock_settlementPrice like #{stock_settlementPrice}
+			</if>
+			<if test="stock_intakeTicket!=null">
+			and stock_intakeTicket like #{stock_intakeTicket}
+			</if>
+			<if test="stock_intakeSmallNumber!=null">
+			and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+			</if>
+			<if test="wholeSale_batch_quantity!=null">
+			and wholeSale_batch_quantity like #{wholeSale_batch_quantity}
+			</if>
+			<if test="wholeSale_batch_unitPrice!=null">
+			and wholeSale_batch_unitPrice like #{wholeSale_batch_unitPrice}
+			</if>
+			<if test="wholeSale_batch_cutDifference!=null">
+			and wholeSale_batch_cutDifference like #{wholeSale_batch_cutDifference}
+			</if>
+			<if test="wholeSale_batch_amount!=null">
+			and wholeSale_batch_amount like #{wholeSale_batch_amount}
+			</if>
+			<if test="wholeSale_batch_grossProfit!=null">
+			and wholeSale_batch_grossProfit like #{wholeSale_batch_grossProfit}
+			</if>
+			<if test="wholeSale_batch_paymentTime!=null">
+			and wholeSale_batch_paymentTime like #{wholeSale_batch_paymentTime}
+			</if>
+			<if test="wholeSale_batch_storageSettlement!=null">
+			and wholeSale_batch_storageSettlement like #{wholeSale_batch_storageSettlement}
+			</if>
+			<if test="wholeSale_batch_settlementTime!=null">
+			and wholeSale_batch_settlementTime like #{wholeSale_batch_settlementTime}
+			</if>
+			<if test="wholeSale_batch_refundQuantity!=null">
+			and wholeSale_batch_refundQuantity like #{wholeSale_batch_refundQuantity}
+			</if>
+			<if test="wholeSale_batch_storageReceive!=null">
+			and wholeSale_batch_storageReceive like #{wholeSale_batch_storageReceive}
+			</if>
+			<if test="wholeSale_batch_receiveTime!=null">
+			and wholeSale_batch_receiveTime like #{wholeSale_batch_receiveTime}
+			</if>
+			<if test="wholeSale_batch_date!=null">
+			and wholeSale_batch_date like #{wholeSale_batch_date}
+			</if>
+			<if test="wholeSale_batch_storageCheck!=null">
+			and wholeSale_batch_storageCheck like #{wholeSale_batch_storageCheck}
+			</if>
+			<if test="wholeSale_batch_storageCheckPerson!=null">
+			and wholeSale_batch_storageCheckPerson like #{wholeSale_batch_storageCheckPerson}
+			</if>
+			<if test="wholeSale_batch_storageCheckTime!=null">
+			and wholeSale_batch_storageCheckTime like #{wholeSale_batch_storageCheckTime}
+			</if>
+			<if test="wholeSale_batch_discountAmount!=null">
+			and wholeSale_batch_discountAmount like #{wholeSale_batch_discountAmount}
+			</if>
+			<if test="wholeSale_batch_brokerage!=null">
+			and wholeSale_batch_brokerage like #{wholeSale_batch_brokerage}
+			</if>
+			<if test="wholeSale_batch_groupNum!=null">
+			and wholeSale_batch_groupNum like #{wholeSale_batch_groupNum}
+			</if>
+			<if test="wholeSale_batch_brokerage2!=null">
+			and wholeSale_batch_brokerage2 like #{wholeSale_batch_brokerage2}
+			</if>
+			<if test="wholeSale_batch_promotionVariety!=null">
+			and wholeSale_batch_promotionVariety like #{wholeSale_batch_promotionVariety}
+			</if>
+			<if test="wholeSale_batch_retailCommission!=null">
+			and wholeSale_batch_retailCommission like #{wholeSale_batch_retailCommission}
+			</if>
+			<if test="wholeSale_batch_mbernointegral!=null">
+			and wholeSale_batch_mbernointegral like #{wholeSale_batch_mbernointegral}
+			</if>
+			<if test="wholeSale_batch_documentGroupNum!=null">
+			and wholeSale_batch_documentGroupNum like #{wholeSale_batch_documentGroupNum}
+			</if>
+			<if test="wholeSale_batch_originalDeliveryTicketId!=null">
+			and wholeSale_batch_originalDeliveryTicketId like #{wholeSale_batch_originalDeliveryTicketId}
+			</if>
+			<if test="wholeSale_batch_point!=null">
+			and wholeSale_batch_point like #{wholeSale_batch_point}
+			</if>
+			<if test="wholeSale_batch_pointMutiple!=null">
+			and wholeSale_batch_pointMutiple like #{wholeSale_batch_pointMutiple}
+			</if>
+			<if test="wholeSale_batch_pointAmount!=null">
+			and wholeSale_batch_pointAmount like #{wholeSale_batch_pointAmount}
+			</if>
+			<if test="wholeSale_batch_originalDeliverySmallNum!=null">
+			and wholeSale_batch_originalDeliverySmallNum like #{wholeSale_batch_originalDeliverySmallNum}
+			</if>
+			<if test="wholeSale_batch_allowReturn!=null">
+			and wholeSale_batch_allowReturn like #{wholeSale_batch_allowReturn}
+			</if>
+			<if test="wholeSale_batch_allowReturnPerson!=null">
+			and wholeSale_batch_allowReturnPerson like #{wholeSale_batch_allowReturnPerson}
+			</if>
+			<if test="wholeSale_batch_allowReturnTime!=null">
+			and wholeSale_batch_allowReturnTime like #{wholeSale_batch_allowReturnTime}
+			</if>
+			<if test="wholeSale_batch_aloowReturnReason!=null">
+			and wholeSale_batch_aloowReturnReason like #{wholeSale_batch_aloowReturnReason}
+			</if>
+			<if test="wholeSale_batch_othercategory2!=null">
+			and wholeSale_batch_othercategory2 like #{wholeSale_batch_othercategory2}
+			</if>
+			<if test="wholeSale_batch_saleId!=null">
+			and wholeSale_batch_saleId like #{wholeSale_batch_saleId}
+			</if>
+			<if test="wholeSale_batch_saleType!=null">
+			and wholeSale_batch_saleType like #{wholeSale_batch_saleType}
+			</if>
+			<if test="wholeSale_batch_member!=null">
+			and wholeSale_batch_member like #{wholeSale_batch_member}
+			</if>
+			<if test="wholeSale_batch_storePrice!=null">
+			and wholeSale_batch_storePrice like #{wholeSale_batch_storePrice}
+			</if>
+			<if test="wholeSale_batch_fullGiftAmount!=null">
+			and wholeSale_batch_fullGiftAmount like #{wholeSale_batch_fullGiftAmount}
+			</if>
+			<if test="wholeSale_batch_fullGiftExchange!=null">
+			and wholeSale_batch_fullGiftExchange like #{wholeSale_batch_fullGiftExchange}
+			</if>
+			<if test="wholeSale_batch_singleDiscountAuthoPerson!=null">
+			and wholeSale_batch_singleDiscountAuthoPerson like #{wholeSale_batch_singleDiscountAuthoPerson}
+			</if>
+			<if test="wholeSale_batch_singleDiscountAuthoReason!=null">
+			and wholeSale_batch_singleDiscountAuthoReason like #{wholeSale_batch_singleDiscountAuthoReason}
+			</if>
+			<if test="wholeSale_batch_intakeBrief!=null">
+			and wholeSale_batch_intakeBrief like #{wholeSale_batch_intakeBrief}
+			</if>
+			<if test="wholeSale_batch_receive!=null">
+			and wholeSale_batch_receive like #{wholeSale_batch_receive}
+			</if>
+			<if test="wholeSale_batch_dismounting!=null">
+			and wholeSale_batch_dismounting like #{wholeSale_batch_dismounting}
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="WholeSaleOrderBatch" resultType="int">
+		select count(wholeSale_batch_id) as count 
+		from wholeSale_order_batch
+		<where>
+			<if test="wholeSale_batch_id!=null">
+			and wholeSale_batch_id like #{wholeSale_batch_id}
+			</if>
+			<if test="wholeSale_order_ticketId!=null">
+			and wholeSale_order_ticketId like #{wholeSale_order_ticketId}
+			</if>
+			<if test="wholeSale_productId!=null">
+			and wholeSale_productId like #{wholeSale_productId}
+			</if>
+			<if test="wholeSale_batch_smallNumber!=null">
+			and wholeSale_batch_smallNumber like #{wholeSale_batch_smallNumber}
+			</if>
+			<if test="stock_info_id!=null">
+			and stock_info_id like #{stock_info_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="stock_storage!=null">
+			and stock_storage like #{stock_storage}
+			</if>
+			<if test="stock_packunit!=null">
+			and stock_packunit like #{stock_packunit}
+			</if>
+			<if test="stock_batchCode!=null">
+			and stock_batchCode like #{stock_batchCode}
+			</if>
+			<if test="stock_invalidDate!=null">
+			and stock_invalidDate like #{stock_invalidDate}
+			</if>
+			<if test="product_barcode!=null">
+			and product_barcode like #{product_barcode}
+			</if>
+			<if test="stock_storageNumber!=null">
+			and stock_storageNumber like #{stock_storageNumber}
+			</if>
+			<if test="stock_purchasePrice!=null">
+			and stock_purchasePrice like #{stock_purchasePrice}
+			</if>
+			<if test="stock_settlementPrice!=null">
+			and stock_settlementPrice like #{stock_settlementPrice}
+			</if>
+			<if test="stock_intakeTicket!=null">
+			and stock_intakeTicket like #{stock_intakeTicket}
+			</if>
+			<if test="stock_intakeSmallNumber!=null">
+			and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+			</if>
+			<if test="wholeSale_batch_quantity!=null">
+			and wholeSale_batch_quantity like #{wholeSale_batch_quantity}
+			</if>
+			<if test="wholeSale_batch_unitPrice!=null">
+			and wholeSale_batch_unitPrice like #{wholeSale_batch_unitPrice}
+			</if>
+			<if test="wholeSale_batch_cutDifference!=null">
+			and wholeSale_batch_cutDifference like #{wholeSale_batch_cutDifference}
+			</if>
+			<if test="wholeSale_batch_amount!=null">
+			and wholeSale_batch_amount like #{wholeSale_batch_amount}
+			</if>
+			<if test="wholeSale_batch_grossProfit!=null">
+			and wholeSale_batch_grossProfit like #{wholeSale_batch_grossProfit}
+			</if>
+			<if test="wholeSale_batch_paymentTime!=null">
+			and wholeSale_batch_paymentTime like #{wholeSale_batch_paymentTime}
+			</if>
+			<if test="wholeSale_batch_storageSettlement!=null">
+			and wholeSale_batch_storageSettlement like #{wholeSale_batch_storageSettlement}
+			</if>
+			<if test="wholeSale_batch_settlementTime!=null">
+			and wholeSale_batch_settlementTime like #{wholeSale_batch_settlementTime}
+			</if>
+			<if test="wholeSale_batch_refundQuantity!=null">
+			and wholeSale_batch_refundQuantity like #{wholeSale_batch_refundQuantity}
+			</if>
+			<if test="wholeSale_batch_storageReceive!=null">
+			and wholeSale_batch_storageReceive like #{wholeSale_batch_storageReceive}
+			</if>
+			<if test="wholeSale_batch_receiveTime!=null">
+			and wholeSale_batch_receiveTime like #{wholeSale_batch_receiveTime}
+			</if>
+			<if test="wholeSale_batch_date!=null">
+			and wholeSale_batch_date like #{wholeSale_batch_date}
+			</if>
+			<if test="wholeSale_batch_storageCheck!=null">
+			and wholeSale_batch_storageCheck like #{wholeSale_batch_storageCheck}
+			</if>
+			<if test="wholeSale_batch_storageCheckPerson!=null">
+			and wholeSale_batch_storageCheckPerson like #{wholeSale_batch_storageCheckPerson}
+			</if>
+			<if test="wholeSale_batch_storageCheckTime!=null">
+			and wholeSale_batch_storageCheckTime like #{wholeSale_batch_storageCheckTime}
+			</if>
+			<if test="wholeSale_batch_discountAmount!=null">
+			and wholeSale_batch_discountAmount like #{wholeSale_batch_discountAmount}
+			</if>
+			<if test="wholeSale_batch_brokerage!=null">
+			and wholeSale_batch_brokerage like #{wholeSale_batch_brokerage}
+			</if>
+			<if test="wholeSale_batch_groupNum!=null">
+			and wholeSale_batch_groupNum like #{wholeSale_batch_groupNum}
+			</if>
+			<if test="wholeSale_batch_brokerage2!=null">
+			and wholeSale_batch_brokerage2 like #{wholeSale_batch_brokerage2}
+			</if>
+			<if test="wholeSale_batch_promotionVariety!=null">
+			and wholeSale_batch_promotionVariety like #{wholeSale_batch_promotionVariety}
+			</if>
+			<if test="wholeSale_batch_retailCommission!=null">
+			and wholeSale_batch_retailCommission like #{wholeSale_batch_retailCommission}
+			</if>
+			<if test="wholeSale_batch_mbernointegral!=null">
+			and wholeSale_batch_mbernointegral like #{wholeSale_batch_mbernointegral}
+			</if>
+			<if test="wholeSale_batch_documentGroupNum!=null">
+			and wholeSale_batch_documentGroupNum like #{wholeSale_batch_documentGroupNum}
+			</if>
+			<if test="wholeSale_batch_originalDeliveryTicketId!=null">
+			and wholeSale_batch_originalDeliveryTicketId like #{wholeSale_batch_originalDeliveryTicketId}
+			</if>
+			<if test="wholeSale_batch_point!=null">
+			and wholeSale_batch_point like #{wholeSale_batch_point}
+			</if>
+			<if test="wholeSale_batch_pointMutiple!=null">
+			and wholeSale_batch_pointMutiple like #{wholeSale_batch_pointMutiple}
+			</if>
+			<if test="wholeSale_batch_pointAmount!=null">
+			and wholeSale_batch_pointAmount like #{wholeSale_batch_pointAmount}
+			</if>
+			<if test="wholeSale_batch_originalDeliverySmallNum!=null">
+			and wholeSale_batch_originalDeliverySmallNum like #{wholeSale_batch_originalDeliverySmallNum}
+			</if>
+			<if test="wholeSale_batch_allowReturn!=null">
+			and wholeSale_batch_allowReturn like #{wholeSale_batch_allowReturn}
+			</if>
+			<if test="wholeSale_batch_allowReturnPerson!=null">
+			and wholeSale_batch_allowReturnPerson like #{wholeSale_batch_allowReturnPerson}
+			</if>
+			<if test="wholeSale_batch_allowReturnTime!=null">
+			and wholeSale_batch_allowReturnTime like #{wholeSale_batch_allowReturnTime}
+			</if>
+			<if test="wholeSale_batch_aloowReturnReason!=null">
+			and wholeSale_batch_aloowReturnReason like #{wholeSale_batch_aloowReturnReason}
+			</if>
+			<if test="wholeSale_batch_othercategory2!=null">
+			and wholeSale_batch_othercategory2 like #{wholeSale_batch_othercategory2}
+			</if>
+			<if test="wholeSale_batch_saleId!=null">
+			and wholeSale_batch_saleId like #{wholeSale_batch_saleId}
+			</if>
+			<if test="wholeSale_batch_saleType!=null">
+			and wholeSale_batch_saleType like #{wholeSale_batch_saleType}
+			</if>
+			<if test="wholeSale_batch_member!=null">
+			and wholeSale_batch_member like #{wholeSale_batch_member}
+			</if>
+			<if test="wholeSale_batch_storePrice!=null">
+			and wholeSale_batch_storePrice like #{wholeSale_batch_storePrice}
+			</if>
+			<if test="wholeSale_batch_fullGiftAmount!=null">
+			and wholeSale_batch_fullGiftAmount like #{wholeSale_batch_fullGiftAmount}
+			</if>
+			<if test="wholeSale_batch_fullGiftExchange!=null">
+			and wholeSale_batch_fullGiftExchange like #{wholeSale_batch_fullGiftExchange}
+			</if>
+			<if test="wholeSale_batch_singleDiscountAuthoPerson!=null">
+			and wholeSale_batch_singleDiscountAuthoPerson like #{wholeSale_batch_singleDiscountAuthoPerson}
+			</if>
+			<if test="wholeSale_batch_singleDiscountAuthoReason!=null">
+			and wholeSale_batch_singleDiscountAuthoReason like #{wholeSale_batch_singleDiscountAuthoReason}
+			</if>
+			<if test="wholeSale_batch_intakeBrief!=null">
+			and wholeSale_batch_intakeBrief like #{wholeSale_batch_intakeBrief}
+			</if>
+			<if test="wholeSale_batch_receive!=null">
+			and wholeSale_batch_receive like #{wholeSale_batch_receive}
+			</if>
+			<if test="wholeSale_batch_dismounting!=null">
+			and wholeSale_batch_dismounting like #{wholeSale_batch_dismounting}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="WholeSaleOrderBatch" useGeneratedKeys="true" keyProperty="wholeSale_batch_id">
+		 insert into wholeSale_order_batch(
+		wholeSale_order_ticketId, wholeSale_productId, wholeSale_batch_smallNumber, stock_info_id, product_id, 
+		stock_storage, stock_packunit, stock_batchCode, stock_invalidDate, product_barcode, 
+		stock_storageNumber, stock_purchasePrice, stock_settlementPrice, stock_intakeTicket, stock_intakeSmallNumber, 
+		wholeSale_batch_quantity, wholeSale_batch_unitPrice, wholeSale_batch_cutDifference, wholeSale_batch_amount, wholeSale_batch_grossProfit, 
+		wholeSale_batch_paymentTime, wholeSale_batch_storageSettlement, wholeSale_batch_settlementTime, wholeSale_batch_refundQuantity, wholeSale_batch_storageReceive, 
+		wholeSale_batch_receiveTime, wholeSale_batch_date, wholeSale_batch_storageCheck, wholeSale_batch_storageCheckPerson, wholeSale_batch_storageCheckTime, 
+		wholeSale_batch_discountAmount, wholeSale_batch_brokerage, wholeSale_batch_groupNum, wholeSale_batch_brokerage2, wholeSale_batch_promotionVariety, 
+		wholeSale_batch_retailCommission, wholeSale_batch_mbernointegral, wholeSale_batch_documentGroupNum, wholeSale_batch_originalDeliveryTicketId, wholeSale_batch_point, 
+		wholeSale_batch_pointMutiple, wholeSale_batch_pointAmount, wholeSale_batch_originalDeliverySmallNum, wholeSale_batch_allowReturn, wholeSale_batch_allowReturnPerson, 
+		wholeSale_batch_allowReturnTime, wholeSale_batch_aloowReturnReason, wholeSale_batch_othercategory2, wholeSale_batch_saleId, wholeSale_batch_saleType, 
+		wholeSale_batch_member, wholeSale_batch_storePrice, wholeSale_batch_fullGiftAmount, wholeSale_batch_fullGiftExchange, wholeSale_batch_singleDiscountAuthoPerson, 
+		wholeSale_batch_singleDiscountAuthoReason, wholeSale_batch_intakeBrief, wholeSale_batch_receive, wholeSale_batch_dismounting)
+		values(
+		#{wholeSale_order_ticketId}, #{wholeSale_productId}, #{wholeSale_batch_smallNumber}, #{stock_info_id}, #{product_id}, 
+		#{stock_storage}, #{stock_packunit}, #{stock_batchCode}, #{stock_invalidDate}, #{product_barcode}, 
+		#{stock_storageNumber}, #{stock_purchasePrice}, #{stock_settlementPrice}, #{stock_intakeTicket}, #{stock_intakeSmallNumber}, 
+		#{wholeSale_batch_quantity}, #{wholeSale_batch_unitPrice}, #{wholeSale_batch_cutDifference}, #{wholeSale_batch_amount}, #{wholeSale_batch_grossProfit}, 
+		#{wholeSale_batch_paymentTime}, #{wholeSale_batch_storageSettlement}, #{wholeSale_batch_settlementTime}, #{wholeSale_batch_refundQuantity}, #{wholeSale_batch_storageReceive}, 
+		#{wholeSale_batch_receiveTime}, #{wholeSale_batch_date}, #{wholeSale_batch_storageCheck}, #{wholeSale_batch_storageCheckPerson}, #{wholeSale_batch_storageCheckTime}, 
+		#{wholeSale_batch_discountAmount}, #{wholeSale_batch_brokerage}, #{wholeSale_batch_groupNum}, #{wholeSale_batch_brokerage2}, #{wholeSale_batch_promotionVariety}, 
+		#{wholeSale_batch_retailCommission}, #{wholeSale_batch_mbernointegral}, #{wholeSale_batch_documentGroupNum}, #{wholeSale_batch_originalDeliveryTicketId}, #{wholeSale_batch_point}, 
+		#{wholeSale_batch_pointMutiple}, #{wholeSale_batch_pointAmount}, #{wholeSale_batch_originalDeliverySmallNum}, #{wholeSale_batch_allowReturn}, #{wholeSale_batch_allowReturnPerson}, 
+		#{wholeSale_batch_allowReturnTime}, #{wholeSale_batch_aloowReturnReason}, #{wholeSale_batch_othercategory2}, #{wholeSale_batch_saleId}, #{wholeSale_batch_saleType}, 
+		#{wholeSale_batch_member}, #{wholeSale_batch_storePrice}, #{wholeSale_batch_fullGiftAmount}, #{wholeSale_batch_fullGiftExchange}, #{wholeSale_batch_singleDiscountAuthoPerson}, 
+		#{wholeSale_batch_singleDiscountAuthoReason}, #{wholeSale_batch_intakeBrief}, #{wholeSale_batch_receive}, #{wholeSale_batch_dismounting});
+	</insert>
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="WholeSaleOrderBatch">
+		 update wholeSale_order_batch
+		<set>
+			<if test="wholeSale_order_ticketId != null">
+			wholeSale_order_ticketId = #{wholeSale_order_ticketId},
+			</if>
+			<if test="wholeSale_productId != null">
+			wholeSale_productId = #{wholeSale_productId},
+			</if>
+			<if test="wholeSale_batch_smallNumber != null">
+			wholeSale_batch_smallNumber = #{wholeSale_batch_smallNumber},
+			</if>
+			<if test="stock_info_id != null">
+			stock_info_id = #{stock_info_id},
+			</if>
+			<if test="product_id != null">
+			product_id = #{product_id},
+			</if>
+			<if test="stock_storage != null">
+			stock_storage = #{stock_storage},
+			</if>
+			<if test="stock_packunit != null">
+			stock_packunit = #{stock_packunit},
+			</if>
+			<if test="stock_batchCode != null">
+			stock_batchCode = #{stock_batchCode},
+			</if>
+			<if test="stock_invalidDate != null">
+			stock_invalidDate = #{stock_invalidDate},
+			</if>
+			<if test="product_barcode != null">
+			product_barcode = #{product_barcode},
+			</if>
+			<if test="stock_storageNumber != null">
+			stock_storageNumber = #{stock_storageNumber},
+			</if>
+			<if test="stock_purchasePrice != null">
+			stock_purchasePrice = #{stock_purchasePrice},
+			</if>
+			<if test="stock_settlementPrice != null">
+			stock_settlementPrice = #{stock_settlementPrice},
+			</if>
+			<if test="stock_intakeTicket != null">
+			stock_intakeTicket = #{stock_intakeTicket},
+			</if>
+			<if test="stock_intakeSmallNumber != null">
+			stock_intakeSmallNumber = #{stock_intakeSmallNumber},
+			</if>
+			<if test="wholeSale_batch_quantity != null">
+			wholeSale_batch_quantity = #{wholeSale_batch_quantity},
+			</if>
+			<if test="wholeSale_batch_unitPrice != null">
+			wholeSale_batch_unitPrice = #{wholeSale_batch_unitPrice},
+			</if>
+			<if test="wholeSale_batch_cutDifference != null">
+			wholeSale_batch_cutDifference = #{wholeSale_batch_cutDifference},
+			</if>
+			<if test="wholeSale_batch_amount != null">
+			wholeSale_batch_amount = #{wholeSale_batch_amount},
+			</if>
+			<if test="wholeSale_batch_grossProfit != null">
+			wholeSale_batch_grossProfit = #{wholeSale_batch_grossProfit},
+			</if>
+			<if test="wholeSale_batch_paymentTime != null">
+			wholeSale_batch_paymentTime = #{wholeSale_batch_paymentTime},
+			</if>
+			<if test="wholeSale_batch_storageSettlement != null">
+			wholeSale_batch_storageSettlement = #{wholeSale_batch_storageSettlement},
+			</if>
+			<if test="wholeSale_batch_settlementTime != null">
+			wholeSale_batch_settlementTime = #{wholeSale_batch_settlementTime},
+			</if>
+			<if test="wholeSale_batch_refundQuantity != null">
+			wholeSale_batch_refundQuantity = #{wholeSale_batch_refundQuantity},
+			</if>
+			<if test="wholeSale_batch_storageReceive != null">
+			wholeSale_batch_storageReceive = #{wholeSale_batch_storageReceive},
+			</if>
+			<if test="wholeSale_batch_receiveTime != null">
+			wholeSale_batch_receiveTime = #{wholeSale_batch_receiveTime},
+			</if>
+			<if test="wholeSale_batch_date != null">
+			wholeSale_batch_date = #{wholeSale_batch_date},
+			</if>
+			<if test="wholeSale_batch_storageCheck != null">
+			wholeSale_batch_storageCheck = #{wholeSale_batch_storageCheck},
+			</if>
+			<if test="wholeSale_batch_storageCheckPerson != null">
+			wholeSale_batch_storageCheckPerson = #{wholeSale_batch_storageCheckPerson},
+			</if>
+			<if test="wholeSale_batch_storageCheckTime != null">
+			wholeSale_batch_storageCheckTime = #{wholeSale_batch_storageCheckTime},
+			</if>
+			<if test="wholeSale_batch_discountAmount != null">
+			wholeSale_batch_discountAmount = #{wholeSale_batch_discountAmount},
+			</if>
+			<if test="wholeSale_batch_brokerage != null">
+			wholeSale_batch_brokerage = #{wholeSale_batch_brokerage},
+			</if>
+			<if test="wholeSale_batch_groupNum != null">
+			wholeSale_batch_groupNum = #{wholeSale_batch_groupNum},
+			</if>
+			<if test="wholeSale_batch_brokerage2 != null">
+			wholeSale_batch_brokerage2 = #{wholeSale_batch_brokerage2},
+			</if>
+			<if test="wholeSale_batch_promotionVariety != null">
+			wholeSale_batch_promotionVariety = #{wholeSale_batch_promotionVariety},
+			</if>
+			<if test="wholeSale_batch_retailCommission != null">
+			wholeSale_batch_retailCommission = #{wholeSale_batch_retailCommission},
+			</if>
+			<if test="wholeSale_batch_mbernointegral != null">
+			wholeSale_batch_mbernointegral = #{wholeSale_batch_mbernointegral},
+			</if>
+			<if test="wholeSale_batch_documentGroupNum != null">
+			wholeSale_batch_documentGroupNum = #{wholeSale_batch_documentGroupNum},
+			</if>
+			<if test="wholeSale_batch_originalDeliveryTicketId != null">
+			wholeSale_batch_originalDeliveryTicketId = #{wholeSale_batch_originalDeliveryTicketId},
+			</if>
+			<if test="wholeSale_batch_point != null">
+			wholeSale_batch_point = #{wholeSale_batch_point},
+			</if>
+			<if test="wholeSale_batch_pointMutiple != null">
+			wholeSale_batch_pointMutiple = #{wholeSale_batch_pointMutiple},
+			</if>
+			<if test="wholeSale_batch_pointAmount != null">
+			wholeSale_batch_pointAmount = #{wholeSale_batch_pointAmount},
+			</if>
+			<if test="wholeSale_batch_originalDeliverySmallNum != null">
+			wholeSale_batch_originalDeliverySmallNum = #{wholeSale_batch_originalDeliverySmallNum},
+			</if>
+			<if test="wholeSale_batch_allowReturn != null">
+			wholeSale_batch_allowReturn = #{wholeSale_batch_allowReturn},
+			</if>
+			<if test="wholeSale_batch_allowReturnPerson != null">
+			wholeSale_batch_allowReturnPerson = #{wholeSale_batch_allowReturnPerson},
+			</if>
+			<if test="wholeSale_batch_allowReturnTime != null">
+			wholeSale_batch_allowReturnTime = #{wholeSale_batch_allowReturnTime},
+			</if>
+			<if test="wholeSale_batch_aloowReturnReason != null">
+			wholeSale_batch_aloowReturnReason = #{wholeSale_batch_aloowReturnReason},
+			</if>
+			<if test="wholeSale_batch_othercategory2 != null">
+			wholeSale_batch_othercategory2 = #{wholeSale_batch_othercategory2},
+			</if>
+			<if test="wholeSale_batch_saleId != null">
+			wholeSale_batch_saleId = #{wholeSale_batch_saleId},
+			</if>
+			<if test="wholeSale_batch_saleType != null">
+			wholeSale_batch_saleType = #{wholeSale_batch_saleType},
+			</if>
+			<if test="wholeSale_batch_member != null">
+			wholeSale_batch_member = #{wholeSale_batch_member},
+			</if>
+			<if test="wholeSale_batch_storePrice != null">
+			wholeSale_batch_storePrice = #{wholeSale_batch_storePrice},
+			</if>
+			<if test="wholeSale_batch_fullGiftAmount != null">
+			wholeSale_batch_fullGiftAmount = #{wholeSale_batch_fullGiftAmount},
+			</if>
+			<if test="wholeSale_batch_fullGiftExchange != null">
+			wholeSale_batch_fullGiftExchange = #{wholeSale_batch_fullGiftExchange},
+			</if>
+			<if test="wholeSale_batch_singleDiscountAuthoPerson != null">
+			wholeSale_batch_singleDiscountAuthoPerson = #{wholeSale_batch_singleDiscountAuthoPerson},
+			</if>
+			<if test="wholeSale_batch_singleDiscountAuthoReason != null">
+			wholeSale_batch_singleDiscountAuthoReason = #{wholeSale_batch_singleDiscountAuthoReason},
+			</if>
+			<if test="wholeSale_batch_intakeBrief != null">
+			wholeSale_batch_intakeBrief = #{wholeSale_batch_intakeBrief},
+			</if>
+			<if test="wholeSale_batch_receive != null">
+			wholeSale_batch_receive = #{wholeSale_batch_receive},
+			</if>
+			<if test="wholeSale_batch_dismounting != null">
+			wholeSale_batch_dismounting = #{wholeSale_batch_dismounting},
+			</if>
+	</set>where wholeSale_batch_id = #{wholeSale_batch_id}
+	</update>
+
+	<!-- 根据id删除表中数据,同时增加库存 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  wholeSale_order_batch
+		where wholeSale_batch_id = #{id};
+		
+
+	</delete>
+
+	<!-- 根据id删除表中数据,同时增加库存 -->
+	<!-- <delete id="deleteAndAdd" parameterType="RetailOrderBatch">
+		delete from  retail_order_batch
+		where order_batch_id = #{order_batch_id};
+		
+		update stock_info
+		set stock_storageNumber +=#{order_batch_quantity}
+		where stock_info_id = #{stock_info_id}
+	</delete>
+	
+		依据订单产品序号查询最大的批次小号
+	<select id="getMaxOrderBatchId" parameterType="RetailOrderVO"  resultType="Integer">
+		select max(order_batch_smallNumber)
+		from retail_order_batch
+		where retail_order_ticketId = #{retail_order_ticketId} and  order_productId = #{order_productId} 
+	</select>
+	
+	<update id="updateOrderBatch" parameterType="map">
+		<foreach collection="list" item="item" index="index" open="" separator=";" close="" > 
+			update retail_order_batch
+			set order_batch_fullGiftExchange = order_batch_fullGiftAmount
+			where retail_order_ticketId = #{ticket_id} and product_id = #{item}
+		</foreach>
+	</update> -->
+</mapper> 

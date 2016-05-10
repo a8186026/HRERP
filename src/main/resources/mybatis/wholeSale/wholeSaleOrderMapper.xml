@@ -1,0 +1,1142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.wholeSale.persist.WholeSaleOrderDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="WholeSaleOrder">
+		select *
+		from wholeSale_order 
+		where wholeSale_order_id = #{id} 
+	</select>
+
+
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="WholeSaleOrder">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+			from wholeSale_order
+		<where>
+			<if test="wholeSale_order_id!=null">
+			and wholeSale_order_id like #{wholeSale_order_id}
+			</if>
+			<if test="wholeSale_order_taxRate!=null">
+			and wholeSale_order_taxRate like #{wholeSale_order_taxRate}
+			</if>
+			<if test="wholeSale_order_orderTime!=null">
+			and wholeSale_order_orderTime like #{wholeSale_order_orderTime}
+			</if>
+			<if test="wholeSale_order_appointTime!=null">
+			and wholeSale_order_appointTime like #{wholeSale_order_appointTime}
+			</if>
+			<if test="wholeSale_order_ticketId!=null">
+			and wholeSale_order_ticketId like #{wholeSale_order_ticketId}
+			</if>
+			<if test="sal_id!=null">
+			and sal_id like #{sal_id}
+			</if>
+			<if test="wholeSale_order_customername!=null">
+			and wholeSale_order_customername like #{wholeSale_order_customername}
+			</if>
+			<if test="wholeSale_order_salesman!=null">
+			and wholeSale_order_salesman like #{wholeSale_order_salesman}
+			</if>
+			<if test="wholeSale_order_formerReceivable!=null">
+			and wholeSale_order_formerReceivable like #{wholeSale_order_formerReceivable}
+			</if>
+			<if test="wholeSale_order_currentReceivable!=null">
+			and wholeSale_order_currentReceivable like #{wholeSale_order_currentReceivable}
+			</if>
+			<if test="wholeSale_order_discountAmount!=null">
+			and wholeSale_order_discountAmount like #{wholeSale_order_discountAmount}
+			</if>
+			<if test="wholeSale_order_wipeZero!=null">
+			and wholeSale_order_wipeZero like #{wholeSale_order_wipeZero}
+			</if>
+			<if test="wholeSale_order_settlementAmount!=null">
+			and wholeSale_order_settlementAmount like #{wholeSale_order_settlementAmount}
+			</if>
+			<if test="wholeSale_order_settlementStyle!=null">
+			and wholeSale_order_settlementStyle like #{wholeSale_order_settlementStyle}
+			</if>
+			<if test="wholeSale_order_settlementOrderId!=null">
+			and wholeSale_order_settlementOrderId like #{wholeSale_order_settlementOrderId}
+			</if>
+			<if test="wholeSale_order_OrderId!=null">
+			and wholeSale_order_OrderId like #{wholeSale_order_OrderId}
+			</if>
+			<if test="wholeSale_order_receiptNumber!=null">
+			and wholeSale_order_receiptNumber like #{wholeSale_order_receiptNumber}
+			</if>
+			<if test="mem_card_id!=null">
+			and mem_card_id like #{mem_card_id}
+			</if>
+			<if test="wholeSale_order_brief!=null">
+			and wholeSale_order_brief like #{wholeSale_order_brief}
+			</if>
+			<if test="wholeSale_order_brokerage!=null">
+			and wholeSale_order_brokerage like #{wholeSale_order_brokerage}
+			</if>
+			<if test="wholeSale_order_operator!=null">
+			and wholeSale_order_operator like #{wholeSale_order_operator}
+			</if>
+			<if test="wholeSale_order_checkout!=null">
+			and wholeSale_order_checkout like #{wholeSale_order_checkout}
+			</if>
+			<if test="wholeSale_order_checkoutPerson!=null">
+			and wholeSale_order_checkoutPerson like #{wholeSale_order_checkoutPerson}
+			</if>
+			<if test="wholeSale_order_checkoutTime!=null">
+			and wholeSale_order_checkoutTime like #{wholeSale_order_checkoutTime}
+			</if>
+			<if test="wholeSale_order_grossProfit!=null">
+			and wholeSale_order_grossProfit like #{wholeSale_order_grossProfit}
+			</if>
+			<if test="wholeSale_order_upload!=null">
+			and wholeSale_order_upload like #{wholeSale_order_upload}
+			</if>
+			<if test="wholeSale_order_draft!=null">
+			and wholeSale_order_draft like #{wholeSale_order_draft}
+			</if>
+			<if test="wholeSale_order_reputationCard!=null">
+			and wholeSale_order_reputationCard like #{wholeSale_order_reputationCard}
+			</if>
+			<if test="wholeSale_order_account!=null">
+			and wholeSale_order_account like #{wholeSale_order_account}
+			</if>
+			<if test="wholeSale_order_accountAmount!=null">
+			and wholeSale_order_accountAmount like #{wholeSale_order_accountAmount}
+			</if>
+			<if test="wholeSale_order_amountReceivable!=null">
+			and wholeSale_order_amountReceivable like #{wholeSale_order_amountReceivable}
+			</if>
+			<if test="wholeSale_order_accountTime!=null">
+			and wholeSale_order_accountTime like #{wholeSale_order_accountTime}
+			</if>
+			<if test="wholeSale_order_accountPerson!=null">
+			and wholeSale_order_accountPerson like #{wholeSale_order_accountPerson}
+			</if>
+			<if test="wholeSale_order_accountTicketId!=null">
+			and wholeSale_order_accountTicketId like #{wholeSale_order_accountTicketId}
+			</if>
+			<if test="wholeSale_order_departTicketId!=null">
+			and wholeSale_order_departTicketId like #{wholeSale_order_departTicketId}
+			</if>
+			<if test="wholeSale_order_depart!=null">
+			and wholeSale_order_depart like #{wholeSale_order_depart}
+			</if>
+			<if test="wholeSale_order_departStyle!=null">
+			and wholeSale_order_departStyle like #{wholeSale_order_departStyle}
+			</if>
+			<if test="wholeSale_order_departRemark!=null">
+			and wholeSale_order_departRemark like #{wholeSale_order_departRemark}
+			</if>
+			<if test="wholeSale_order_pickUp!=null">
+			and wholeSale_order_pickUp like #{wholeSale_order_pickUp}
+			</if>
+			<if test="wholeSale_order_dispatch!=null">
+			and wholeSale_order_dispatch like #{wholeSale_order_dispatch}
+			</if>
+			<if test="wholeSale_order_entruck!=null">
+			and wholeSale_order_entruck like #{wholeSale_order_entruck}
+			</if>
+			<if test="wholeSale_order_packingNumber!=null">
+			and wholeSale_order_packingNumber like #{wholeSale_order_packingNumber}
+			</if>
+			<if test="wholeSale_order_printReceipt!=null">
+			and wholeSale_order_printReceipt like #{wholeSale_order_printReceipt}
+			</if>
+			<if test="wholeSale_order_machineName!=null">
+			and wholeSale_order_machineName like #{wholeSale_order_machineName}
+			</if>
+			<if test="wholeSale_order_receive!=null">
+			and wholeSale_order_receive like #{wholeSale_order_receive}
+			</if>
+			<if test="wholeSale_order_receivePerson!=null">
+			and wholeSale_order_receivePerson like #{wholeSale_order_receivePerson}
+			</if>
+			<if test="wholeSale_order_receiveTime!=null">
+			and wholeSale_order_receiveTime like #{wholeSale_order_receiveTime}
+			</if>
+			<if test="wholeSale_order_handleReputationCard!=null">
+			and wholeSale_order_handleReputationCard like #{wholeSale_order_handleReputationCard}
+			</if>
+			<if test="wholeSale_order_printReceiveList!=null">
+			and wholeSale_order_printReceiveList like #{wholeSale_order_printReceiveList}
+			</if>
+			<if test="wholeSale_order_doseNumber!=null">
+			and wholeSale_order_doseNumber like #{wholeSale_order_doseNumber}
+			</if>
+			<if test="wholeSale_order_realIncomeAmount!=null">
+			and wholeSale_order_realIncomeAmount like #{wholeSale_order_realIncomeAmount}
+			</if>
+			<if test="wholeSale_order_change!=null">
+			and wholeSale_order_change like #{wholeSale_order_change}
+			</if>
+			<if test="wholeSale_order_giftCard!=null">
+			and wholeSale_order_giftCard like #{wholeSale_order_giftCard}
+			</if>
+			<if test="wholeSale_order_discount!=null">
+			and wholeSale_order_discount like #{wholeSale_order_discount}
+			</if>
+			<if test="wholeSale_order_swingCardStyle!=null">
+			and wholeSale_order_swingCardStyle like #{wholeSale_order_swingCardStyle}
+			</if>
+			<if test="wholeSale_order_swingCardAmount!=null">
+			and wholeSale_order_swingCardAmount like #{wholeSale_order_swingCardAmount}
+			</if>
+			<if test="wholeSale_order_cash!=null">
+			and wholeSale_order_cash like #{wholeSale_order_cash}
+			</if>
+			<if test="wholeSale_order_pointMultiple!=null">
+			and wholeSale_order_pointMultiple like #{wholeSale_order_pointMultiple}
+			</if>
+			<if test="wholeSale_order_swingCardName!=null">
+			and wholeSale_order_swingCardName like #{wholeSale_order_swingCardName}
+			</if>
+			<if test="wholeSale_order_swingCardId!=null">
+			and wholeSale_order_swingCardId like #{wholeSale_order_swingCardId}
+			</if>
+			<if test="wholeSale_order_swingCardRemain!=null">
+			and wholeSale_order_swingCardRemain like #{wholeSale_order_swingCardRemain}
+			</if>
+			<if test="wholeSale_order_point!=null">
+			and wholeSale_order_point like #{wholeSale_order_point}
+			</if>
+			<if test="wholeSale_order_printTimes!=null">
+			and wholeSale_order_printTimes like #{wholeSale_order_printTimes}
+			</if>
+			<if test="wholeSale_order_modifyRemark!=null">
+			and wholeSale_order_modifyRemark like #{wholeSale_order_modifyRemark}
+			</if>
+			<if test="wholeSale_order_swingCardPersonPropery!=null">
+			and wholeSale_order_swingCardPersonPropery like #{wholeSale_order_swingCardPersonPropery}
+			</if>
+			<if test="wholeSale_order_giftCardMax!=null">
+			and wholeSale_order_giftCardMax like #{wholeSale_order_giftCardMax}
+			</if>
+			<if test="wholeSale_order_giftCardInitAmount!=null">
+			and wholeSale_order_giftCardInitAmount like #{wholeSale_order_giftCardInitAmount}
+			</if>
+			<if test="wholeSale_order_purchasePersonName!=null">
+			and wholeSale_order_purchasePersonName like #{wholeSale_order_purchasePersonName}
+			</if>
+			<if test="wholeSale_order_purchasePersonID!=null">
+			and wholeSale_order_purchasePersonID like #{wholeSale_order_purchasePersonID}
+			</if>
+			<if test="wholeSale_order_purchasePersonPhone!=null">
+			and wholeSale_order_purchasePersonPhone like #{wholeSale_order_purchasePersonPhone}
+			</if>
+			<if test="wholeSale_order_pharmacistName!=null">
+			and wholeSale_order_pharmacistName like #{wholeSale_order_pharmacistName}
+			</if>
+			<if test="wholeSale_order_pharmacistElectronicSignature!=null">
+			and wholeSale_order_pharmacistElectronicSignature like #{wholeSale_order_pharmacistElectronicSignature}
+			</if>
+			<if test="wholeSale_order_drugTicketId!=null">
+			and wholeSale_order_drugTicketId like #{wholeSale_order_drugTicketId}
+			</if>
+			<if test="wholeSale_order_saveTime!=null">
+			and wholeSale_order_saveTime like #{wholeSale_order_saveTime}
+			</if>
+			<if test="wholeSale_order_SingleDoseAmount!=null">
+			and wholeSale_order_SingleDoseAmount like #{wholeSale_order_SingleDoseAmount}
+			</if>
+			<if test="wholeSale_order_fullGiftAmount!=null">
+			and wholeSale_order_fullGiftAmount like #{wholeSale_order_fullGiftAmount}
+			</if>
+			<if test="wholeSale_order_fullGiftExchange!=null">
+			and wholeSale_order_fullGiftExchange like #{wholeSale_order_fullGiftExchange}
+			</if>
+			<if test="wholeSale_order_fullGiftRemain!=null">
+			and wholeSale_order_fullGiftRemain like #{wholeSale_order_fullGiftRemain}
+			</if>
+			<if test="wholeSale_order_otherCharge!=null">
+			and wholeSale_order_otherCharge like #{wholeSale_order_otherCharge}
+			</if>
+			<if test="wholeSale_order_receivableAmount!=null">
+			and wholeSale_order_receivableAmount like #{wholeSale_order_receivableAmount}
+			</if>
+			<if test="wholeSale_order_pointPay!=null">
+			and wholeSale_order_pointPay like #{wholeSale_order_pointPay}
+			</if>
+			<if test="offset != null and offset !=0">
+			and wholeSale_order_id not in(select top ${offset} wholeSale_order_id from wholeSale_order where 0 = 0
+				<if test="wholeSale_order_id!=null">
+				and wholeSale_order_id like #{wholeSale_order_id}
+				</if>
+				<if test="wholeSale_order_taxRate!=null">
+				and wholeSale_order_taxRate like #{wholeSale_order_taxRate}
+				</if>
+				<if test="wholeSale_order_orderTime!=null">
+				and wholeSale_order_orderTime like #{wholeSale_order_orderTime}
+				</if>
+				<if test="wholeSale_order_appointTime!=null">
+				and wholeSale_order_appointTime like #{wholeSale_order_appointTime}
+				</if>
+				<if test="wholeSale_order_ticketId!=null">
+				and wholeSale_order_ticketId like #{wholeSale_order_ticketId}
+				</if>
+				<if test="sal_id!=null">
+				and sal_id like #{sal_id}
+				</if>
+				<if test="wholeSale_order_customername!=null">
+				and wholeSale_order_customername like #{wholeSale_order_customername}
+				</if>
+				<if test="wholeSale_order_salesman!=null">
+				and wholeSale_order_salesman like #{wholeSale_order_salesman}
+				</if>
+				<if test="wholeSale_order_formerReceivable!=null">
+				and wholeSale_order_formerReceivable like #{wholeSale_order_formerReceivable}
+				</if>
+				<if test="wholeSale_order_currentReceivable!=null">
+				and wholeSale_order_currentReceivable like #{wholeSale_order_currentReceivable}
+				</if>
+				<if test="wholeSale_order_discountAmount!=null">
+				and wholeSale_order_discountAmount like #{wholeSale_order_discountAmount}
+				</if>
+				<if test="wholeSale_order_wipeZero!=null">
+				and wholeSale_order_wipeZero like #{wholeSale_order_wipeZero}
+				</if>
+				<if test="wholeSale_order_settlementAmount!=null">
+				and wholeSale_order_settlementAmount like #{wholeSale_order_settlementAmount}
+				</if>
+				<if test="wholeSale_order_settlementStyle!=null">
+				and wholeSale_order_settlementStyle like #{wholeSale_order_settlementStyle}
+				</if>
+				<if test="wholeSale_order_settlementOrderId!=null">
+				and wholeSale_order_settlementOrderId like #{wholeSale_order_settlementOrderId}
+				</if>
+				<if test="wholeSale_order_OrderId!=null">
+				and wholeSale_order_OrderId like #{wholeSale_order_OrderId}
+				</if>
+				<if test="wholeSale_order_receiptNumber!=null">
+				and wholeSale_order_receiptNumber like #{wholeSale_order_receiptNumber}
+				</if>
+				<if test="mem_card_id!=null">
+				and mem_card_id like #{mem_card_id}
+				</if>
+				<if test="wholeSale_order_brief!=null">
+				and wholeSale_order_brief like #{wholeSale_order_brief}
+				</if>
+				<if test="wholeSale_order_brokerage!=null">
+				and wholeSale_order_brokerage like #{wholeSale_order_brokerage}
+				</if>
+				<if test="wholeSale_order_operator!=null">
+				and wholeSale_order_operator like #{wholeSale_order_operator}
+				</if>
+				<if test="wholeSale_order_checkout!=null">
+				and wholeSale_order_checkout like #{wholeSale_order_checkout}
+				</if>
+				<if test="wholeSale_order_checkoutPerson!=null">
+				and wholeSale_order_checkoutPerson like #{wholeSale_order_checkoutPerson}
+				</if>
+				<if test="wholeSale_order_checkoutTime!=null">
+				and wholeSale_order_checkoutTime like #{wholeSale_order_checkoutTime}
+				</if>
+				<if test="wholeSale_order_grossProfit!=null">
+				and wholeSale_order_grossProfit like #{wholeSale_order_grossProfit}
+				</if>
+				<if test="wholeSale_order_upload!=null">
+				and wholeSale_order_upload like #{wholeSale_order_upload}
+				</if>
+				<if test="wholeSale_order_draft!=null">
+				and wholeSale_order_draft like #{wholeSale_order_draft}
+				</if>
+				<if test="wholeSale_order_reputationCard!=null">
+				and wholeSale_order_reputationCard like #{wholeSale_order_reputationCard}
+				</if>
+				<if test="wholeSale_order_account!=null">
+				and wholeSale_order_account like #{wholeSale_order_account}
+				</if>
+				<if test="wholeSale_order_accountAmount!=null">
+				and wholeSale_order_accountAmount like #{wholeSale_order_accountAmount}
+				</if>
+				<if test="wholeSale_order_amountReceivable!=null">
+				and wholeSale_order_amountReceivable like #{wholeSale_order_amountReceivable}
+				</if>
+				<if test="wholeSale_order_accountTime!=null">
+				and wholeSale_order_accountTime like #{wholeSale_order_accountTime}
+				</if>
+				<if test="wholeSale_order_accountPerson!=null">
+				and wholeSale_order_accountPerson like #{wholeSale_order_accountPerson}
+				</if>
+				<if test="wholeSale_order_accountTicketId!=null">
+				and wholeSale_order_accountTicketId like #{wholeSale_order_accountTicketId}
+				</if>
+				<if test="wholeSale_order_departTicketId!=null">
+				and wholeSale_order_departTicketId like #{wholeSale_order_departTicketId}
+				</if>
+				<if test="wholeSale_order_depart!=null">
+				and wholeSale_order_depart like #{wholeSale_order_depart}
+				</if>
+				<if test="wholeSale_order_departStyle!=null">
+				and wholeSale_order_departStyle like #{wholeSale_order_departStyle}
+				</if>
+				<if test="wholeSale_order_departRemark!=null">
+				and wholeSale_order_departRemark like #{wholeSale_order_departRemark}
+				</if>
+				<if test="wholeSale_order_pickUp!=null">
+				and wholeSale_order_pickUp like #{wholeSale_order_pickUp}
+				</if>
+				<if test="wholeSale_order_dispatch!=null">
+				and wholeSale_order_dispatch like #{wholeSale_order_dispatch}
+				</if>
+				<if test="wholeSale_order_entruck!=null">
+				and wholeSale_order_entruck like #{wholeSale_order_entruck}
+				</if>
+				<if test="wholeSale_order_packingNumber!=null">
+				and wholeSale_order_packingNumber like #{wholeSale_order_packingNumber}
+				</if>
+				<if test="wholeSale_order_printReceipt!=null">
+				and wholeSale_order_printReceipt like #{wholeSale_order_printReceipt}
+				</if>
+				<if test="wholeSale_order_machineName!=null">
+				and wholeSale_order_machineName like #{wholeSale_order_machineName}
+				</if>
+				<if test="wholeSale_order_receive!=null">
+				and wholeSale_order_receive like #{wholeSale_order_receive}
+				</if>
+				<if test="wholeSale_order_receivePerson!=null">
+				and wholeSale_order_receivePerson like #{wholeSale_order_receivePerson}
+				</if>
+				<if test="wholeSale_order_receiveTime!=null">
+				and wholeSale_order_receiveTime like #{wholeSale_order_receiveTime}
+				</if>
+				<if test="wholeSale_order_handleReputationCard!=null">
+				and wholeSale_order_handleReputationCard like #{wholeSale_order_handleReputationCard}
+				</if>
+				<if test="wholeSale_order_printReceiveList!=null">
+				and wholeSale_order_printReceiveList like #{wholeSale_order_printReceiveList}
+				</if>
+				<if test="wholeSale_order_doseNumber!=null">
+				and wholeSale_order_doseNumber like #{wholeSale_order_doseNumber}
+				</if>
+				<if test="wholeSale_order_realIncomeAmount!=null">
+				and wholeSale_order_realIncomeAmount like #{wholeSale_order_realIncomeAmount}
+				</if>
+				<if test="wholeSale_order_change!=null">
+				and wholeSale_order_change like #{wholeSale_order_change}
+				</if>
+				<if test="wholeSale_order_giftCard!=null">
+				and wholeSale_order_giftCard like #{wholeSale_order_giftCard}
+				</if>
+				<if test="wholeSale_order_discount!=null">
+				and wholeSale_order_discount like #{wholeSale_order_discount}
+				</if>
+				<if test="wholeSale_order_swingCardStyle!=null">
+				and wholeSale_order_swingCardStyle like #{wholeSale_order_swingCardStyle}
+				</if>
+				<if test="wholeSale_order_swingCardAmount!=null">
+				and wholeSale_order_swingCardAmount like #{wholeSale_order_swingCardAmount}
+				</if>
+				<if test="wholeSale_order_cash!=null">
+				and wholeSale_order_cash like #{wholeSale_order_cash}
+				</if>
+				<if test="wholeSale_order_pointMultiple!=null">
+				and wholeSale_order_pointMultiple like #{wholeSale_order_pointMultiple}
+				</if>
+				<if test="wholeSale_order_swingCardName!=null">
+				and wholeSale_order_swingCardName like #{wholeSale_order_swingCardName}
+				</if>
+				<if test="wholeSale_order_swingCardId!=null">
+				and wholeSale_order_swingCardId like #{wholeSale_order_swingCardId}
+				</if>
+				<if test="wholeSale_order_swingCardRemain!=null">
+				and wholeSale_order_swingCardRemain like #{wholeSale_order_swingCardRemain}
+				</if>
+				<if test="wholeSale_order_point!=null">
+				and wholeSale_order_point like #{wholeSale_order_point}
+				</if>
+				<if test="wholeSale_order_printTimes!=null">
+				and wholeSale_order_printTimes like #{wholeSale_order_printTimes}
+				</if>
+				<if test="wholeSale_order_modifyRemark!=null">
+				and wholeSale_order_modifyRemark like #{wholeSale_order_modifyRemark}
+				</if>
+				<if test="wholeSale_order_swingCardPersonPropery!=null">
+				and wholeSale_order_swingCardPersonPropery like #{wholeSale_order_swingCardPersonPropery}
+				</if>
+				<if test="wholeSale_order_giftCardMax!=null">
+				and wholeSale_order_giftCardMax like #{wholeSale_order_giftCardMax}
+				</if>
+				<if test="wholeSale_order_giftCardInitAmount!=null">
+				and wholeSale_order_giftCardInitAmount like #{wholeSale_order_giftCardInitAmount}
+				</if>
+				<if test="wholeSale_order_purchasePersonName!=null">
+				and wholeSale_order_purchasePersonName like #{wholeSale_order_purchasePersonName}
+				</if>
+				<if test="wholeSale_order_purchasePersonID!=null">
+				and wholeSale_order_purchasePersonID like #{wholeSale_order_purchasePersonID}
+				</if>
+				<if test="wholeSale_order_purchasePersonPhone!=null">
+				and wholeSale_order_purchasePersonPhone like #{wholeSale_order_purchasePersonPhone}
+				</if>
+				<if test="wholeSale_order_pharmacistName!=null">
+				and wholeSale_order_pharmacistName like #{wholeSale_order_pharmacistName}
+				</if>
+				<if test="wholeSale_order_pharmacistElectronicSignature!=null">
+				and wholeSale_order_pharmacistElectronicSignature like #{wholeSale_order_pharmacistElectronicSignature}
+				</if>
+				<if test="wholeSale_order_drugTicketId!=null">
+				and wholeSale_order_drugTicketId like #{wholeSale_order_drugTicketId}
+				</if>
+				<if test="wholeSale_order_saveTime!=null">
+				and wholeSale_order_saveTime like #{wholeSale_order_saveTime}
+				</if>
+				<if test="wholeSale_order_SingleDoseAmount!=null">
+				and wholeSale_order_SingleDoseAmount like #{wholeSale_order_SingleDoseAmount}
+				</if>
+				<if test="wholeSale_order_fullGiftAmount!=null">
+				and wholeSale_order_fullGiftAmount like #{wholeSale_order_fullGiftAmount}
+				</if>
+				<if test="wholeSale_order_fullGiftExchange!=null">
+				and wholeSale_order_fullGiftExchange like #{wholeSale_order_fullGiftExchange}
+				</if>
+				<if test="wholeSale_order_fullGiftRemain!=null">
+				and wholeSale_order_fullGiftRemain like #{wholeSale_order_fullGiftRemain}
+				</if>
+				<if test="wholeSale_order_otherCharge!=null">
+				and wholeSale_order_otherCharge like #{wholeSale_order_otherCharge}
+				</if>
+				<if test="wholeSale_order_receivableAmount!=null">
+				and wholeSale_order_receivableAmount like #{wholeSale_order_receivableAmount}
+				</if>
+				<if test="wholeSale_order_pointPay!=null">
+				and wholeSale_order_pointPay like #{wholeSale_order_pointPay}
+				</if>
+			)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="WholeSaleOrder" resultType="int">
+		select count(wholeSale_order_id) as count 
+		from wholeSale_order
+		<where>
+			<if test="wholeSale_order_id!=null">
+			and wholeSale_order_id like #{wholeSale_order_id}
+			</if>
+			<if test="wholeSale_order_taxRate!=null">
+			and wholeSale_order_taxRate like #{wholeSale_order_taxRate}
+			</if>
+			<if test="wholeSale_order_orderTime!=null">
+			and wholeSale_order_orderTime like #{wholeSale_order_orderTime}
+			</if>
+			<if test="wholeSale_order_appointTime!=null">
+			and wholeSale_order_appointTime like #{wholeSale_order_appointTime}
+			</if>
+			<if test="wholeSale_order_ticketId!=null">
+			and wholeSale_order_ticketId like #{wholeSale_order_ticketId}
+			</if>
+			<if test="sal_id!=null">
+			and sal_id like #{sal_id}
+			</if>
+			<if test="wholeSale_order_customername!=null">
+			and wholeSale_order_customername like #{wholeSale_order_customername}
+			</if>
+			<if test="wholeSale_order_salesman!=null">
+			and wholeSale_order_salesman like #{wholeSale_order_salesman}
+			</if>
+			<if test="wholeSale_order_formerReceivable!=null">
+			and wholeSale_order_formerReceivable like #{wholeSale_order_formerReceivable}
+			</if>
+			<if test="wholeSale_order_currentReceivable!=null">
+			and wholeSale_order_currentReceivable like #{wholeSale_order_currentReceivable}
+			</if>
+			<if test="wholeSale_order_discountAmount!=null">
+			and wholeSale_order_discountAmount like #{wholeSale_order_discountAmount}
+			</if>
+			<if test="wholeSale_order_wipeZero!=null">
+			and wholeSale_order_wipeZero like #{wholeSale_order_wipeZero}
+			</if>
+			<if test="wholeSale_order_settlementAmount!=null">
+			and wholeSale_order_settlementAmount like #{wholeSale_order_settlementAmount}
+			</if>
+			<if test="wholeSale_order_settlementStyle!=null">
+			and wholeSale_order_settlementStyle like #{wholeSale_order_settlementStyle}
+			</if>
+			<if test="wholeSale_order_settlementOrderId!=null">
+			and wholeSale_order_settlementOrderId like #{wholeSale_order_settlementOrderId}
+			</if>
+			<if test="wholeSale_order_OrderId!=null">
+			and wholeSale_order_OrderId like #{wholeSale_order_OrderId}
+			</if>
+			<if test="wholeSale_order_receiptNumber!=null">
+			and wholeSale_order_receiptNumber like #{wholeSale_order_receiptNumber}
+			</if>
+			<if test="mem_card_id!=null">
+			and mem_card_id like #{mem_card_id}
+			</if>
+			<if test="wholeSale_order_brief!=null">
+			and wholeSale_order_brief like #{wholeSale_order_brief}
+			</if>
+			<if test="wholeSale_order_brokerage!=null">
+			and wholeSale_order_brokerage like #{wholeSale_order_brokerage}
+			</if>
+			<if test="wholeSale_order_operator!=null">
+			and wholeSale_order_operator like #{wholeSale_order_operator}
+			</if>
+			<if test="wholeSale_order_checkout!=null">
+			and wholeSale_order_checkout like #{wholeSale_order_checkout}
+			</if>
+			<if test="wholeSale_order_checkoutPerson!=null">
+			and wholeSale_order_checkoutPerson like #{wholeSale_order_checkoutPerson}
+			</if>
+			<if test="wholeSale_order_checkoutTime!=null">
+			and wholeSale_order_checkoutTime like #{wholeSale_order_checkoutTime}
+			</if>
+			<if test="wholeSale_order_grossProfit!=null">
+			and wholeSale_order_grossProfit like #{wholeSale_order_grossProfit}
+			</if>
+			<if test="wholeSale_order_upload!=null">
+			and wholeSale_order_upload like #{wholeSale_order_upload}
+			</if>
+			<if test="wholeSale_order_draft!=null">
+			and wholeSale_order_draft like #{wholeSale_order_draft}
+			</if>
+			<if test="wholeSale_order_reputationCard!=null">
+			and wholeSale_order_reputationCard like #{wholeSale_order_reputationCard}
+			</if>
+			<if test="wholeSale_order_account!=null">
+			and wholeSale_order_account like #{wholeSale_order_account}
+			</if>
+			<if test="wholeSale_order_accountAmount!=null">
+			and wholeSale_order_accountAmount like #{wholeSale_order_accountAmount}
+			</if>
+			<if test="wholeSale_order_amountReceivable!=null">
+			and wholeSale_order_amountReceivable like #{wholeSale_order_amountReceivable}
+			</if>
+			<if test="wholeSale_order_accountTime!=null">
+			and wholeSale_order_accountTime like #{wholeSale_order_accountTime}
+			</if>
+			<if test="wholeSale_order_accountPerson!=null">
+			and wholeSale_order_accountPerson like #{wholeSale_order_accountPerson}
+			</if>
+			<if test="wholeSale_order_accountTicketId!=null">
+			and wholeSale_order_accountTicketId like #{wholeSale_order_accountTicketId}
+			</if>
+			<if test="wholeSale_order_departTicketId!=null">
+			and wholeSale_order_departTicketId like #{wholeSale_order_departTicketId}
+			</if>
+			<if test="wholeSale_order_depart!=null">
+			and wholeSale_order_depart like #{wholeSale_order_depart}
+			</if>
+			<if test="wholeSale_order_departStyle!=null">
+			and wholeSale_order_departStyle like #{wholeSale_order_departStyle}
+			</if>
+			<if test="wholeSale_order_departRemark!=null">
+			and wholeSale_order_departRemark like #{wholeSale_order_departRemark}
+			</if>
+			<if test="wholeSale_order_pickUp!=null">
+			and wholeSale_order_pickUp like #{wholeSale_order_pickUp}
+			</if>
+			<if test="wholeSale_order_dispatch!=null">
+			and wholeSale_order_dispatch like #{wholeSale_order_dispatch}
+			</if>
+			<if test="wholeSale_order_entruck!=null">
+			and wholeSale_order_entruck like #{wholeSale_order_entruck}
+			</if>
+			<if test="wholeSale_order_packingNumber!=null">
+			and wholeSale_order_packingNumber like #{wholeSale_order_packingNumber}
+			</if>
+			<if test="wholeSale_order_printReceipt!=null">
+			and wholeSale_order_printReceipt like #{wholeSale_order_printReceipt}
+			</if>
+			<if test="wholeSale_order_machineName!=null">
+			and wholeSale_order_machineName like #{wholeSale_order_machineName}
+			</if>
+			<if test="wholeSale_order_receive!=null">
+			and wholeSale_order_receive like #{wholeSale_order_receive}
+			</if>
+			<if test="wholeSale_order_receivePerson!=null">
+			and wholeSale_order_receivePerson like #{wholeSale_order_receivePerson}
+			</if>
+			<if test="wholeSale_order_receiveTime!=null">
+			and wholeSale_order_receiveTime like #{wholeSale_order_receiveTime}
+			</if>
+			<if test="wholeSale_order_handleReputationCard!=null">
+			and wholeSale_order_handleReputationCard like #{wholeSale_order_handleReputationCard}
+			</if>
+			<if test="wholeSale_order_printReceiveList!=null">
+			and wholeSale_order_printReceiveList like #{wholeSale_order_printReceiveList}
+			</if>
+			<if test="wholeSale_order_doseNumber!=null">
+			and wholeSale_order_doseNumber like #{wholeSale_order_doseNumber}
+			</if>
+			<if test="wholeSale_order_realIncomeAmount!=null">
+			and wholeSale_order_realIncomeAmount like #{wholeSale_order_realIncomeAmount}
+			</if>
+			<if test="wholeSale_order_change!=null">
+			and wholeSale_order_change like #{wholeSale_order_change}
+			</if>
+			<if test="wholeSale_order_giftCard!=null">
+			and wholeSale_order_giftCard like #{wholeSale_order_giftCard}
+			</if>
+			<if test="wholeSale_order_discount!=null">
+			and wholeSale_order_discount like #{wholeSale_order_discount}
+			</if>
+			<if test="wholeSale_order_swingCardStyle!=null">
+			and wholeSale_order_swingCardStyle like #{wholeSale_order_swingCardStyle}
+			</if>
+			<if test="wholeSale_order_swingCardAmount!=null">
+			and wholeSale_order_swingCardAmount like #{wholeSale_order_swingCardAmount}
+			</if>
+			<if test="wholeSale_order_cash!=null">
+			and wholeSale_order_cash like #{wholeSale_order_cash}
+			</if>
+			<if test="wholeSale_order_pointMultiple!=null">
+			and wholeSale_order_pointMultiple like #{wholeSale_order_pointMultiple}
+			</if>
+			<if test="wholeSale_order_swingCardName!=null">
+			and wholeSale_order_swingCardName like #{wholeSale_order_swingCardName}
+			</if>
+			<if test="wholeSale_order_swingCardId!=null">
+			and wholeSale_order_swingCardId like #{wholeSale_order_swingCardId}
+			</if>
+			<if test="wholeSale_order_swingCardRemain!=null">
+			and wholeSale_order_swingCardRemain like #{wholeSale_order_swingCardRemain}
+			</if>
+			<if test="wholeSale_order_point!=null">
+			and wholeSale_order_point like #{wholeSale_order_point}
+			</if>
+			<if test="wholeSale_order_printTimes!=null">
+			and wholeSale_order_printTimes like #{wholeSale_order_printTimes}
+			</if>
+			<if test="wholeSale_order_modifyRemark!=null">
+			and wholeSale_order_modifyRemark like #{wholeSale_order_modifyRemark}
+			</if>
+			<if test="wholeSale_order_swingCardPersonPropery!=null">
+			and wholeSale_order_swingCardPersonPropery like #{wholeSale_order_swingCardPersonPropery}
+			</if>
+			<if test="wholeSale_order_giftCardMax!=null">
+			and wholeSale_order_giftCardMax like #{wholeSale_order_giftCardMax}
+			</if>
+			<if test="wholeSale_order_giftCardInitAmount!=null">
+			and wholeSale_order_giftCardInitAmount like #{wholeSale_order_giftCardInitAmount}
+			</if>
+			<if test="wholeSale_order_purchasePersonName!=null">
+			and wholeSale_order_purchasePersonName like #{wholeSale_order_purchasePersonName}
+			</if>
+			<if test="wholeSale_order_purchasePersonID!=null">
+			and wholeSale_order_purchasePersonID like #{wholeSale_order_purchasePersonID}
+			</if>
+			<if test="wholeSale_order_purchasePersonPhone!=null">
+			and wholeSale_order_purchasePersonPhone like #{wholeSale_order_purchasePersonPhone}
+			</if>
+			<if test="wholeSale_order_pharmacistName!=null">
+			and wholeSale_order_pharmacistName like #{wholeSale_order_pharmacistName}
+			</if>
+			<if test="wholeSale_order_pharmacistElectronicSignature!=null">
+			and wholeSale_order_pharmacistElectronicSignature like #{wholeSale_order_pharmacistElectronicSignature}
+			</if>
+			<if test="wholeSale_order_drugTicketId!=null">
+			and wholeSale_order_drugTicketId like #{wholeSale_order_drugTicketId}
+			</if>
+			<if test="wholeSale_order_saveTime!=null">
+			and wholeSale_order_saveTime like #{wholeSale_order_saveTime}
+			</if>
+			<if test="wholeSale_order_SingleDoseAmount!=null">
+			and wholeSale_order_SingleDoseAmount like #{wholeSale_order_SingleDoseAmount}
+			</if>
+			<if test="wholeSale_order_fullGiftAmount!=null">
+			and wholeSale_order_fullGiftAmount like #{wholeSale_order_fullGiftAmount}
+			</if>
+			<if test="wholeSale_order_fullGiftExchange!=null">
+			and wholeSale_order_fullGiftExchange like #{wholeSale_order_fullGiftExchange}
+			</if>
+			<if test="wholeSale_order_fullGiftRemain!=null">
+			and wholeSale_order_fullGiftRemain like #{wholeSale_order_fullGiftRemain}
+			</if>
+			<if test="wholeSale_order_otherCharge!=null">
+			and wholeSale_order_otherCharge like #{wholeSale_order_otherCharge}
+			</if>
+			<if test="wholeSale_order_receivableAmount!=null">
+			and wholeSale_order_receivableAmount like #{wholeSale_order_receivableAmount}
+			</if>
+			<if test="wholeSale_order_pointPay!=null">
+			and wholeSale_order_pointPay like #{wholeSale_order_pointPay}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="WholeSaleOrder" useGeneratedKeys="true" keyProperty="wholeSale_order_id">
+		 insert into wholeSale_order(
+		wholeSale_order_taxRate, wholeSale_order_orderTime, wholeSale_order_appointTime, wholeSale_order_ticketId, sal_id, 
+		wholeSale_order_customername, wholeSale_order_salesman, wholeSale_order_formerReceivable, wholeSale_order_currentReceivable, wholeSale_order_discountAmount, 
+		wholeSale_order_wipeZero, wholeSale_order_settlementAmount, wholeSale_order_settlementStyle, wholeSale_order_settlementOrderId, wholeSale_order_OrderId, 
+		wholeSale_order_receiptNumber, mem_card_id, wholeSale_order_brief, wholeSale_order_brokerage, wholeSale_order_operator, 
+		wholeSale_order_checkout, wholeSale_order_checkoutPerson, wholeSale_order_checkoutTime, wholeSale_order_grossProfit, wholeSale_order_upload, 
+		wholeSale_order_draft, wholeSale_order_reputationCard, wholeSale_order_account, wholeSale_order_accountAmount, wholeSale_order_amountReceivable, 
+		wholeSale_order_accountTime, wholeSale_order_accountPerson, wholeSale_order_accountTicketId, wholeSale_order_departTicketId, wholeSale_order_depart, 
+		wholeSale_order_departStyle, wholeSale_order_departRemark, wholeSale_order_pickUp, wholeSale_order_dispatch, wholeSale_order_entruck, 
+		wholeSale_order_packingNumber, wholeSale_order_printReceipt, wholeSale_order_machineName, wholeSale_order_receive, wholeSale_order_receivePerson, 
+		wholeSale_order_receiveTime, wholeSale_order_handleReputationCard, wholeSale_order_printReceiveList, wholeSale_order_doseNumber, wholeSale_order_realIncomeAmount, 
+		wholeSale_order_change, wholeSale_order_giftCard, wholeSale_order_discount, wholeSale_order_swingCardStyle, wholeSale_order_swingCardAmount, 
+		wholeSale_order_cash, wholeSale_order_pointMultiple, wholeSale_order_swingCardName, wholeSale_order_swingCardId, wholeSale_order_swingCardRemain, 
+		wholeSale_order_point, wholeSale_order_printTimes, wholeSale_order_modifyRemark, wholeSale_order_swingCardPersonPropery, wholeSale_order_giftCardMax, 
+		wholeSale_order_giftCardInitAmount, wholeSale_order_purchasePersonName, wholeSale_order_purchasePersonID, wholeSale_order_purchasePersonPhone, wholeSale_order_pharmacistName, 
+		wholeSale_order_pharmacistElectronicSignature, wholeSale_order_drugTicketId, wholeSale_order_saveTime, wholeSale_order_SingleDoseAmount, wholeSale_order_fullGiftAmount, 
+		wholeSale_order_fullGiftExchange, wholeSale_order_fullGiftRemain, wholeSale_order_otherCharge, wholeSale_order_receivableAmount, wholeSale_order_pointPay)
+		values(
+		#{wholeSale_order_taxRate}, #{wholeSale_order_orderTime}, #{wholeSale_order_appointTime}, #{wholeSale_order_ticketId}, #{sal_id}, 
+		#{wholeSale_order_customername}, #{wholeSale_order_salesman}, #{wholeSale_order_formerReceivable}, #{wholeSale_order_currentReceivable}, #{wholeSale_order_discountAmount}, 
+		#{wholeSale_order_wipeZero}, #{wholeSale_order_settlementAmount}, #{wholeSale_order_settlementStyle}, #{wholeSale_order_settlementOrderId}, #{wholeSale_order_OrderId}, 
+		#{wholeSale_order_receiptNumber}, #{mem_card_id}, #{wholeSale_order_brief}, #{wholeSale_order_brokerage}, #{wholeSale_order_operator}, 
+		#{wholeSale_order_checkout}, #{wholeSale_order_checkoutPerson}, #{wholeSale_order_checkoutTime}, #{wholeSale_order_grossProfit}, #{wholeSale_order_upload}, 
+		#{wholeSale_order_draft}, #{wholeSale_order_reputationCard}, #{wholeSale_order_account}, #{wholeSale_order_accountAmount}, #{wholeSale_order_amountReceivable}, 
+		#{wholeSale_order_accountTime}, #{wholeSale_order_accountPerson}, #{wholeSale_order_accountTicketId}, #{wholeSale_order_departTicketId}, #{wholeSale_order_depart}, 
+		#{wholeSale_order_departStyle}, #{wholeSale_order_departRemark}, #{wholeSale_order_pickUp}, #{wholeSale_order_dispatch}, #{wholeSale_order_entruck}, 
+		#{wholeSale_order_packingNumber}, #{wholeSale_order_printReceipt}, #{wholeSale_order_machineName}, #{wholeSale_order_receive}, #{wholeSale_order_receivePerson}, 
+		#{wholeSale_order_receiveTime}, #{wholeSale_order_handleReputationCard}, #{wholeSale_order_printReceiveList}, #{wholeSale_order_doseNumber}, #{wholeSale_order_realIncomeAmount}, 
+		#{wholeSale_order_change}, #{wholeSale_order_giftCard}, #{wholeSale_order_discount}, #{wholeSale_order_swingCardStyle}, #{wholeSale_order_swingCardAmount}, 
+		#{wholeSale_order_cash}, #{wholeSale_order_pointMultiple}, #{wholeSale_order_swingCardName}, #{wholeSale_order_swingCardId}, #{wholeSale_order_swingCardRemain}, 
+		#{wholeSale_order_point}, #{wholeSale_order_printTimes}, #{wholeSale_order_modifyRemark}, #{wholeSale_order_swingCardPersonPropery}, #{wholeSale_order_giftCardMax}, 
+		#{wholeSale_order_giftCardInitAmount}, #{wholeSale_order_purchasePersonName}, #{wholeSale_order_purchasePersonID}, #{wholeSale_order_purchasePersonPhone}, #{wholeSale_order_pharmacistName}, 
+		#{wholeSale_order_pharmacistElectronicSignature}, #{wholeSale_order_drugTicketId}, #{wholeSale_order_saveTime}, #{wholeSale_order_SingleDoseAmount}, #{wholeSale_order_fullGiftAmount}, 
+		#{wholeSale_order_fullGiftExchange}, #{wholeSale_order_fullGiftRemain}, #{wholeSale_order_otherCharge}, #{wholeSale_order_receivableAmount}, #{wholeSale_order_pointPay});
+	</insert>
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="WholeSaleOrder">
+		 update wholeSale_order
+		<set>
+			<if test="wholeSale_order_taxRate != null">
+			wholeSale_order_taxRate = #{wholeSale_order_taxRate},
+			</if>
+			<if test="wholeSale_order_orderTime != null">
+			wholeSale_order_orderTime = #{wholeSale_order_orderTime},
+			</if>
+			<if test="wholeSale_order_appointTime != null">
+			wholeSale_order_appointTime = #{wholeSale_order_appointTime},
+			</if>
+			<if test="wholeSale_order_ticketId != null">
+			wholeSale_order_ticketId = #{wholeSale_order_ticketId},
+			</if>
+			<if test="sal_id != null">
+			sal_id = #{sal_id},
+			</if>
+			<if test="wholeSale_order_customername != null">
+			wholeSale_order_customername = #{wholeSale_order_customername},
+			</if>
+			<if test="wholeSale_order_salesman != null">
+			wholeSale_order_salesman = #{wholeSale_order_salesman},
+			</if>
+			<if test="wholeSale_order_formerReceivable != null">
+			wholeSale_order_formerReceivable = #{wholeSale_order_formerReceivable},
+			</if>
+			<if test="wholeSale_order_currentReceivable != null">
+			wholeSale_order_currentReceivable = #{wholeSale_order_currentReceivable},
+			</if>
+			<if test="wholeSale_order_discountAmount != null">
+			wholeSale_order_discountAmount = #{wholeSale_order_discountAmount},
+			</if>
+			<if test="wholeSale_order_wipeZero != null">
+			wholeSale_order_wipeZero = #{wholeSale_order_wipeZero},
+			</if>
+			<if test="wholeSale_order_settlementAmount != null">
+			wholeSale_order_settlementAmount = #{wholeSale_order_settlementAmount},
+			</if>
+			<if test="wholeSale_order_settlementStyle != null">
+			wholeSale_order_settlementStyle = #{wholeSale_order_settlementStyle},
+			</if>
+			<if test="wholeSale_order_settlementOrderId != null">
+			wholeSale_order_settlementOrderId = #{wholeSale_order_settlementOrderId},
+			</if>
+			<if test="wholeSale_order_OrderId != null">
+			wholeSale_order_OrderId = #{wholeSale_order_OrderId},
+			</if>
+			<if test="wholeSale_order_receiptNumber != null">
+			wholeSale_order_receiptNumber = #{wholeSale_order_receiptNumber},
+			</if>
+			<if test="mem_card_id != null">
+			mem_card_id = #{mem_card_id},
+			</if>
+			<if test="wholeSale_order_brief != null">
+			wholeSale_order_brief = #{wholeSale_order_brief},
+			</if>
+			<if test="wholeSale_order_brokerage != null">
+			wholeSale_order_brokerage = #{wholeSale_order_brokerage},
+			</if>
+			<if test="wholeSale_order_operator != null">
+			wholeSale_order_operator = #{wholeSale_order_operator},
+			</if>
+			<if test="wholeSale_order_checkout != null">
+			wholeSale_order_checkout = #{wholeSale_order_checkout},
+			</if>
+			<if test="wholeSale_order_checkoutPerson != null">
+			wholeSale_order_checkoutPerson = #{wholeSale_order_checkoutPerson},
+			</if>
+			<if test="wholeSale_order_checkoutTime != null">
+			wholeSale_order_checkoutTime = #{wholeSale_order_checkoutTime},
+			</if>
+			<if test="wholeSale_order_grossProfit != null">
+			wholeSale_order_grossProfit = #{wholeSale_order_grossProfit},
+			</if>
+			<if test="wholeSale_order_upload != null">
+			wholeSale_order_upload = #{wholeSale_order_upload},
+			</if>
+			<if test="wholeSale_order_draft != null">
+			wholeSale_order_draft = #{wholeSale_order_draft},
+			</if>
+			<if test="wholeSale_order_reputationCard != null">
+			wholeSale_order_reputationCard = #{wholeSale_order_reputationCard},
+			</if>
+			<if test="wholeSale_order_account != null">
+			wholeSale_order_account = #{wholeSale_order_account},
+			</if>
+			<if test="wholeSale_order_accountAmount != null">
+			wholeSale_order_accountAmount = #{wholeSale_order_accountAmount},
+			</if>
+			<if test="wholeSale_order_amountReceivable != null">
+			wholeSale_order_amountReceivable = #{wholeSale_order_amountReceivable},
+			</if>
+			<if test="wholeSale_order_accountTime != null">
+			wholeSale_order_accountTime = #{wholeSale_order_accountTime},
+			</if>
+			<if test="wholeSale_order_accountPerson != null">
+			wholeSale_order_accountPerson = #{wholeSale_order_accountPerson},
+			</if>
+			<if test="wholeSale_order_accountTicketId != null">
+			wholeSale_order_accountTicketId = #{wholeSale_order_accountTicketId},
+			</if>
+			<if test="wholeSale_order_departTicketId != null">
+			wholeSale_order_departTicketId = #{wholeSale_order_departTicketId},
+			</if>
+			<if test="wholeSale_order_depart != null">
+			wholeSale_order_depart = #{wholeSale_order_depart},
+			</if>
+			<if test="wholeSale_order_departStyle != null">
+			wholeSale_order_departStyle = #{wholeSale_order_departStyle},
+			</if>
+			<if test="wholeSale_order_departRemark != null">
+			wholeSale_order_departRemark = #{wholeSale_order_departRemark},
+			</if>
+			<if test="wholeSale_order_pickUp != null">
+			wholeSale_order_pickUp = #{wholeSale_order_pickUp},
+			</if>
+			<if test="wholeSale_order_dispatch != null">
+			wholeSale_order_dispatch = #{wholeSale_order_dispatch},
+			</if>
+			<if test="wholeSale_order_entruck != null">
+			wholeSale_order_entruck = #{wholeSale_order_entruck},
+			</if>
+			<if test="wholeSale_order_packingNumber != null">
+			wholeSale_order_packingNumber = #{wholeSale_order_packingNumber},
+			</if>
+			<if test="wholeSale_order_printReceipt != null">
+			wholeSale_order_printReceipt = #{wholeSale_order_printReceipt},
+			</if>
+			<if test="wholeSale_order_machineName != null">
+			wholeSale_order_machineName = #{wholeSale_order_machineName},
+			</if>
+			<if test="wholeSale_order_receive != null">
+			wholeSale_order_receive = #{wholeSale_order_receive},
+			</if>
+			<if test="wholeSale_order_receivePerson != null">
+			wholeSale_order_receivePerson = #{wholeSale_order_receivePerson},
+			</if>
+			<if test="wholeSale_order_receiveTime != null">
+			wholeSale_order_receiveTime = #{wholeSale_order_receiveTime},
+			</if>
+			<if test="wholeSale_order_handleReputationCard != null">
+			wholeSale_order_handleReputationCard = #{wholeSale_order_handleReputationCard},
+			</if>
+			<if test="wholeSale_order_printReceiveList != null">
+			wholeSale_order_printReceiveList = #{wholeSale_order_printReceiveList},
+			</if>
+			<if test="wholeSale_order_doseNumber != null">
+			wholeSale_order_doseNumber = #{wholeSale_order_doseNumber},
+			</if>
+			<if test="wholeSale_order_realIncomeAmount != null">
+			wholeSale_order_realIncomeAmount = #{wholeSale_order_realIncomeAmount},
+			</if>
+			<if test="wholeSale_order_change != null">
+			wholeSale_order_change = #{wholeSale_order_change},
+			</if>
+			<if test="wholeSale_order_giftCard != null">
+			wholeSale_order_giftCard = #{wholeSale_order_giftCard},
+			</if>
+			<if test="wholeSale_order_discount != null">
+			wholeSale_order_discount = #{wholeSale_order_discount},
+			</if>
+			<if test="wholeSale_order_swingCardStyle != null">
+			wholeSale_order_swingCardStyle = #{wholeSale_order_swingCardStyle},
+			</if>
+			<if test="wholeSale_order_swingCardAmount != null">
+			wholeSale_order_swingCardAmount = #{wholeSale_order_swingCardAmount},
+			</if>
+			<if test="wholeSale_order_cash != null">
+			wholeSale_order_cash = #{wholeSale_order_cash},
+			</if>
+			<if test="wholeSale_order_pointMultiple != null">
+			wholeSale_order_pointMultiple = #{wholeSale_order_pointMultiple},
+			</if>
+			<if test="wholeSale_order_swingCardName != null">
+			wholeSale_order_swingCardName = #{wholeSale_order_swingCardName},
+			</if>
+			<if test="wholeSale_order_swingCardId != null">
+			wholeSale_order_swingCardId = #{wholeSale_order_swingCardId},
+			</if>
+			<if test="wholeSale_order_swingCardRemain != null">
+			wholeSale_order_swingCardRemain = #{wholeSale_order_swingCardRemain},
+			</if>
+			<if test="wholeSale_order_point != null">
+			wholeSale_order_point = #{wholeSale_order_point},
+			</if>
+			<if test="wholeSale_order_printTimes != null">
+			wholeSale_order_printTimes = #{wholeSale_order_printTimes},
+			</if>
+			<if test="wholeSale_order_modifyRemark != null">
+			wholeSale_order_modifyRemark = #{wholeSale_order_modifyRemark},
+			</if>
+			<if test="wholeSale_order_swingCardPersonPropery != null">
+			wholeSale_order_swingCardPersonPropery = #{wholeSale_order_swingCardPersonPropery},
+			</if>
+			<if test="wholeSale_order_giftCardMax != null">
+			wholeSale_order_giftCardMax = #{wholeSale_order_giftCardMax},
+			</if>
+			<if test="wholeSale_order_giftCardInitAmount != null">
+			wholeSale_order_giftCardInitAmount = #{wholeSale_order_giftCardInitAmount},
+			</if>
+			<if test="wholeSale_order_purchasePersonName != null">
+			wholeSale_order_purchasePersonName = #{wholeSale_order_purchasePersonName},
+			</if>
+			<if test="wholeSale_order_purchasePersonID != null">
+			wholeSale_order_purchasePersonID = #{wholeSale_order_purchasePersonID},
+			</if>
+			<if test="wholeSale_order_purchasePersonPhone != null">
+			wholeSale_order_purchasePersonPhone = #{wholeSale_order_purchasePersonPhone},
+			</if>
+			<if test="wholeSale_order_pharmacistName != null">
+			wholeSale_order_pharmacistName = #{wholeSale_order_pharmacistName},
+			</if>
+			<if test="wholeSale_order_pharmacistElectronicSignature != null">
+			wholeSale_order_pharmacistElectronicSignature = #{wholeSale_order_pharmacistElectronicSignature},
+			</if>
+			<if test="wholeSale_order_drugTicketId != null">
+			wholeSale_order_drugTicketId = #{wholeSale_order_drugTicketId},
+			</if>
+			<if test="wholeSale_order_saveTime != null">
+			wholeSale_order_saveTime = #{wholeSale_order_saveTime},
+			</if>
+			<if test="wholeSale_order_SingleDoseAmount != null">
+			wholeSale_order_SingleDoseAmount = #{wholeSale_order_SingleDoseAmount},
+			</if>
+			<if test="wholeSale_order_fullGiftAmount != null">
+			wholeSale_order_fullGiftAmount = #{wholeSale_order_fullGiftAmount},
+			</if>
+			<if test="wholeSale_order_fullGiftExchange != null">
+			wholeSale_order_fullGiftExchange = #{wholeSale_order_fullGiftExchange},
+			</if>
+			<if test="wholeSale_order_fullGiftRemain != null">
+			wholeSale_order_fullGiftRemain = #{wholeSale_order_fullGiftRemain},
+			</if>
+			<if test="wholeSale_order_otherCharge != null">
+			wholeSale_order_otherCharge = #{wholeSale_order_otherCharge},
+			</if>
+			<if test="wholeSale_order_receivableAmount != null">
+			wholeSale_order_receivableAmount = #{wholeSale_order_receivableAmount},
+			</if>
+			<if test="wholeSale_order_pointPay != null">
+			wholeSale_order_pointPay = #{wholeSale_order_pointPay},
+			</if>
+	</set>where wholeSale_order_id = #{wholeSale_order_id}
+	</update>
+
+
+
+	<!-- 删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  wholeSale_order
+		where wholeSale_order_id = #{id}
+	</delete>
+	
+	<!-- <select id="getMaxRetailOrderCode" parameterType="String" resultType="Integer">
+		select max(cast(SUBSTRING(retail_order_ticketId,len(retail_order_ticketId)-3,4) as INT))
+		from retail_order 
+		where 
+		SUBSTRING(retail_order_ticketId,3,len(retail_order_ticketId)-6) =#{currentDate}
+	</select>
+	
+	根据ticketId删除表中数据
+	<delete id="deleteByTicketId" parameterType="String">
+		delete from retail_order_batch
+		where retail_order_ticketId = #{ticketId};
+		delete from retail_order_product
+		where retail_order_ticketId = #{ticketId};
+		delete from retail_order
+		where retail_order_ticketId = #{ticketId}
+	</delete>
+	
+	
+	
+	根据productId查询批次库存
+	<select id="getStockByProductId"   resultType="RetailOrderVO">
+		select *,(si.stock_storageNumber-si.stock_occupyNumber) as accept_Number,bd.department_discountModify as discount_modify
+		from bas_departmentinfo as bd,stock_info as si LEFT JOIN pro_infoManage as pim on pim.product_id = si.product_id 
+		<where>
+			si.stock_storage = bd.department_id
+			and si.stock_saleStop = 0 
+			and DATEDIFF(second, si.stock_invalidDate , getdate()) &lt; = 0
+			<if test="bean.stock_info_id != null">
+			and si.stock_info_id = #{bean.stock_info_id}
+			</if>
+			
+			<if test="list.size() > 0">
+			and
+				<foreach collection="list" item="product_id" index="index" open="(" separator="or" close=")" >
+					si.product_id = #{product_id} 
+				</foreach>
+			</if>
+			<if test="bean.stock_storage != null">
+			and si.stock_storage = #{bean.stock_storage}
+			</if>
+			<if test="bean.stock_buyPresentSpecial != null">
+			and si.stock_buyPresentSpecial = #{bean.stock_buyPresentSpecial}
+			</if>
+			<if test="bean.product_code != null">
+			and pim.product_code like #{bean.product_code}
+			</if>
+			<if test="bean.product_chnpy != null">
+			and pim.product_chnpy like #{bean.product_chnpy}
+			</if>
+			<if test="bean.product_name != null">
+			and pim.product_name like #{bean.product_name}
+			</if>
+		</where>
+		order by si.${bean.order} asc
+	</select>
+	
+	
+	
+	查询未完成的草稿信息
+	<select id="getDraftInfo" parameterType="String" resultType="RetailOrderVO">
+		select rob.order_batch_quantity as number, (rop.order_product_unitPrice - rop.order_product_discountAmount)as discountedPrice,
+		rob.order_batch_member as mem_card_id,*
+		from  retail_order_product as rop, retail_order_batch as rob LEFT JOIN pro_infoManage as pi on rob.product_id = pi.product_id
+		WHERE rop.order_productId = rob.order_productId 
+		and rop.retail_order_ticketId = rob.retail_order_ticketId  
+		and rop.retail_order_ticketId = #{retail_order_ticketId}
+	</select>
+	
+	获得当前销售订单包含的产品数量
+	<select id="countProduct" parameterType="String"  resultType="Integer">
+		select count(retail_order_product_id) as count
+		from retail_order_product
+		where retail_order_ticketId = #{retail_order_ticketId}
+	</select> -->
+</mapper> 

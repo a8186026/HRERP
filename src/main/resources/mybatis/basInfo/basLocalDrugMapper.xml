@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.BasLocalDrugDao">
+	<!-- 获取厂家档案信息 -->
+	<select id="get" parameterType="Integer" resultType="TCatalog">
+		select *
+		from TCatalog
+		where ca_id = #{id}
+		and ca_status = 0
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="TCatalog" resultType="TCatalog">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from TCatalog
+		<where>
+			ca_status = 0
+			<if test="ca_gysmc != null">
+				and ca_gysmc like #{ca_gysmc}
+			</if>		
+			<if test="offset != null and offset !=0">
+				and ca_id not in(select top ${offset} ca_id from TCatalog where ca_status = 0
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	 
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="TCatalog" resultType="int">
+		select
+		count(ca_id) as count
+		from
+		TCatalog
+		<where>
+			ca_status = 0	
+			<if test="ca_gysmc != null">
+				and ca_gysmc like #{ca_gysmc}
+			</if>	
+		</where>
+	</select>
+</mapper> 

@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.sale.persist.SalInfoManageDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="SalInfoManage">
+		select *
+		from sal_infoManage
+		where sal_id = #{id}
+		and status = 0
+	</select>
+	
+	
+	<select id="getMaxProductCode" parameterType="String" resultType="Integer">
+		select max(cast(SUBSTRING(sal_code,len(sal_code)-2,len(sal_code)) as INT))
+		from sal_infoManage 
+		where 
+		SUBSTRING(sal_code,1,len(sal_code)-3) =#{ticketNumber}
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="SalInfoManage" resultType="SalInfoManage">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from sal_infoManage
+		<where>
+			status = 0			
+			<if test="sal_code != null">
+				and sal_code like #{sal_code}
+			</if>
+			<if test="sal_customername != null">
+				and sal_customername like #{sal_customername}
+			</if>
+			<if test="sal_shortname != null">
+				and sal_shortname like #{sal_shortname}
+			</if>
+			<if test="sal_chnpy != null">
+				and sal_chnpy like #{sal_chnpy}
+			</if>
+			<if test="sal_check != null">
+				and sal_check = #{sal_check}
+			</if>
+			<if test="sal_drugid != null">
+				<if test="sal_drugid == -1">
+				and sal_drugid is null
+				</if>
+				<if test="sal_drugid == -2">
+				and sal_drugid >0
+				</if>
+			</if>
+			<if test="offset != null and offset !=0">
+				and sal_id not in(select top ${offset} sal_id from sal_infoManage where status = 0
+				<if test="sal_code != null">
+					and sal_code like #{sal_code}
+				</if>
+				<if test="sal_customername != null">
+					and sal_customername like #{sal_customername}
+				</if>
+				<if test="sal_shortname != null">
+					and sal_shortname like #{sal_shortname}
+				</if>
+				<if test="sal_chnpy != null">
+					and sal_chnpy like #{sal_chnpy}
+				</if>
+				<if test="sal_check != null">
+					and sal_check = #{sal_check}
+				</if>
+				<if test="sal_drugid != null">
+					<if test="sal_drugid == -1">
+					and sal_drugid is null
+					</if>
+					<if test="sal_drugid == -2">
+					and sal_drugid >0
+					</if>
+				</if>
+				<if test="sort != null and order != null">
+					order by ${sort} ${order}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+		
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="SalInfoManage" resultType="int">
+		select
+		count(sal_id) as count
+		from
+		sal_infoManage
+		<where>
+			status = 0
+			<if test="sal_code != null">
+				and sal_code like #{sal_code}
+			</if>
+				<if test="sal_customername != null">
+				and sal_customername like #{sal_customername}
+			</if>
+				<if test="sal_shortname != null">
+				and sal_shortname like #{sal_shortname}
+			</if>
+				<if test="sal_chnpy != null">
+				and sal_chnpy like #{sal_chnpy}
+			</if>
+			<if test="sal_check != null">
+				and sal_check = #{sal_check}
+			</if>
+			<if test="sal_drugid != null">
+				and sal_drugid = #{sal_drugid}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SalInfoManage" useGeneratedKeys="true" keyProperty="sal_id">
+		 insert into sal_infoManage(
+		sal_type, sal_areacode, sal_code, sal_memcardno, sal_shortname, 
+		sal_customername, sal_salesman, sal_property, sal_department, sal_chnpy, 
+		sal_receivable, sal_sup_id, sal_creditline, sal_contactperson, sal_phone, 
+		sal_telephone, sal_address, sal_zipcode, sal_margin, sal_accountbank, 
+		sal_accountno, sal_tax, sal_createtime, sal_updatetime, sal_description, 
+		sal_strikeprice, sal_settlestyle, sal_contractno, sal_remoneyrate, 
+		sal_remoneyday, sal_fileno, sal_procedure, sal_cancel, sal_allusable, 
+		sal_lockeddosage, sal_bnslicensescope, sal_invailddate, sal_amountsettle, sal_billsettle, 
+		sal_varietysettle, sal_arrivalsettle, sal_daysettle, sal_receiveno, sal_longdistance, 
+		sal_password, sal_stationno, sal_autoallocation, sal_customer, sal_paymentway, 
+		sal_A, sal_B, sal_receive, sal_area, sal_smallarea, sal_areasort, sal_inputsettleprice, sal_customerordertime, 
+		sal_qltycatescope, sal_proxy, sal_belongscustomer, 
+		sal_email, sal_permitno, sal_permitname, sal_permitchief, sal_permitissuingauthority, 
+		sal_permitvailddate, sal_legalperson, sal_registrationno, sal_registeredmoney, sal_bnslicenseway, 
+		sal_qltycateno, sal_bnslicensevailddate, sal_operationlock, sal_drugid, sal_fax, 
+		sal_taxperson, sal_bnslicenseissuingauthority, sal_economyproperty, sal_permitscope, sal_retailstore, 
+		sal_check, sal_checkperson, sal_checktime, sal_lastsaledate, 
+		sal_category2, sal_category3, sal_msn, sal_qq, sal_accountname, 
+		sal_remittanceway, sal_paymentdate, sal_commontaxpayer, sal_financialnote, sal_permitcueday, 
+		sal_bnslicenseannualdeadline, sal_bnslicensecueday, sal_bnslicenseannualnote, sal_qltycatename, sal_qltycatevailddate, 
+		sal_qltycatecueday, sal_qltycateissuingauthority, sal_licensenote, sal_clerkcard, sal_clerktel, 
+		sal_clerkedu, sal_clerkvaliddate, sal_clerkcueday, sal_goodsticket, sal_relatedseal, 
+		sal_sealmold, sal_filelocation, sal_drugcode, sal_annualoutput, sal_techinician, 
+		sal_majorhonor, sal_intendedspecies, sal_majorproduct, sal_qualitystatus, sal_qualityinstitution, 
+		sal_qualityauthentication, sal_qualitymanage, sal_qa, sal_qasex, sal_qaedu, 
+		sal_qatitle, sal_qaposition, sal_qaworkyear, sal_qualitynote, sal_fillingdate, 
+		sal_qacprint, sal_other, sal_other1, sal_other2, sal_other3, 
+		sal_sealmoldphoto, sal_registeraddr, sal_addperson, sal_receiptperson, sal_deliverperson, 
+		status, create_user, create_time, last_modify_user, last_modify_time,sal_salcueday,sal_salentrustarea,
+		sal_accountnumber,sal_clerkretrustarea,sal_idnumber，sal_istaxpayer,sal_localdrug,sal_finddrugid)
+		values(
+		#{sal_type}, #{sal_areacode}, #{sal_code}, #{sal_memcardno}, #{sal_shortname}, 
+		#{sal_customername}, #{sal_salesman}, #{sal_property}, #{sal_department}, #{sal_chnpy}, 
+		#{sal_receivable}, #{sal_sup_id}, #{sal_creditline}, #{sal_contactperson}, #{sal_phone}, 
+		#{sal_telephone}, #{sal_address}, #{sal_zipcode}, #{sal_margin}, #{sal_accountbank}, 
+		#{sal_accountno}, #{sal_tax}, #{sal_createtime}, #{sal_updatetime}, #{sal_description}, 
+		#{sal_strikeprice}, #{sal_settlestyle}, #{sal_contractno}, #{sal_remoneyrate}, 
+		#{sal_remoneyday}, #{sal_fileno}, #{sal_procedure}, #{sal_cancel}, #{sal_allusable}, 
+		#{sal_lockeddosage}, #{sal_bnslicensescope}, #{sal_invailddate}, #{sal_amountsettle}, #{sal_billsettle}, 
+		#{sal_varietysettle}, #{sal_arrivalsettle}, #{sal_daysettle}, #{sal_receiveno}, #{sal_longdistance}, 
+		#{sal_password}, #{sal_stationno}, #{sal_autoallocation}, #{sal_customer}, #{sal_paymentway}, 
+		#{sal_A}, #{sal_B}, #{sal_receive}, #{sal_area}, 
+		#{sal_smallarea}, #{sal_areasort}, #{sal_inputsettleprice}, #{sal_customerordertime}, 
+		#{sal_qltycatescope}, 
+		#{sal_proxy}, #{sal_belongscustomer}, 
+		#{sal_email}, #{sal_permitno}, #{sal_permitname}, #{sal_permitchief}, #{sal_permitissuingauthority}, 
+		#{sal_permitvailddate}, #{sal_legalperson}, #{sal_registrationno}, #{sal_registeredmoney}, #{sal_bnslicenseway}, 
+		#{sal_qltycateno}, #{sal_bnslicensevailddate}, #{sal_operationlock}, #{sal_drugid}, #{sal_fax}, 
+		#{sal_taxperson}, #{sal_bnslicenseissuingauthority}, #{sal_economyproperty}, #{sal_permitscope}, #{sal_retailstore}, 
+		#{sal_check}, #{sal_checkperson}, #{sal_checktime}, #{sal_lastsaledate}, 
+		#{sal_category2}, #{sal_category3}, #{sal_msn}, #{sal_qq}, #{sal_accountname}, 
+		#{sal_remittanceway}, #{sal_paymentdate}, #{sal_commontaxpayer}, #{sal_financialnote}, #{sal_permitcueday}, 
+		#{sal_bnslicenseannualdeadline}, #{sal_bnslicensecueday}, #{sal_bnslicenseannualnote}, #{sal_qltycatename}, #{sal_qltycatevailddate}, 
+		#{sal_qltycatecueday}, #{sal_qltycateissuingauthority}, #{sal_licensenote}, #{sal_clerkcard}, #{sal_clerktel}, 
+		#{sal_clerkedu}, #{sal_clerkvaliddate}, #{sal_clerkcueday}, #{sal_goodsticket}, #{sal_relatedseal}, 
+		#{sal_sealmold}, #{sal_filelocation}, #{sal_drugcode}, #{sal_annualoutput}, #{sal_techinician}, 
+		#{sal_majorhonor}, #{sal_intendedspecies}, #{sal_majorproduct}, #{sal_qualitystatus}, #{sal_qualityinstitution}, 
+		#{sal_qualityauthentication}, #{sal_qualitymanage}, #{sal_qa}, #{sal_qasex}, #{sal_qaedu}, 
+		#{sal_qatitle}, #{sal_qaposition}, #{sal_qaworkyear}, #{sal_qualitynote}, #{sal_fillingdate}, 
+		#{sal_qacprint}, #{sal_other}, #{sal_other1}, #{sal_other2}, #{sal_other3}, 
+		#{sal_sealmoldphoto}, #{sal_registeraddr}, #{sal_addperson}, #{sal_receiptperson}, #{sal_deliverperson}, 
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time},
+		#{sal_salcueday}, #{sal_salentrustarea}, #{sal_accountnumber}, #{sal_clerkretrustarea}, 
+		#{sal_idnumber}, #{sal_istaxpayer}, #{sal_localdrug}, #{sal_finddrugid});
+	</insert>
+	
+		<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addlog" parameterType="SalInfoManage" useGeneratedKeys="true" keyProperty="sal_log_id">
+		 insert into sal_infoManage_log(
+		sal_id, sal_type, sal_areacode, sal_code, sal_memcardno, sal_shortname, 
+		sal_customername, sal_salesman, sal_property, sal_department, sal_chnpy, 
+		sal_receivable, sal_sup_id, sal_creditline, sal_contactperson, sal_phone, 
+		sal_telephone, sal_address, sal_zipcode, sal_margin, sal_accountbank, 
+		sal_accountno, sal_tax, sal_createtime, sal_updatetime, sal_description, 
+		sal_strikeprice, sal_settlestyle, sal_contractno, sal_remoneyrate, 
+		sal_remoneyday, sal_fileno, sal_procedure, sal_cancel, sal_allusable, 
+		sal_lockeddosage, sal_bnslicensescope, sal_invailddate, sal_amountsettle, sal_billsettle, 
+		sal_varietysettle, sal_arrivalsettle, sal_daysettle, sal_receiveno, sal_longdistance, 
+		sal_password, sal_stationno, sal_autoallocation, sal_customer, sal_paymentway, 
+		sal_A, sal_B, sal_receive, sal_area, sal_smallarea, sal_areasort, sal_inputsettleprice, sal_customerordertime, 
+		sal_qltycatescope, sal_proxy, sal_belongscustomer, 
+		sal_email, sal_permitno, sal_permitname, sal_permitchief, sal_permitissuingauthority, 
+		sal_permitvailddate, sal_legalperson, sal_registrationno, sal_registeredmoney, sal_bnslicenseway, 
+		sal_qltycateno, sal_bnslicensevailddate, sal_operationlock, sal_drugid, sal_fax, 
+		sal_taxperson, sal_bnslicenseissuingauthority, sal_economyproperty, sal_permitscope, sal_retailstore, 
+		sal_check, sal_checkperson, sal_checktime, sal_lastsaledate, 
+		sal_category2, sal_category3, sal_msn, sal_qq, sal_accountname, 
+		sal_remittanceway, sal_paymentdate, sal_commontaxpayer, sal_financialnote, sal_permitcueday, 
+		sal_bnslicenseannualdeadline, sal_bnslicensecueday, sal_bnslicenseannualnote, sal_qltycatename, sal_qltycatevailddate, 
+		sal_qltycatecueday, sal_qltycateissuingauthority, sal_licensenote, sal_clerkcard, sal_clerktel, 
+		sal_clerkedu, sal_clerkvaliddate, sal_clerkcueday, sal_goodsticket, sal_relatedseal, 
+		sal_sealmold, sal_filelocation, sal_drugcode, sal_annualoutput, sal_techinician, 
+		sal_majorhonor, sal_intendedspecies, sal_majorproduct, sal_qualitystatus, sal_qualityinstitution, 
+		sal_qualityauthentication, sal_qualitymanage, sal_qa, sal_qasex, sal_qaedu, 
+		sal_qatitle, sal_qaposition, sal_qaworkyear, sal_qualitynote, sal_fillingdate, 
+		sal_qacprint, sal_other, sal_other1, sal_other2, sal_other3, 
+		sal_sealmoldphoto, sal_registeraddr, sal_addperson, sal_receiptperson, sal_deliverperson, 
+		status, create_user, create_time, last_modify_user, last_modify_time,sal_salcueday,sal_salentrustarea,
+		sal_accountnumber,sal_clerkretrustarea,sal_idnumber,sal_istaxpayer,sal_localdrug,sal_finddrugid)
+		values(
+		#{sal_id}, #{sal_type}, #{sal_areacode}, #{sal_code}, #{sal_memcardno}, #{sal_shortname}, 
+		#{sal_customername}, #{sal_salesman}, #{sal_property}, #{sal_department}, #{sal_chnpy}, 
+		#{sal_receivable}, #{sal_sup_id}, #{sal_creditline}, #{sal_contactperson}, #{sal_phone}, 
+		#{sal_telephone}, #{sal_address}, #{sal_zipcode}, #{sal_margin}, #{sal_accountbank}, 
+		#{sal_accountno}, #{sal_tax}, #{sal_createtime}, #{sal_updatetime}, #{sal_description}, 
+		#{sal_strikeprice}, #{sal_settlestyle}, #{sal_contractno}, #{sal_remoneyrate}, 
+		#{sal_remoneyday}, #{sal_fileno}, #{sal_procedure}, #{sal_cancel}, #{sal_allusable}, 
+		#{sal_lockeddosage}, #{sal_bnslicensescope}, #{sal_invailddate}, #{sal_amountsettle}, #{sal_billsettle}, 
+		#{sal_varietysettle}, #{sal_arrivalsettle}, #{sal_daysettle}, #{sal_receiveno}, #{sal_longdistance}, 
+		#{sal_password}, #{sal_stationno}, #{sal_autoallocation}, #{sal_customer}, #{sal_paymentway}, 
+		#{sal_A}, #{sal_B}, #{sal_receive}, #{sal_area}, 
+		#{sal_smallarea}, #{sal_areasort}, #{sal_inputsettleprice}, #{sal_customerordertime}, 
+		#{sal_qltycatescope}, 
+		#{sal_proxy}, #{sal_belongscustomer}, 
+		#{sal_email}, #{sal_permitno}, #{sal_permitname}, #{sal_permitchief}, #{sal_permitissuingauthority}, 
+		#{sal_permitvailddate}, #{sal_legalperson}, #{sal_registrationno}, #{sal_registeredmoney}, #{sal_bnslicenseway}, 
+		#{sal_qltycateno}, #{sal_bnslicensevailddate}, #{sal_operationlock}, #{sal_drugid}, #{sal_fax}, 
+		#{sal_taxperson}, #{sal_bnslicenseissuingauthority}, #{sal_economyproperty}, #{sal_permitscope}, #{sal_retailstore}, 
+		#{sal_check}, #{sal_checkperson}, #{sal_checktime}, #{sal_lastsaledate}, 
+		#{sal_category2}, #{sal_category3}, #{sal_msn}, #{sal_qq}, #{sal_accountname}, 
+		#{sal_remittanceway}, #{sal_paymentdate}, #{sal_commontaxpayer}, #{sal_financialnote}, #{sal_permitcueday}, 
+		#{sal_bnslicenseannualdeadline}, #{sal_bnslicensecueday}, #{sal_bnslicenseannualnote}, #{sal_qltycatename}, #{sal_qltycatevailddate}, 
+		#{sal_qltycatecueday}, #{sal_qltycateissuingauthority}, #{sal_licensenote}, #{sal_clerkcard}, #{sal_clerktel}, 
+		#{sal_clerkedu}, #{sal_clerkvaliddate}, #{sal_clerkcueday}, #{sal_goodsticket}, #{sal_relatedseal}, 
+		#{sal_sealmold}, #{sal_filelocation}, #{sal_drugcode}, #{sal_annualoutput}, #{sal_techinician}, 
+		#{sal_majorhonor}, #{sal_intendedspecies}, #{sal_majorproduct}, #{sal_qualitystatus}, #{sal_qualityinstitution}, 
+		#{sal_qualityauthentication}, #{sal_qualitymanage}, #{sal_qa}, #{sal_qasex}, #{sal_qaedu}, 
+		#{sal_qatitle}, #{sal_qaposition}, #{sal_qaworkyear}, #{sal_qualitynote}, #{sal_fillingdate}, 
+		#{sal_qacprint}, #{sal_other}, #{sal_other1}, #{sal_other2}, #{sal_other3}, 
+		#{sal_sealmoldphoto}, #{sal_registeraddr}, #{sal_addperson}, #{sal_receiptperson}, #{sal_deliverperson}, 
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time},
+		#{sal_salcueday}, #{sal_salentrustarea}, #{sal_accountnumber}, 
+		#{sal_clerkretrustarea}, #{sal_idnumber}, #{sal_istaxpayer}, #{sal_localdrug}, #{sal_finddrugid});
+	</insert>
+	
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SalInfoManage">
+		 update sal_infoManage
+		<set>
+			<if test="sal_type != null">
+			sal_type = #{sal_type},
+			</if>
+			<if test="sal_areacode != null">
+			sal_areacode = #{sal_areacode},
+			</if>
+			<if test="sal_code != null">
+			sal_code = #{sal_code},
+			</if>
+			<if test="sal_memcardno != null">
+			sal_memcardno = #{sal_memcardno},
+			</if>
+			<if test="sal_shortname != null">
+			sal_shortname = #{sal_shortname},
+			</if>
+			<if test="sal_customername != null">
+			sal_customername = #{sal_customername},
+			</if>
+			<if test="sal_salesman != null">
+			sal_salesman = #{sal_salesman},
+			</if>
+			<if test="sal_property != null">
+			sal_property = #{sal_property},
+			</if>
+			<if test="sal_department != null">
+			sal_department = #{sal_department},
+			</if>
+			<if test="sal_chnpy != null">
+			sal_chnpy = #{sal_chnpy},
+			</if>
+			<if test="sal_receivable != null">
+			sal_receivable = #{sal_receivable},
+			</if>
+			<if test="sal_sup_id != null">
+			sal_sup_id = #{sal_sup_id},
+			</if>
+			<if test="sal_creditline != null">
+			sal_creditline = #{sal_creditline},
+			</if>
+			<if test="sal_contactperson != null">
+			sal_contactperson = #{sal_contactperson},
+			</if>
+			<if test="sal_phone != null">
+			sal_phone = #{sal_phone},
+			</if>
+			<if test="sal_telephone != null">
+			sal_telephone = #{sal_telephone},
+			</if>
+			<if test="sal_address != null">
+			sal_address = #{sal_address},
+			</if>
+			<if test="sal_zipcode != null">
+			sal_zipcode = #{sal_zipcode},
+			</if>
+			<if test="sal_margin != null">
+			sal_margin = #{sal_margin},
+			</if>
+			<if test="sal_accountbank != null">
+			sal_accountbank = #{sal_accountbank},
+			</if>
+			<if test="sal_accountno != null">
+			sal_accountno = #{sal_accountno},
+			</if>
+			<if test="sal_tax != null">
+			sal_tax = #{sal_tax},
+			</if>
+			<if test="sal_createtime != null">
+			sal_createtime = #{sal_createtime},
+			</if>
+			<if test="sal_updatetime != null">
+			sal_updatetime = #{sal_updatetime},
+			</if>
+			<if test="sal_description != null">
+			sal_description = #{sal_description},
+			</if>
+			<if test="sal_strikeprice != null">
+			sal_strikeprice = #{sal_strikeprice},
+			</if>
+			<if test="sal_settlestyle != null">
+			sal_settlestyle = #{sal_settlestyle},
+			</if>
+			<if test="sal_contractno != null">
+			sal_contractno = #{sal_contractno},
+			</if>
+			<if test="sal_remoneyrate != null">
+			sal_remoneyrate = #{sal_remoneyrate},
+			</if>
+			<if test="sal_remoneyday != null">
+			sal_remoneyday = #{sal_remoneyday},
+			</if>
+			<if test="sal_fileno != null">
+			sal_fileno = #{sal_fileno},
+			</if>
+			<if test="sal_procedure != null">
+			sal_procedure = #{sal_procedure},
+			</if>
+			<if test="sal_cancel != null">
+			sal_cancel = #{sal_cancel},
+			</if>
+			<if test="sal_allusable != null">
+			sal_allusable = #{sal_allusable},
+			</if>
+			<if test="sal_lockeddosage != null">
+			sal_lockeddosage = #{sal_lockeddosage},
+			</if>
+			<if test="sal_bnslicensescope != null">
+			sal_bnslicensescope = #{sal_bnslicensescope},
+			</if>
+			<if test="sal_invailddate != null">
+			sal_invailddate = #{sal_invailddate},
+			</if>
+			<if test="sal_amountsettle != null">
+			sal_amountsettle = #{sal_amountsettle},
+			</if>
+			<if test="sal_billsettle != null">
+			sal_billsettle = #{sal_billsettle},
+			</if>
+			<if test="sal_varietysettle != null">
+			sal_varietysettle = #{sal_varietysettle},
+			</if>
+			<if test="sal_arrivalsettle != null">
+			sal_arrivalsettle = #{sal_arrivalsettle},
+			</if>
+			<if test="sal_daysettle != null">
+			sal_daysettle = #{sal_daysettle},
+			</if>
+			<if test="sal_receiveno != null">
+			sal_receiveno = #{sal_receiveno},
+			</if>
+			<if test="sal_longdistance != null">
+			sal_longdistance = #{sal_longdistance},
+			</if>
+			<if test="sal_password != null">
+			sal_password = #{sal_password},
+			</if>
+			<if test="sal_stationno != null">
+			sal_stationno = #{sal_stationno},
+			</if>
+			<if test="sal_autoallocation != null">
+			sal_autoallocation = #{sal_autoallocation},
+			</if>
+			<if test="sal_customer != null">
+			sal_customer = #{sal_customer},
+			</if>
+			<if test="sal_paymentway != null">
+			sal_paymentway = #{sal_paymentway},
+			</if>
+			<if test="sal_A != null">
+			sal_A = #{sal_A},
+			</if>
+			<if test="sal_B != null">
+			sal_B = #{sal_B},
+			</if>
+			<if test="sal_receive != null">
+			sal_receive = #{sal_receive},
+			</if>
+			<if test="sal_area != null">
+			sal_area = #{sal_area},
+			</if>
+			<if test="sal_smallarea != null">
+			sal_smallarea = #{sal_smallarea},
+			</if>
+			<if test="sal_areasort != null">
+			sal_areasort = #{sal_areasort},
+			</if>
+			<if test="sal_inputsettleprice != null">
+			sal_inputsettleprice = #{sal_inputsettleprice},
+			</if>
+			<if test="sal_customerordertime != null">
+			sal_customerordertime = #{sal_customerordertime},
+			</if>
+			<if test="sal_qltycatescope != null">
+			sal_qltycatescope = #{sal_qltycatescope},
+			</if>
+			<if test="sal_proxy != null">
+			sal_proxy = #{sal_proxy},
+			</if>
+			<if test="sal_belongscustomer != null">
+			sal_belongscustomer = #{sal_belongscustomer},
+			</if>
+			<if test="sal_email != null">
+			sal_email = #{sal_email},
+			</if>
+			<if test="sal_permitno != null">
+			sal_permitno = #{sal_permitno},
+			</if>
+			<if test="sal_permitname != null">
+			sal_permitname = #{sal_permitname},
+			</if>
+			<if test="sal_permitchief != null">
+			sal_permitchief = #{sal_permitchief},
+			</if>
+			<if test="sal_permitissuingauthority != null">
+			sal_permitissuingauthority = #{sal_permitissuingauthority},
+			</if>
+			<if test="sal_permitvailddate != null">
+			sal_permitvailddate = #{sal_permitvailddate},
+			</if>
+			<if test="sal_legalperson != null">
+			sal_legalperson = #{sal_legalperson},
+			</if>
+			<if test="sal_registrationno != null">
+			sal_registrationno = #{sal_registrationno},
+			</if>
+			<if test="sal_registeredmoney != null">
+			sal_registeredmoney = #{sal_registeredmoney},
+			</if>
+			<if test="sal_bnslicenseway != null">
+			sal_bnslicenseway = #{sal_bnslicenseway},
+			</if>
+			<if test="sal_qltycateno != null">
+			sal_qltycateno = #{sal_qltycateno},
+			</if>
+			<if test="sal_bnslicensevailddate != null">
+			sal_bnslicensevailddate = #{sal_bnslicensevailddate},
+			</if>
+			<if test="sal_operationlock != null">
+			sal_operationlock = #{sal_operationlock},
+			</if>
+			<if test="sal_drugid != null">
+			sal_drugid = #{sal_drugid},
+			</if>
+			<if test="sal_fax != null">
+			sal_fax = #{sal_fax},
+			</if>
+			<if test="sal_taxperson != null">
+			sal_taxperson = #{sal_taxperson},
+			</if>
+			<if test="sal_bnslicenseissuingauthority != null">
+			sal_bnslicenseissuingauthority = #{sal_bnslicenseissuingauthority},
+			</if>
+			<if test="sal_economyproperty != null">
+			sal_economyproperty = #{sal_economyproperty},
+			</if>
+			<if test="sal_permitscope != null">
+			sal_permitscope = #{sal_permitscope},
+			</if>
+			<if test="sal_retailstore != null">
+			sal_retailstore = #{sal_retailstore},
+			</if>
+			<if test="sal_check != null">
+			sal_check = #{sal_check},
+			</if>
+			<if test="sal_checkperson != null">
+			sal_checkperson = #{sal_checkperson},
+			</if>
+			<if test="sal_checktime != null">
+			sal_checktime = #{sal_checktime},
+			</if>
+			<if test="sal_lastsaledate != null">
+			sal_lastsaledate = #{sal_lastsaledate},
+			</if>
+			<if test="sal_category2 != null">
+			sal_category2 = #{sal_category2},
+			</if>
+			<if test="sal_category3 != null">
+			sal_category3 = #{sal_category3},
+			</if>
+			<if test="sal_msn != null">
+			sal_msn = #{sal_msn},
+			</if>
+			<if test="sal_qq != null">
+			sal_qq = #{sal_qq},
+			</if>
+			<if test="sal_accountname != null">
+			sal_accountname = #{sal_accountname},
+			</if>
+			<if test="sal_remittanceway != null">
+			sal_remittanceway = #{sal_remittanceway},
+			</if>
+			<if test="sal_paymentdate != null">
+			sal_paymentdate = #{sal_paymentdate},
+			</if>
+			<if test="sal_commontaxpayer != null">
+			sal_commontaxpayer = #{sal_commontaxpayer},
+			</if>
+			<if test="sal_financialnote != null">
+			sal_financialnote = #{sal_financialnote},
+			</if>
+			<if test="sal_permitcueday != null">
+			sal_permitcueday = #{sal_permitcueday},
+			</if>
+			<if test="sal_bnslicenseannualdeadline != null">
+			sal_bnslicenseannualdeadline = #{sal_bnslicenseannualdeadline},
+			</if>
+			<if test="sal_bnslicensecueday != null">
+			sal_bnslicensecueday = #{sal_bnslicensecueday},
+			</if>
+			<if test="sal_bnslicenseannualnote != null">
+			sal_bnslicenseannualnote = #{sal_bnslicenseannualnote},
+			</if>
+			<if test="sal_qltycatename != null">
+			sal_qltycatename = #{sal_qltycatename},
+			</if>
+			<if test="sal_qltycatevailddate != null">
+			sal_qltycatevailddate = #{sal_qltycatevailddate},
+			</if>
+			<if test="sal_qltycatecueday != null">
+			sal_qltycatecueday = #{sal_qltycatecueday},
+			</if>
+			<if test="sal_qltycateissuingauthority != null">
+			sal_qltycateissuingauthority = #{sal_qltycateissuingauthority},
+			</if>
+			<if test="sal_licensenote != null">
+			sal_licensenote = #{sal_licensenote},
+			</if>
+			<if test="sal_clerkcard != null">
+			sal_clerkcard = #{sal_clerkcard},
+			</if>
+			<if test="sal_clerktel != null">
+			sal_clerktel = #{sal_clerktel},
+			</if>
+			<if test="sal_clerkedu != null">
+			sal_clerkedu = #{sal_clerkedu},
+			</if>
+			<if test="sal_clerkvaliddate != null">
+			sal_clerkvaliddate = #{sal_clerkvaliddate},
+			</if>
+			<if test="sal_clerkcueday != null">
+			sal_clerkcueday = #{sal_clerkcueday},
+			</if>
+			<if test="sal_goodsticket != null">
+			sal_goodsticket = #{sal_goodsticket},
+			</if>
+			<if test="sal_relatedseal != null">
+			sal_relatedseal = #{sal_relatedseal},
+			</if>
+			<if test="sal_sealmold != null">
+			sal_sealmold = #{sal_sealmold},
+			</if>
+			<if test="sal_filelocation != null">
+			sal_filelocation = #{sal_filelocation},
+			</if>
+			<if test="sal_drugcode != null">
+			sal_drugcode = #{sal_drugcode},
+			</if>
+			<if test="sal_annualoutput != null">
+			sal_annualoutput = #{sal_annualoutput},
+			</if>
+			<if test="sal_techinician != null">
+			sal_techinician = #{sal_techinician},
+			</if>
+			<if test="sal_majorhonor != null">
+			sal_majorhonor = #{sal_majorhonor},
+			</if>
+			<if test="sal_intendedspecies != null">
+			sal_intendedspecies = #{sal_intendedspecies},
+			</if>
+			<if test="sal_majorproduct != null">
+			sal_majorproduct = #{sal_majorproduct},
+			</if>
+			<if test="sal_qualitystatus != null">
+			sal_qualitystatus = #{sal_qualitystatus},
+			</if>
+			<if test="sal_qualityinstitution != null">
+			sal_qualityinstitution = #{sal_qualityinstitution},
+			</if>
+			<if test="sal_qualityauthentication != null">
+			sal_qualityauthentication = #{sal_qualityauthentication},
+			</if>
+			<if test="sal_qualitymanage != null">
+			sal_qualitymanage = #{sal_qualitymanage},
+			</if>
+			<if test="sal_qa != null">
+			sal_qa = #{sal_qa},
+			</if>
+			<if test="sal_qasex != null">
+			sal_qasex = #{sal_qasex},
+			</if>
+			<if test="sal_qaedu != null">
+			sal_qaedu = #{sal_qaedu},
+			</if>
+			<if test="sal_qatitle != null">
+			sal_qatitle = #{sal_qatitle},
+			</if>
+			<if test="sal_qaposition != null">
+			sal_qaposition = #{sal_qaposition},
+			</if>
+			<if test="sal_qaworkyear != null">
+			sal_qaworkyear = #{sal_qaworkyear},
+			</if>
+			<if test="sal_qualitynote != null">
+			sal_qualitynote = #{sal_qualitynote},
+			</if>
+			<if test="sal_fillingdate != null">
+			sal_fillingdate = #{sal_fillingdate},
+			</if>
+			<if test="sal_qacprint != null">
+			sal_qacprint = #{sal_qacprint},
+			</if>
+			<if test="sal_other != null">
+			sal_other = #{sal_other},
+			</if>
+			<if test="sal_other1 != null">
+			sal_other1 = #{sal_other1},
+			</if>
+			<if test="sal_other2 != null">
+			sal_other2 = #{sal_other2},
+			</if>
+			<if test="sal_other3 != null">
+			sal_other3 = #{sal_other3},
+			</if>
+			<if test="sal_sealmoldphoto != null">
+			sal_sealmoldphoto = #{sal_sealmoldphoto},
+			</if>
+			<if test="sal_registeraddr != null">
+			sal_registeraddr = #{sal_registeraddr},
+			</if>
+			<if test="sal_addperson != null">
+			sal_addperson = #{sal_addperson},
+			</if>
+			<if test="sal_receiptperson != null">
+			sal_receiptperson = #{sal_receiptperson},
+			</if>
+			<if test="sal_deliverperson != null">
+			sal_deliverperson = #{sal_deliverperson},
+			</if>
+			<if test="status != null">
+			status = #{status},
+			</if>
+			<if test="create_user != null">
+			create_user = #{create_user},
+			</if>
+			<if test="create_time != null">
+			create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+			</if>
+			<if test="sal_salcueday != null">
+			sal_salcueday = #{sal_salcueday},
+			</if>
+			<if test="sal_salentrustarea != null">
+			sal_salentrustarea = #{sal_salentrustarea},
+			</if>
+			<if test="sal_accountnumber != null">
+			sal_accountnumber = #{sal_accountnumber},
+			</if>
+			<if test="sal_clerkretrustarea != null">
+			sal_clerkretrustarea = #{sal_clerkretrustarea},
+			</if>
+			<if test="sal_istaxpayer != null">
+			sal_istaxpayer = #{sal_istaxpayer},
+			</if>	
+			<if test="sal_localdrug != null">
+			sal_localdrug = #{sal_localdrug},
+			</if>
+			<if test="sal_finddrugid != null">
+			sal_finddrugid = #{sal_finddrugid},
+			</if>			
+			
+						
+	</set>where sal_id = #{sal_id}
+	</update>
+
+
+	<update id="delete" parameterType="int">
+		update sal_infoManage
+		<set>
+				status = 9,
+		</set>
+		where sal_id = #{sal_id}
+	</update>
+
+</mapper> 

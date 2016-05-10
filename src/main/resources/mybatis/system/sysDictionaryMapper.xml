@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysDictionaryDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="SysDictionary">
+		select *
+		from sys_dictionary
+		where dict_id = #{dict_id} 
+		and status = 0
+	</select>
+
+	<!-- 获取用户 -->
+	<select id="getSub" parameterType="Integer" resultType="SysDictionarySub">
+		select *
+		from sys_dictionary_sub
+		where dict_sub_id = #{dict_sub_id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="mapList" parameterType="SysDictionary" resultType="map">
+		select t2.* from (
+		select
+		convert(varchar,t.dict_id) as dict_id,
+		t.dict_name,
+		t.dict_code,
+		null as dict_sub_value,
+		t. status,
+		t.note,
+		0 as dict_parent,
+		0 as dict_sub_id,
+		null as orders
+		from
+		sys_dictionary t
+		where
+		t.status = 0
+		<if test="dict_code != null">
+			and t.dict_code like #{dict_code}
+		</if>
+		union
+		select
+		convert(varchar,t1.dict_parent)+'_'+convert(varchar,t1.dict_sub_id),
+		t1.dict_sub_name,
+		null,
+		t1.dict_sub_value,
+		t1. status,
+		t1.dict_sub_note,
+		t1.dict_parent,
+		t1.dict_sub_id,
+		t1.orders
+		from
+		sys_dictionary_sub t1, sys_dictionary t3
+		where
+		t1.dict_parent = t3.dict_id
+		and t1.status = 0
+		<if test="dict_code != null">
+			and t3.dict_code like #{dict_code}
+		</if>
+		) t2
+		<where>
+			1 = 1
+			<if test="dict_name != null">
+				and t2.dict_name like #{dict_name}
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by t2.${sort} ${order}
+		</if>
+	</select>
+
+	<!-- 按编码查询 -->
+	<select id="getByCode" parameterType="string" resultType="SysDictionarySub">
+		select
+		sds.*
+		from sys_dictionary sd, sys_dictionary_sub sds
+		where sd.dict_id = sds.dict_parent
+		and sd.dict_code = #{code}
+		and sd.status = 0
+		and sds.status = 0
+		order by sds.orders asc
+	</select>
+
+	<!-- 按编码和值查询 -->
+	<select id="getByCodeAndValue" parameterType="map" resultType="SysDictionarySub">
+		select sds.*
+		from sys_dictionary sd, sys_dictionary_sub sds
+		where sd.dict_id = sds.dict_parent
+		and sd.dict_code = #{code}
+		and sds.dict_sub_value = #{value}
+		and sd.status = 0
+		and sds.status = 0
+	</select>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysDictionary" useGeneratedKeys="true"
+		keyProperty="dict_id">
+		insert into sys_dictionary(dict_name, dict_code, note,
+		status, create_user, create_time, last_modify_user, last_modify_time)
+		values(#{dict_name}, #{dict_code}, #{note}, #{status}, #{create_user},
+		#{create_time}, #{last_modify_user}, #{last_modify_time});
+	</insert>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="saveSub" parameterType="SysDictionarySub"
+		useGeneratedKeys="true" keyProperty="dict_sub_id">
+		insert into
+		sys_dictionary_sub(dict_sub_name, dict_sub_value, orders,
+		dict_sub_note, dict_parent, status, create_user, create_time,
+		last_modify_user, last_modify_time)
+		values(#{dict_sub_name}, #{dict_sub_value}, #{orders}, #{dict_sub_note}, #{dict_parent},
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user},
+		#{last_modify_time});
+	</insert>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysDictionary">
+		update sys_dictionary
+		<set>
+			<if test="dict_name != null">
+				dict_name = #{dict_name},
+			</if>
+			<if test="dict_code != null">
+				dict_code = #{dict_code},
+			</if>
+			<if test="note != null">
+				note = #{note},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where dict_id = #{dict_id}
+	</update>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="updateSub" parameterType="SysDictionarySub">
+		update sys_dictionary_sub
+		<set>
+			<if test="dict_sub_name != null">
+				dict_sub_name = #{dict_sub_name},
+			</if>
+			<if test="dict_sub_value != null">
+				dict_sub_value = #{dict_sub_value},
+			</if>
+			<if test="orders != null">
+				orders = #{orders},
+			</if>
+			<if test="dict_sub_note != null">
+				dict_sub_note = #{dict_sub_note},
+			</if>
+			<if test="dict_parent != null">
+				dict_parent = #{dict_parent},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where dict_sub_id = #{dict_sub_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<update id="delete">
+		update sys_dictionary set status = 9 where dict_id
+		=#{dict_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<update id="deleteSub">
+		update sys_dictionary_sub set status = 9 where
+		dict_sub_id =#{dict_sub_id}
+	</update>
+</mapper> 

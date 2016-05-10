@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.inventory.persist.InventoryApplyDao">
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="getInventoryApplyList" parameterType="InventoryVO" resultType="InventoryVO">
+		<if test="rows!=null and rows!=0">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null and rows!=0">
+			select *
+		</if>
+			from stock_inventory as sit, stock_info as si, pro_infoManage as pim, bas_departmentinfo as bdi
+		<where>
+				sit.stock_info_id = si.stock_info_id 
+				and si.product_id = pim.product_id 
+				and si.stock_storage = bdi.department_id
+			<if test="inventory_id!= null">
+			and inventory_id like #{inventory_id}
+			</if>
+			<if test="inventory_date!=null">
+			and inventory_date like #{inventory_date}
+			</if>
+			<if test="inventory_operator!=null">
+			and inventory_operator like #{inventory_operator}
+			</if>
+			<if test="department_id!= null">
+			and sit.department_id like #{department_id}
+			</if>
+			<if test="pro_group_no!=null">
+			and pro_group_no like #{pro_group_no}
+			</if>
+			<if test="pro_location_no!=null">
+			and pro_location_no like #{pro_location_no}
+			</if>
+			<if test="stock_info_id!= null">
+			and sit.stock_info_id like #{stock_info_id}
+			</if>
+			<if test="inventory_countedNumber!= null">
+			and inventory_countedNumber like #{inventory_countedNumber}
+			</if>
+			<if test="inventory_noRecord!= null">
+			and inventory_noRecord like #{inventory_noRecord}
+			</if>
+			<if test="inventory_profitLossId!= null">
+			and inventory_profitLossId like #{inventory_profitLossId}
+			</if>
+			<if test="inventory_profitLossHandle!= null">
+			and inventory_profitLossHandle like #{inventory_profitLossHandle}
+			</if>
+			<if test="inventory_profitLossNumber!= null">
+			and inventory_profitLossNumber like #{inventory_profitLossNumber}
+			</if>
+			<if test="inventory_reason!=null">
+			and inventory_reason like #{inventory_reason}
+			</if>
+			<if test="inventory_handlePerson!=null">
+			and inventory_handlePerson like #{inventory_handlePerson}
+			</if>
+			<if test="inventory_handleTime!=null">
+			and inventory_handleTime like #{inventory_handleTime}
+			</if>
+			<if test="inventory_ticket_id!=null">
+			and inventory_ticket_id like #{inventory_ticket_id}
+			</if>
+			<if test="department_fullname!=null">
+			and department_fullname like #{department_fullname}
+			</if>
+			<if test="product_code!=null">
+			and product_code like #{product_code}
+			</if>
+			<if test="product_id!=null">
+			and pim.product_id like #{product_id}
+			</if>
+			<if test="product_name!=null">
+			and product_name like #{product_name}
+			</if>
+			<if test="product_specification!=null">
+			and product_specification like #{product_specification}
+			</if>
+			<if test="product_unit!= null">
+			and product_unit like #{product_unit}
+			</if>
+			<if test="product_productarea!=null">
+			and product_productarea like #{product_productarea}
+			</if>
+			<if test="product_retailprice!=null">
+			and product_retailprice like #{product_retailprice}
+			</if>
+			<if test="stock_invalidDate !=null">
+			and stock_invalidDate like #{stock_invalidDate}
+			</if>
+			<if test="stock_purchasePrice!=null">
+			and stock_purchasePrice like #{stock_purchasePrice}
+			</if>
+			<if test="stock_intakeSmallNumber!=null">
+			and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+			</if>
+			<if test="stock_intakeTicket!=null">
+			and stock_intakeTicket like #{stock_intakeTicket}
+			</if>
+			<if test="sup_id!= null">
+			and sup_id like #{sup_id}
+			</if>
+			<if test="stock_storageNumber!=null">
+			and stock_storageNumber like #{stock_storageNumber}
+			</if>
+			<if test="product_approvalnum!=null">
+			and product_approvalnum like #{product_approvalnum}
+			</if>
+			<if test="inventory_check_status!=null">
+			and inventory_check_status like #{inventory_check_status}
+			</if>
+			<if test="inventory_check_person!=null">
+			and inventory_check_person like #{inventory_check_person}
+			</if>
+			<if test="inventory_check_time!=null">
+			and inventory_check_time like #{inventory_check_time}
+			</if>
+			<if test="inventory_profitLossMoney!=null">
+			and inventory_profitLossMoney like #{inventory_profitLossMoney}
+			</if>
+			<if test="inventory_apply_time!=null">
+			and inventory_apply_time like #{inventory_apply_time}
+			</if>
+			<if test="product_packingunit!=null">
+			and product_packingunit like #{product_packingunit}
+			</if>
+			
+			
+			<if test="offset != null and offset !=0">
+			and sit.stock_info_id not in(select top ${offset} sit.stock_info_id 
+			from stock_inventory as sit, stock_info as si, pro_infoManage as pim, bas_departmentinfo as bdi
+			where sit.stock_info_id = si.stock_info_id 
+			and si.product_id = pim.product_id 
+			and si.stock_storage = bdi.department_id	
+			<if test="inventory_id!= null">
+			and inventory_id like #{inventory_id}
+			</if>
+			<if test="inventory_date!=null">
+			and inventory_date like #{inventory_date}
+			</if>
+			<if test="inventory_operator!=null">
+			and inventory_operator like #{inventory_operator}
+			</if>
+			<if test="department_id!= null">
+			and sit.department_id like #{department_id}
+			</if>
+			<if test="pro_group_no!=null">
+			and pro_group_no like #{pro_group_no}
+			</if>
+			<if test="pro_location_no!=null">
+			and pro_location_no like #{pro_location_no}
+			</if>
+			<if test="stock_info_id!= null">
+			and sit.stock_info_id like #{stock_info_id}
+			</if>
+			<if test="inventory_countedNumber!= null">
+			and inventory_countedNumber like #{inventory_countedNumber}
+			</if>
+			<if test="inventory_noRecord!= null">
+			and inventory_noRecord like #{inventory_noRecord}
+			</if>
+			<if test="inventory_profitLossId!= null">
+			and inventory_profitLossId like #{inventory_profitLossId}
+			</if>
+			<if test="inventory_profitLossHandle!= null">
+			and inventory_profitLossHandle like #{inventory_profitLossHandle}
+			</if>
+			<if test="inventory_profitLossNumber!= null">
+			and inventory_profitLossNumber like #{inventory_profitLossNumber}
+			</if>
+			<if test="inventory_reason!=null">
+			and inventory_reason like #{inventory_reason}
+			</if>
+			<if test="inventory_handlePerson!=null">
+			and inventory_handlePerson like #{inventory_handlePerson}
+			</if>
+			<if test="inventory_handleTime!=null">
+			and inventory_handleTime like #{inventory_handleTime}
+			</if>
+			<if test="inventory_ticket_id!=null">
+			and inventory_ticket_id like #{inventory_ticket_id}
+			</if>
+			<if test="department_fullname!=null">
+			and department_fullname like #{department_fullname}
+			</if>
+			<if test="product_code!=null">
+			and product_code like #{product_code}
+			</if>
+			<if test="product_id!=null">
+			and pim.product_id like #{product_id}
+			</if>
+			<if test="product_name!=null">
+			and product_name like #{product_name}
+			</if>
+			<if test="product_specification!=null">
+			and product_specification like #{product_specification}
+			</if>
+			<if test="product_unit!= null">
+			and product_unit like #{product_unit}
+			</if>
+			<if test="product_productarea!=null">
+			and product_productarea like #{product_productarea}
+			</if>
+			<if test="product_retailprice!=null">
+			and product_retailprice like #{product_retailprice}
+			</if>
+			<if test="stock_invalidDate !=null">
+			and stock_invalidDate like #{stock_invalidDate}
+			</if>
+			<if test="stock_purchasePrice!=null">
+			and stock_purchasePrice like #{stock_purchasePrice}
+			</if>
+			<if test="stock_intakeSmallNumber!=null">
+			and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+			</if>
+			<if test="stock_intakeTicket!=null">
+			and stock_intakeTicket like #{stock_intakeTicket}
+			</if>
+			<if test="sup_id!= null">
+			and sup_id like #{sup_id}
+			</if>
+			<if test="stock_storageNumber!=null">
+			and stock_storageNumber like #{stock_storageNumber}
+			</if>
+			<if test="product_approvalnum!=null">
+			and product_approvalnum like #{product_approvalnum}
+			</if>
+			<if test="inventory_check_status!=null">
+			and inventory_check_status like #{inventory_check_status}
+			</if>
+			<if test="inventory_check_person!=null">
+			and inventory_check_person like #{inventory_check_person}
+			</if>
+			<if test="inventory_check_time!=null">
+			and inventory_check_time like #{inventory_check_time}
+			</if>
+			<if test="inventory_profitLossMoney!=null">
+			and inventory_profitLossMoney like #{inventory_profitLossMoney}
+			</if>
+			<if test="inventory_apply_time!=null">
+			and inventory_apply_time like #{inventory_apply_time}
+			</if>
+			<if test="product_packingunit!=null">
+			and product_packingunit like #{product_packingunit}
+			</if>
+			)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<!-- count    -->
+	<select id="getInventoryCount" parameterType="InventoryVO" resultType="int">
+		select count(inventory_id) as count 
+			from stock_inventory
+			<where>
+			<if test="inventory_id !=null  and inventory_id !=0">
+            inventory_id=#{inventory_id}
+       		</if>
+			</where>
+	</select>
+
+	<insert id="add" parameterType="Inventory" useGeneratedKeys="true" keyProperty="inventory_id">
+		insert into stock_inventory(
+		inventory_date, inventory_operator, department_id, pro_group_no, pro_location_no, 
+		stock_info_id, inventory_countedNumber, inventory_noRecord, inventory_profitLossId, inventory_profitLossHandle, 
+		inventory_profitLossNumber, inventory_reason, inventory_handlePerson, inventory_handleTime, inventory_ticket_id,
+		inventory_check_status, inventory_check_person, inventory_check_time,inventory_profitLossMoney,inventory_apply_time)
+		values(
+		#{inventory_date,jdbcType=TIMESTAMP}, #{inventory_operator}, #{department_id}, #{pro_group_no}, #{pro_location_no}, 
+		#{stock_info_id}, #{inventory_countedNumber}, #{inventory_noRecord}, #{inventory_profitLossId}, #{inventory_profitLossHandle}, 
+		#{inventory_profitLossNumber}, #{inventory_reason}, #{inventory_handlePerson}, #{inventory_handleTime,jdbcType=TIMESTAMP},
+		#{inventory_ticket_id},#{inventory_check_status}, #{inventory_check_person}, #{inventory_check_time,jdbcType=TIMESTAMP},
+		#{inventory_profitLossMoney},#{inventory_apply_time,jdbcType=TIMESTAMP});
+	</insert>
+	
+	   <!-- 更新表中数据 -->
+	<update id="update" parameterType="Inventory">
+	 update stock_inventory
+	<set>
+		<if test="inventory_countedNumber != null">
+		inventory_countedNumber = #{inventory_countedNumber},
+		</if>
+		<if test="inventory_profitLossNumber != null">
+		inventory_profitLossNumber = #{inventory_profitLossNumber},
+		</if>
+		<if test="inventory_profitLossMoney != null">
+		inventory_profitLossMoney = #{inventory_profitLossMoney},
+		</if>
+		<if test="inventory_reason != null">
+		inventory_reason = #{inventory_reason},
+		</if>
+	</set>
+	where stock_info_id = #{stock_info_id}
+	</update>
+	
+	<select id="get" parameterType="Integer" resultType="Inventory">
+		select *
+		from stock_inventory
+		where stock_info_id = #{id} 
+	</select>
+	
+	<select id="getInverntoryVOByID" parameterType="Integer" resultType="InventoryVO">
+		select *
+		from stock_inventory as sit, stock_info as si, pro_infoManage as pim, bas_departmentinfo as bdi
+		where
+		sit.stock_info_id = si.stock_info_id 
+		and si.product_id = pim.product_id 
+		and si.stock_storage = bdi.department_id		
+		and sit.stock_info_id = #{id} 
+	</select>
+	
+		<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		delete stock_inventory 
+		where stock_info_id = #{stock_info_id}
+	</delete>
+</mapper> 

@@ -1,0 +1,940 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.stock.persist.StockInfoDao">
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="StockInfo">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if>
+		from stock_info
+		<where>
+			<if test="stock_info_id!=null">
+			and stock_info_id like #{stock_info_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="stock_intakeSmallNumber!=null">
+			and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+			</if>
+			<if test="stock_storage!=null">
+			and stock_storage like #{stock_storage}
+			</if>
+			<if test="stock_packunit!=null">
+			and stock_packunit like #{stock_packunit}
+			</if>
+			<if test="stock_batchCode!=null">
+			and stock_batchCode like #{stock_batchCode}
+			</if>
+			<if test="stock_purchasePrice!=null">
+			and stock_purchasePrice like #{stock_purchasePrice}
+			</if>
+			<if test="stock_storageNumber!=null">
+			and stock_storageNumber like #{stock_storageNumber}
+			</if>
+			<if test="stock_settlementPrice!=null">
+			and stock_settlementPrice like #{stock_settlementPrice}
+			</if>
+			<if test="stock_salepPrice1!=null">
+			and stock_salepPrice1 like #{stock_salepPrice1}
+			</if>
+			<if test="stock_lowPrice!=null">
+			and stock_lowPrice like #{stock_lowPrice}
+			</if>
+			<if test="stock_marketPrice!=null">
+			and stock_marketPrice like #{stock_marketPrice}
+			</if>
+			<if test="stock_invalidDate!=null">
+			and stock_invalidDate like #{stock_invalidDate}
+			</if>
+			<if test="stock_maintaintime!=null">
+			and stock_maintaintime like #{stock_maintaintime}
+			</if>
+			<if test="stock_slottingNumber!=null">
+			and stock_slottingNumber like #{stock_slottingNumber}
+			</if>
+			<if test="stock_saleStop!=null">
+			and stock_saleStop = #{stock_saleStop}
+			</if>
+			<if test="stock_intakeBrief!=null">
+			and stock_intakeBrief like #{stock_intakeBrief}
+			</if>
+			<if test="stock_intakeTicket!=null">
+			and stock_intakeTicket like #{stock_intakeTicket}
+			</if>
+			<if test="stock_buyPresentSpecial!=null">
+			and stock_buyPresentSpecial like #{stock_buyPresentSpecial}
+			</if>
+			<if test="stock_occupyNumber!=null">
+			and stock_occupyNumber like #{stock_occupyNumber}
+			</if>
+			<if test="stock_produceDate!=null">
+			and stock_produceDate like #{stock_produceDate}
+			</if>
+			<if test="stock_sterilizationbnum!=null">
+			and stock_sterilizationbnum like #{stock_sterilizationbnum}
+			</if>
+			<if test="stock_sterilizationtime!=null">
+			and stock_sterilizationtime like #{stock_sterilizationtime}
+			</if>
+			<if test="stock_batchSmallCode!=null">
+			and stock_batchSmallCode like #{stock_batchSmallCode}
+			</if>
+			<if test="stock_priceCode!=null">
+			and stock_priceCode like #{stock_priceCode}
+			</if>
+			<if test="stock_priceTime!=null">
+			and stock_priceTime like #{stock_priceTime}
+			</if>
+			<if test="stock_oldPrice!=null">
+			and stock_oldPrice like #{stock_oldPrice}
+			</if>
+			<if test="stock_intakeCheckPerson!=null">
+			and stock_intakeCheckPerson like #{stock_intakeCheckPerson}
+			</if>
+			<if test="stock_intakeCheckTime!=null">
+			and stock_intakeCheckTime like #{stock_intakeCheckTime}
+			</if>
+			<if test="stock_intakeCheck!=null">
+			and stock_intakeCheck like #{stock_intakeCheck}
+			</if>
+			<if test="stock_majorMaintain!=null">
+			and stock_majorMaintain like #{stock_majorMaintain}
+			</if>
+			<if test="stock_increasePrice!=null">
+			and stock_increasePrice like #{stock_increasePrice}
+			</if>
+			<if test="stock_zeroSetNumber!=null">
+			and stock_zeroSetNumber like #{stock_zeroSetNumber}
+			</if>
+			<if test="sup_id!=null">
+			and sup_id like #{sup_id}
+			</if>
+			<if test="stock_batchAmount!=null">
+			and stock_batchAmount like #{stock_batchAmount}
+			</if>
+			<if test="stock_batchNumAmount!=null">
+			and stock_batchNumAmount like #{stock_batchNumAmount}
+			</if>
+			<if test="stock_varietyAmount!=null">
+			and stock_varietyAmount like #{stock_varietyAmount}
+			</if>
+			<if test="stock_varietyStorageAmount!=null">
+			and stock_varietyStorageAmount like #{stock_varietyStorageAmount}
+			</if>
+			<if test="stock_stopReason!=null">
+			and stock_stopReason like #{stock_stopReason}
+			</if>
+			<if test="stock_stopPerson!=null">
+			and stock_stopPerson like #{stock_stopPerson}
+			</if>
+			<if test="stock_stopTime!=null">
+			and stock_stopTime = #{stock_stopTime}
+			</if>
+			<if test="stock_stopClearReason!=null">
+			and stock_stopClearReason like #{stock_stopClearReason}
+			</if>
+			<if test="stock_stopClearPerson!=null">
+			and stock_stopClearPerson like #{stock_stopClearPerson}
+			</if>
+			<if test="stock_stopClearTime!=null">
+			and stock_stopClearTime = #{stock_stopClearTime}
+			</if>
+			<if test="offset != null and offset !=0">
+			and stock_info_id not in(select top ${offset} stock_info_id from stock_info where 0 = 0
+				<if test="stock_info_id!=null">
+				and stock_info_id like #{stock_info_id}
+				</if>
+				<if test="product_id!=null">
+				and product_id like #{product_id}
+				</if>
+				<if test="stock_intakeSmallNumber!=null">
+				and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+				</if>
+				<if test="stock_storage!=null">
+				and stock_storage like #{stock_storage}
+				</if>
+				<if test="stock_packunit!=null">
+				and stock_packunit like #{stock_packunit}
+				</if>
+				<if test="stock_batchCode!=null">
+				and stock_batchCode like #{stock_batchCode}
+				</if>
+				<if test="stock_purchasePrice!=null">
+				and stock_purchasePrice like #{stock_purchasePrice}
+				</if>
+				<if test="stock_storageNumber!=null">
+				and stock_storageNumber like #{stock_storageNumber}
+				</if>
+				<if test="stock_settlementPrice!=null">
+				and stock_settlementPrice like #{stock_settlementPrice}
+				</if>
+				<if test="stock_salepPrice1!=null">
+				and stock_salepPrice1 like #{stock_salepPrice1}
+				</if>
+				<if test="stock_lowPrice!=null">
+				and stock_lowPrice like #{stock_lowPrice}
+				</if>
+				<if test="stock_marketPrice!=null">
+				and stock_marketPrice like #{stock_marketPrice}
+				</if>
+				<if test="stock_invalidDate!=null">
+				and stock_invalidDate like #{stock_invalidDate}
+				</if>
+				<if test="stock_maintaintime!=null">
+				and stock_maintaintime like #{stock_maintaintime}
+				</if>
+				<if test="stock_slottingNumber!=null">
+				and stock_slottingNumber like #{stock_slottingNumber}
+				</if>
+				<if test="stock_saleStop!=null">
+				and stock_saleStop = #{stock_saleStop}
+				</if>
+				<if test="stock_intakeBrief!=null">
+				and stock_intakeBrief like #{stock_intakeBrief}
+				</if>
+				<if test="stock_intakeTicket!=null">
+				and stock_intakeTicket like #{stock_intakeTicket}
+				</if>
+				<if test="stock_buyPresentSpecial!=null">
+				and stock_buyPresentSpecial like #{stock_buyPresentSpecial}
+				</if>
+				<if test="stock_occupyNumber!=null">
+				and stock_occupyNumber like #{stock_occupyNumber}
+				</if>
+				<if test="stock_produceDate!=null">
+				and stock_produceDate like #{stock_produceDate}
+				</if>
+				<if test="stock_sterilizationbnum!=null">
+				and stock_sterilizationbnum like #{stock_sterilizationbnum}
+				</if>
+				<if test="stock_sterilizationtime!=null">
+				and stock_sterilizationtime like #{stock_sterilizationtime}
+				</if>
+				<if test="stock_batchSmallCode!=null">
+				and stock_batchSmallCode like #{stock_batchSmallCode}
+				</if>
+				<if test="stock_priceCode!=null">
+				and stock_priceCode like #{stock_priceCode}
+				</if>
+				<if test="stock_priceTime!=null">
+				and stock_priceTime like #{stock_priceTime}
+				</if>
+				<if test="stock_oldPrice!=null">
+				and stock_oldPrice like #{stock_oldPrice}
+				</if>
+				<if test="stock_intakeCheckPerson!=null">
+				and stock_intakeCheckPerson like #{stock_intakeCheckPerson}
+				</if>
+				<if test="stock_intakeCheckTime!=null">
+				and stock_intakeCheckTime like #{stock_intakeCheckTime}
+				</if>
+				<if test="stock_intakeCheck!=null">
+				and stock_intakeCheck like #{stock_intakeCheck}
+				</if>
+				<if test="stock_majorMaintain!=null">
+				and stock_majorMaintain like #{stock_majorMaintain}
+				</if>
+				<if test="stock_increasePrice!=null">
+				and stock_increasePrice like #{stock_increasePrice}
+				</if>
+				<if test="stock_zeroSetNumber!=null">
+				and stock_zeroSetNumber like #{stock_zeroSetNumber}
+				</if>
+				<if test="sup_id!=null">
+				and sup_id like #{sup_id}
+				</if>
+				<if test="stock_batchAmount!=null">
+				and stock_batchAmount like #{stock_batchAmount}
+				</if>
+				<if test="stock_batchNumAmount!=null">
+				and stock_batchNumAmount like #{stock_batchNumAmount}
+				</if>
+				<if test="stock_varietyAmount!=null">
+				and stock_varietyAmount like #{stock_varietyAmount}
+				</if>
+				<if test="stock_varietyStorageAmount!=null">
+				and stock_varietyStorageAmount like #{stock_varietyStorageAmount}
+				</if>
+				<if test="stock_stopReason!=null">
+				and stock_stopReason like #{stock_stopReason}
+				</if>
+				<if test="stock_stopPerson!=null">
+				and stock_stopPerson like #{stock_stopPerson}
+				</if>
+				<if test="stock_stopTime!=null">
+				and stock_stopTime = #{stock_stopTime}
+				</if>
+				<if test="stock_stopClearReason!=null">
+				and stock_stopClearReason like #{stock_stopClearReason}
+				</if>
+				<if test="stock_stopClearPerson!=null">
+				and stock_stopClearPerson like #{stock_stopClearPerson}
+				</if>
+				<if test="stock_stopClearTime!=null">
+				and stock_stopClearTime = #{stock_stopClearTime}
+				</if>
+			)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="listBatch" parameterType="StockInfoVO" resultType="StockInfoVO">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows} si.*,pim.product_code,pim.product_name,pim.product_commonname
+	</if>
+	<if test="rows == null or rows == 0">
+		select si.*,pim.product_code,pim.product_name,pim.product_commonname
+	</if>
+		from stock_info as si,pro_infoManage pim 
+		<where>
+			si.product_id = pim.product_id
+			<if test="product_code !=null">
+			and product_code like #{product_code}
+			</if>
+			<if test="product_name !=null">
+			and product_name like #{product_name}
+			</if>
+			<if test="stock_info_id!=null">
+			and stock_info_id like #{stock_info_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="stock_intakeSmallNumber!=null">
+			and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+			</if>
+			<if test="stock_storage!=null">
+			and stock_storage like #{stock_storage}
+			</if>
+			<if test="stock_packunit!=null">
+			and stock_packunit like #{stock_packunit}
+			</if>
+			<if test="stock_batchCode!=null">
+			and stock_batchCode like #{stock_batchCode}
+			</if>
+			<if test="stock_purchasePrice!=null">
+			and stock_purchasePrice like #{stock_purchasePrice}
+			</if>
+			<if test="stock_storageNumber!=null">
+			and stock_storageNumber like #{stock_storageNumber}
+			</if>
+			<if test="stock_settlementPrice!=null">
+			and stock_settlementPrice like #{stock_settlementPrice}
+			</if>
+			<if test="stock_salepPrice1!=null">
+			and stock_salepPrice1 like #{stock_salepPrice1}
+			</if>
+			<if test="stock_lowPrice!=null">
+			and stock_lowPrice like #{stock_lowPrice}
+			</if>
+			<if test="stock_marketPrice!=null">
+			and stock_marketPrice like #{stock_marketPrice}
+			</if>
+			<if test="stock_invalidDate!=null">
+			and stock_invalidDate like #{stock_invalidDate}
+			</if>
+			<if test="stock_maintaintime!=null">
+			and stock_maintaintime like #{stock_maintaintime}
+			</if>
+			<if test="stock_slottingNumber!=null">
+			and stock_slottingNumber like #{stock_slottingNumber}
+			</if>
+			<if test="stock_saleStop!=null">
+			and stock_saleStop = #{stock_saleStop}
+			</if>
+			<if test="stock_intakeBrief!=null">
+			and stock_intakeBrief like #{stock_intakeBrief}
+			</if>
+			<if test="stock_intakeTicket!=null">
+			and stock_intakeTicket like #{stock_intakeTicket}
+			</if>
+			<if test="stock_buyPresentSpecial!=null">
+			and stock_buyPresentSpecial like #{stock_buyPresentSpecial}
+			</if>
+			<if test="stock_occupyNumber!=null">
+			and stock_occupyNumber like #{stock_occupyNumber}
+			</if>
+			<if test="stock_produceDate!=null">
+			and stock_produceDate like #{stock_produceDate}
+			</if>
+			<if test="stock_sterilizationbnum!=null">
+			and stock_sterilizationbnum like #{stock_sterilizationbnum}
+			</if>
+			<if test="stock_sterilizationtime!=null">
+			and stock_sterilizationtime like #{stock_sterilizationtime}
+			</if>
+			<if test="stock_batchSmallCode!=null">
+			and stock_batchSmallCode like #{stock_batchSmallCode}
+			</if>
+			<if test="stock_priceCode!=null">
+			and stock_priceCode like #{stock_priceCode}
+			</if>
+			<if test="stock_priceTime!=null">
+			and stock_priceTime like #{stock_priceTime}
+			</if>
+			<if test="stock_oldPrice!=null">
+			and stock_oldPrice like #{stock_oldPrice}
+			</if>
+			<if test="stock_intakeCheckPerson!=null">
+			and stock_intakeCheckPerson like #{stock_intakeCheckPerson}
+			</if>
+			<if test="stock_intakeCheckTime!=null">
+			and stock_intakeCheckTime like #{stock_intakeCheckTime}
+			</if>
+			<if test="stock_intakeCheck!=null">
+			and stock_intakeCheck like #{stock_intakeCheck}
+			</if>
+			<if test="stock_majorMaintain!=null">
+			and stock_majorMaintain like #{stock_majorMaintain}
+			</if>
+			<if test="stock_increasePrice!=null">
+			and stock_increasePrice like #{stock_increasePrice}
+			</if>
+			<if test="stock_zeroSetNumber!=null">
+			and stock_zeroSetNumber like #{stock_zeroSetNumber}
+			</if>
+			<if test="sup_id!=null">
+			and sup_id like #{sup_id}
+			</if>
+			<if test="stock_batchAmount!=null">
+			and stock_batchAmount like #{stock_batchAmount}
+			</if>
+			<if test="stock_batchNumAmount!=null">
+			and stock_batchNumAmount like #{stock_batchNumAmount}
+			</if>
+			<if test="stock_varietyAmount!=null">
+			and stock_varietyAmount like #{stock_varietyAmount}
+			</if>
+			<if test="stock_varietyStorageAmount!=null">
+			and stock_varietyStorageAmount like #{stock_varietyStorageAmount}
+			</if>
+			<if test="stock_stopReason!=null">
+			and stock_stopReason like #{stock_stopReason}
+			</if>
+			<if test="stock_stopPerson!=null">
+			and stock_stopPerson like #{stock_stopPerson}
+			</if>
+			<if test="stock_stopTime!=null">
+			and stock_stopTime = #{stock_stopTime}
+			</if>
+			<if test="offset != null and offset !=0">
+			and stock_info_id not in(select top ${offset} stock_info_id from stock_info where 0 = 0
+				<if test="product_code !=null">
+				and product_code like #{product_code}
+				</if>
+				<if test="product_name !=null">
+				and product_name like #{product_name}
+				</if>
+				<if test="stock_info_id!=null">
+				and stock_info_id like #{stock_info_id}
+				</if>
+				<if test="product_id!=null">
+				and product_id like #{product_id}
+				</if>
+				<if test="stock_intakeSmallNumber!=null">
+				and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+				</if>
+				<if test="stock_storage!=null">
+				and stock_storage like #{stock_storage}
+				</if>
+				<if test="stock_packunit!=null">
+				and stock_packunit like #{stock_packunit}
+				</if>
+				<if test="stock_batchCode!=null">
+				and stock_batchCode like #{stock_batchCode}
+				</if>
+				<if test="stock_purchasePrice!=null">
+				and stock_purchasePrice like #{stock_purchasePrice}
+				</if>
+				<if test="stock_storageNumber!=null">
+				and stock_storageNumber like #{stock_storageNumber}
+				</if>
+				<if test="stock_settlementPrice!=null">
+				and stock_settlementPrice like #{stock_settlementPrice}
+				</if>
+				<if test="stock_salepPrice1!=null">
+				and stock_salepPrice1 like #{stock_salepPrice1}
+				</if>
+				<if test="stock_lowPrice!=null">
+				and stock_lowPrice like #{stock_lowPrice}
+				</if>
+				<if test="stock_marketPrice!=null">
+				and stock_marketPrice like #{stock_marketPrice}
+				</if>
+				<if test="stock_invalidDate!=null">
+				and stock_invalidDate like #{stock_invalidDate}
+				</if>
+				<if test="stock_maintaintime!=null">
+				and stock_maintaintime like #{stock_maintaintime}
+				</if>
+				<if test="stock_slottingNumber!=null">
+				and stock_slottingNumber like #{stock_slottingNumber}
+				</if>
+				<if test="stock_saleStop!=null">
+				and stock_saleStop = #{stock_saleStop}
+				</if>
+				<if test="stock_intakeBrief!=null">
+				and stock_intakeBrief like #{stock_intakeBrief}
+				</if>
+				<if test="stock_intakeTicket!=null">
+				and stock_intakeTicket like #{stock_intakeTicket}
+				</if>
+				<if test="stock_buyPresentSpecial!=null">
+				and stock_buyPresentSpecial like #{stock_buyPresentSpecial}
+				</if>
+				<if test="stock_occupyNumber!=null">
+				and stock_occupyNumber like #{stock_occupyNumber}
+				</if>
+				<if test="stock_produceDate!=null">
+				and stock_produceDate like #{stock_produceDate}
+				</if>
+				<if test="stock_sterilizationbnum!=null">
+				and stock_sterilizationbnum like #{stock_sterilizationbnum}
+				</if>
+				<if test="stock_sterilizationtime!=null">
+				and stock_sterilizationtime like #{stock_sterilizationtime}
+				</if>
+				<if test="stock_batchSmallCode!=null">
+				and stock_batchSmallCode like #{stock_batchSmallCode}
+				</if>
+				<if test="stock_priceCode!=null">
+				and stock_priceCode like #{stock_priceCode}
+				</if>
+				<if test="stock_priceTime!=null">
+				and stock_priceTime like #{stock_priceTime}
+				</if>
+				<if test="stock_oldPrice!=null">
+				and stock_oldPrice like #{stock_oldPrice}
+				</if>
+				<if test="stock_intakeCheckPerson!=null">
+				and stock_intakeCheckPerson like #{stock_intakeCheckPerson}
+				</if>
+				<if test="stock_intakeCheckTime!=null">
+				and stock_intakeCheckTime like #{stock_intakeCheckTime}
+				</if>
+				<if test="stock_intakeCheck!=null">
+				and stock_intakeCheck like #{stock_intakeCheck}
+				</if>
+				<if test="stock_majorMaintain!=null">
+				and stock_majorMaintain like #{stock_majorMaintain}
+				</if>
+				<if test="stock_increasePrice!=null">
+				and stock_increasePrice like #{stock_increasePrice}
+				</if>
+				<if test="stock_zeroSetNumber!=null">
+				and stock_zeroSetNumber like #{stock_zeroSetNumber}
+				</if>
+				<if test="sup_id!=null">
+				and sup_id like #{sup_id}
+				</if>
+				<if test="stock_batchAmount!=null">
+				and stock_batchAmount like #{stock_batchAmount}
+				</if>
+				<if test="stock_batchNumAmount!=null">
+				and stock_batchNumAmount like #{stock_batchNumAmount}
+				</if>
+				<if test="stock_varietyAmount!=null">
+				and stock_varietyAmount like #{stock_varietyAmount}
+				</if>
+				<if test="stock_varietyStorageAmount!=null">
+				and stock_varietyStorageAmount like #{stock_varietyStorageAmount}
+				</if>
+				<if test="stock_stopReason!=null">
+				and stock_stopReason like #{stock_stopReason}
+				</if>
+				<if test="stock_stopPerson!=null">
+				and stock_stopPerson like #{stock_stopPerson}
+				</if>
+				<if test="stock_stopTime!=null">
+				and stock_stopTime = #{stock_stopTime}
+				</if>
+			)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+
+	<!-- count    -->
+	<select id="count" resultType="int">
+		select count(stock_info_id) as count 
+			from stock_info
+			<where>
+				<if test="stock_info_id !=null  and stock_info_id !=0">
+	            and stock_info_id=#{stock_info_id}
+	     		</if>	
+			</where>
+	</select>	
+	
+	
+	<select id="countBatch" parameterType="StockInfoVO" resultType="int">
+		select count(stock_info_id) as count 
+			from stock_info as si,pro_infoManage pim 
+			<where>
+				si.product_id = pim.product_id
+				<if test="stock_info_id !=null  and stock_info_id !=0">
+	            and stock_info_id=#{stock_info_id}
+	       		</if>
+	       		<if test="product_code !=null">
+				and product_code like #{product_code}
+				</if>
+				<if test="product_name !=null">
+				and product_name like #{product_name}
+				</if>
+	       		<if test="product_id!=null">
+				and product_id like #{product_id}
+				</if>
+				<if test="stock_intakeSmallNumber!=null">
+				and stock_intakeSmallNumber like #{stock_intakeSmallNumber}
+				</if>
+				<if test="stock_storage!=null">
+				and stock_storage like #{stock_storage}
+				</if>
+				<if test="stock_packunit!=null">
+				and stock_packunit like #{stock_packunit}
+				</if>
+				<if test="stock_batchCode!=null">
+				and stock_batchCode like #{stock_batchCode}
+				</if>
+				<if test="stock_purchasePrice!=null">
+				and stock_purchasePrice like #{stock_purchasePrice}
+				</if>
+				<if test="stock_storageNumber!=null">
+				and stock_storageNumber like #{stock_storageNumber}
+				</if>
+				<if test="stock_settlementPrice!=null">
+				and stock_settlementPrice like #{stock_settlementPrice}
+				</if>
+				<if test="stock_salepPrice1!=null">
+				and stock_salepPrice1 like #{stock_salepPrice1}
+				</if>
+				<if test="stock_lowPrice!=null">
+				and stock_lowPrice like #{stock_lowPrice}
+				</if>
+				<if test="stock_marketPrice!=null">
+				and stock_marketPrice like #{stock_marketPrice}
+				</if>
+				<if test="stock_invalidDate!=null">
+				and stock_invalidDate like #{stock_invalidDate}
+				</if>
+				<if test="stock_maintaintime!=null">
+				and stock_maintaintime like #{stock_maintaintime}
+				</if>
+				<if test="stock_slottingNumber!=null">
+				and stock_slottingNumber like #{stock_slottingNumber}
+				</if>
+				<if test="stock_saleStop!=null">
+				and stock_saleStop = #{stock_saleStop}
+				</if>
+				<if test="stock_intakeBrief!=null">
+				and stock_intakeBrief like #{stock_intakeBrief}
+				</if>
+				<if test="stock_intakeTicket!=null">
+				and stock_intakeTicket like #{stock_intakeTicket}
+				</if>
+				<if test="stock_buyPresentSpecial!=null">
+				and stock_buyPresentSpecial like #{stock_buyPresentSpecial}
+				</if>
+				<if test="stock_occupyNumber!=null">
+				and stock_occupyNumber like #{stock_occupyNumber}
+				</if>
+				<if test="stock_produceDate!=null">
+				and stock_produceDate like #{stock_produceDate}
+				</if>
+				<if test="stock_sterilizationbnum!=null">
+				and stock_sterilizationbnum like #{stock_sterilizationbnum}
+				</if>
+				<if test="stock_sterilizationtime!=null">
+				and stock_sterilizationtime like #{stock_sterilizationtime}
+				</if>
+				<if test="stock_batchSmallCode!=null">
+				and stock_batchSmallCode like #{stock_batchSmallCode}
+				</if>
+				<if test="stock_priceCode!=null">
+				and stock_priceCode like #{stock_priceCode}
+				</if>
+				<if test="stock_priceTime!=null">
+				and stock_priceTime like #{stock_priceTime}
+				</if>
+				<if test="stock_oldPrice!=null">
+				and stock_oldPrice like #{stock_oldPrice}
+				</if>
+				<if test="stock_intakeCheckPerson!=null">
+				and stock_intakeCheckPerson like #{stock_intakeCheckPerson}
+				</if>
+				<if test="stock_intakeCheckTime!=null">
+				and stock_intakeCheckTime like #{stock_intakeCheckTime}
+				</if>
+				<if test="stock_intakeCheck!=null">
+				and stock_intakeCheck like #{stock_intakeCheck}
+				</if>
+				<if test="stock_majorMaintain!=null">
+				and stock_majorMaintain like #{stock_majorMaintain}
+				</if>
+				<if test="stock_increasePrice!=null">
+				and stock_increasePrice like #{stock_increasePrice}
+				</if>
+				<if test="stock_zeroSetNumber!=null">
+				and stock_zeroSetNumber like #{stock_zeroSetNumber}
+				</if>
+				<if test="sup_id!=null">
+				and sup_id like #{sup_id}
+				</if>
+				<if test="stock_batchAmount!=null">
+				and stock_batchAmount like #{stock_batchAmount}
+				</if>
+				<if test="stock_batchNumAmount!=null">
+				and stock_batchNumAmount like #{stock_batchNumAmount}
+				</if>
+				<if test="stock_varietyAmount!=null">
+				and stock_varietyAmount like #{stock_varietyAmount}
+				</if>
+				<if test="stock_varietyStorageAmount!=null">
+				and stock_varietyStorageAmount like #{stock_varietyStorageAmount}
+				</if>
+				<if test="stock_stopReason!=null">
+				and stock_stopReason like #{stock_stopReason}
+				</if>
+				<if test="stock_stopPerson!=null">
+				and stock_stopPerson like #{stock_stopPerson}
+				</if>
+				<if test="stock_stopTime!=null">
+				and stock_stopTime = #{stock_stopTime}
+				</if>
+			</where>
+	</select>	
+	
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="StockInfo" useGeneratedKeys="true" keyProperty="stock_info_id">
+		 insert into stock_info(product_id,
+		stock_intakeSmallNumber, stock_storage, stock_packunit, stock_batchCode, stock_purchasePrice, 
+		stock_storageNumber, stock_settlementPrice, stock_salepPrice1, stock_lowPrice, stock_tradeprice,stock_marketPrice, 
+		stock_invalidDate, stock_maintaintime, stock_slottingNumber, stock_saleStop, stock_intakeBrief, 
+		stock_intakeTicket, stock_buyPresentSpecial, stock_occupyNumber, stock_produceDate, stock_sterilizationbnum, 
+		stock_sterilizationtime, stock_batchSmallCode, stock_priceCode, stock_priceTime, stock_oldPrice, 
+		stock_intakeCheckPerson, stock_intakeCheckTime, stock_intakeCheck, stock_majorMaintain, stock_increasePrice, 
+		stock_zeroSetNumber, sup_id,stock_batchAmount,stock_batchNumAmount,stock_varietyAmount,stock_varietyStorageAmount,stock_stopReason,stock_stopPerson,stock_stopTime,
+		stock_stopClearReason,stock_stopClearPerson,stock_stopClearTime,maintain_days)
+		values(#{product_id}, 
+		#{stock_intakeSmallNumber}, #{stock_storage}, #{stock_packunit}, #{stock_batchCode}, #{stock_purchasePrice}, 
+		#{stock_storageNumber}, #{stock_settlementPrice}, #{stock_salepPrice1}, #{stock_lowPrice},#{stock_tradeprice}, #{stock_marketPrice}, 
+		#{stock_invalidDate,jdbcType=TIMESTAMP}, #{stock_maintaintime,jdbcType=TIMESTAMP}, #{stock_slottingNumber}, #{stock_saleStop}, #{stock_intakeBrief}, 
+		#{stock_intakeTicket}, #{stock_buyPresentSpecial}, #{stock_occupyNumber}, #{stock_produceDate}, #{stock_sterilizationbnum}, 
+		#{stock_sterilizationtime,jdbcType=TIMESTAMP}, #{stock_batchSmallCode}, #{stock_priceCode}, #{stock_priceTime,jdbcType=TIMESTAMP}, #{stock_oldPrice}, 
+		#{stock_intakeCheckPerson}, #{stock_intakeCheckTime,jdbcType=TIMESTAMP}, #{stock_intakeCheck}, #{stock_majorMaintain}, #{stock_increasePrice}, 
+		#{stock_zeroSetNumber}, #{sup_id}, #{stock_batchAmount}, #{stock_batchNumAmount}, 
+		#{stock_varietyAmount}, #{stock_varietyStorageAmount},#{stock_stopReason},#{stock_stopPerson},#{stock_stopTime,jdbcType=TIMESTAMP},
+		#{stock_stopClearReason},#{stock_stopClearPerson},#{stock_stopClearTime,jdbcType=TIMESTAMP},#{maintain_days});
+	</insert>
+
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addStockInfos" parameterType="java.util.List" useGeneratedKeys="true">
+		
+		<selectKey resultType="long" keyProperty="stock_info_id" order="AFTER">  
+	        SELECT  
+	        SCOPE_IDENTITY() 
+    	</selectKey>
+	
+		insert into stock_info(product_id,
+		stock_intakeSmallNumber, stock_storage, stock_packunit, stock_batchCode, stock_purchasePrice, 
+		stock_storageNumber, stock_settlementPrice, stock_salepPrice1, stock_lowPrice,stock_tradeprice, stock_marketPrice, 
+		stock_invalidDate, stock_maintaintime, stock_slottingNumber, stock_saleStop, stock_intakeBrief, 
+		stock_intakeTicket, stock_buyPresentSpecial, stock_occupyNumber, stock_produceDate, stock_sterilizationbnum, 
+		stock_sterilizationtime, stock_batchSmallCode, stock_priceCode, stock_priceTime, stock_oldPrice, 
+		stock_intakeCheckPerson, stock_intakeCheckTime, stock_intakeCheck, stock_majorMaintain, stock_increasePrice, 
+		stock_zeroSetNumber, sup_id,stock_batchAmount,stock_batchNumAmount,stock_varietyAmount,stock_varietyStorageAmount,stock_stopReason,stock_stopPerson,stock_stopTime,
+		stock_stopClearReason,stock_stopClearPerson,stock_stopClearTime,maintain_days)
+		values
+		<foreach collection="list" item="stock" index="index" open="" separator="," close="" > 
+		(#{stock.product_id}, #{stock.stock_intakeSmallNumber}, #{stock.stock_storage}, #{stock.stock_packunit}, #{stock.stock_batchCode}, 
+		#{stock.stock_purchasePrice}, #{stock.stock_storageNumber}, #{stock.stock_settlementPrice}, #{stock.stock_salepPrice1}, #{stock.stock_lowPrice}, #{stock_tradeprice},
+		#{stock.stock_marketPrice}, #{stock.stock_invalidDate}, #{stock.stock_maintaintime}, #{stock.stock_slottingNumber}, #{stock.stock_saleStop}, 
+		#{stock.stock_intakeBrief}, #{stock.stock_intakeTicket}, #{stock.stock_buyPresentSpecial}, #{stock.stock_occupyNumber}, #{stock.stock_produceDate}, 
+		#{stock.stock_sterilizationbnum}, #{stock.stock_sterilizationtime}, #{stock.stock_batchSmallCode}, #{stock.stock_priceCode}, #{stock.stock_priceTime}, 
+		#{stock.stock_oldPrice}, #{stock.stock_intakeCheckPerson}, #{stock.stock_intakeCheckTime}, #{stock.stock_intakeCheck}, #{stock.stock_majorMaintain}, 
+		#{stock.stock_increasePrice}, #{stock.stock_zeroSetNumber}, #{stock.sup_id}, #{stock.stock_batchAmount}, #{stock.stock_batchNumAmount}, 
+		#{stock.stock_varietyAmount}, #{stock.stock_varietyStorageAmount},#{stock.stock_stopReason},#{stock.stock_stopPerson},#{stock.stock_stopTime,jdbcType=TIMESTAMP},
+		#{stock.stock_stopClearReason},#{stock.stock_stopClearPerson},#{stock.stock_stopClearTime,jdbcType=TIMESTAMP},#{stock.maintain_days}) 
+
+		</foreach>
+	</insert>
+	
+		<!-- 根据product_ids获取多条库存数量的和 -->
+	<select id="getByProductIds" parameterType="java.util.List" resultType="double">
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")" > 
+		select sum(stock_storageNumber)
+		from stock_info
+		where
+		product_id = #{item}
+   		</foreach>  
+	</select>
+	
+	<!-- 根据proid获取对应总库存 --><!-- 战晓桐 -->
+	<select id="getSumStorageByProductId" parameterType="StockInfo" resultType="double">
+		select sum(stock_storageNumber)
+		from stock_info
+		where
+		product_id = #{product_id} and stock_storage = #{stock_storage}
+	</select>
+	
+	<!-- 根据stockInfo获取多条库存数量的和 -->
+	<select id="getByStockInfos" parameterType="java.util.List" resultType="double">
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")" > 
+		select sum(stock_storageNumber)
+		from stock_info
+		where
+		product_id = #{item.product_id}
+		and stock_storage = #{item.stock_storage}
+   		</foreach>  
+	</select>
+
+	<!-- 根据stock_Info_id获取某条库存记录 -->
+	<select id="get" parameterType="int" resultType="StockInfo">
+	   select * from stock_info where stock_info_id = #{stock_info_id}
+	</select>
+	
+	
+	<!-- 根据stock_Info_id获取某条库存记录详细信息 -->
+	<select id="getDetailById" parameterType="int" resultType="StockBatchVO">
+	   select si.*,pim.*,po.supply_fullname as sup_name,pac.accept_checkQualitedNumber as intake_number,
+	   pac.accept_checkStockTime as intake_date
+	   from stock_info as si,pro_infoManage as pim,pur_accept_check as pac,pur_order as po
+	   where si.product_id = pim.product_id
+	   and si.stock_intakeSmallNumber = pac.accept_check_id
+	   and pac.pur_order_id = po.id
+	   and stock_info_id = #{stock_info_id}
+	</select>
+	
+	<update id="update" parameterType="StockInfo">
+	 update stock_info
+	<set>
+		<if test="stock_storageNumber != null">
+			stock_storageNumber = #{stock_storageNumber},
+		</if>
+		<if test="stock_maintaintime != null">
+			stock_maintaintime = #{stock_maintaintime},
+		</if>
+		<if test="stock_saleStop != null">
+			stock_saleStop = #{stock_saleStop},
+		</if>
+		<if test="stock_tradeprice!=null">
+			stock_tradeprice = #{stock_tradeprice},
+		</if>
+		<if test="stock_occupyNumber!=null">
+			stock_occupyNumber = #{stock_occupyNumber},
+		</if>
+		<if test="stock_stopReason!=null">
+			stock_stopReason = #{stock_stopReason},
+		</if>
+		<if test="stock_stopPerson!=null">
+			stock_stopPerson = #{stock_stopPerson},
+		</if>
+		<if test="stock_stopTime!=null">
+			stock_stopTime = #{stock_stopTime},
+		</if>
+		<if test="stock_batchCode!=null">
+			stock_batchCode = #{stock_batchCode},
+		</if>
+		<if test="stock_invalidDate!=null">
+			stock_invalidDate = #{stock_invalidDate},
+		</if>
+		<if test="stock_produceDate !=null">
+			stock_produceDate = #{stock_produceDate},
+		</if>
+		<if test="stock_stopClearReason">
+			stock_stopClearReason = #{stock_stopClearReason},
+		</if>
+		<if test="stock_stopClearPerson">
+			stock_stopClearPerson = #{stock_stopClearPerson},
+		</if>
+		<if test="stock_stopClearTime">
+			stock_stopClearTime = #{stock_stopClearTime},
+		</if>
+		</set>
+		where stock_info_id = #{stock_info_id}
+	</update>
+	
+	<!-- 获取某库房某产品有效库存 --><!-- wubin -->
+	<select id="getValidatStocks" parameterType="StockInfo" resultType="StockInfo">
+		select *
+		from stock_info
+		<where>
+			product_id = #{product_id} and stock_storage = #{stock_storage} and DATEDIFF(second, getdate(),stock_invalidDate)>= 0
+			<if test="stock_saleStop!=null">
+				and stock_saleStop = #{stock_saleStop}
+			</if>
+		</where>
+	</select>
+	<!-- 获取某库房某产品有效库存 --><!-- wubin -->
+	<select id="getwholeStocks" parameterType="StockInfo" resultType="StockInfo">
+		select *
+		from stock_info
+		<where>
+			product_id = #{product_id}  and DATEDIFF(second, getdate(),stock_invalidDate)>= 0
+			<if test="stock_saleStop!=null">
+				and stock_saleStop = #{stock_saleStop}
+			</if>
+		</where>
+	</select>
+    	
+    <!-- 批量更新表中养护信息 -->
+	<update id="updateStockInfos" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" separator=";" close="" > 
+			 update stock_info
+			  	<set>
+					maintain_days = #{item.maintain_days},
+					stock_maintaintime = #{item.stock_maintaintime},
+				</set>where stock_info_id = #{item.stock_info_id} 
+	   	</foreach>  
+	</update>  
+	
+	   <!-- 批量增加库存 -->
+	<update id="addStorageNumber" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" separator=";" close="" > 
+			update stock_info
+			set	stock_storageNumber += #{item.order_batch_quantity}
+			where stock_info_id = #{item.stock_info_id} 
+	   	</foreach>  
+	</update> 
+	
+		<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="listSaleStop" parameterType="StockInfo" resultType="StockInfo">
+		<if test="rows != null and rows !=0">
+			select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+			select *
+		</if>
+			from stock_info 
+			where stock_saleStop = 1
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="countSaleStop" parameterType="StockInfo" resultType="int">
+		select
+		count(stock_info_id) as count
+		from
+		stock_info
+		where stock_saleStop = 1
+	</select>
+</mapper> 

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.BasLicenseInfoDao">
+	<!-- 获取厂家档案信息 -->
+	<select id="get" parameterType="Integer" resultType="BasLicenseInfo">
+		select *
+		from bas_licenseinfo
+		where license_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="BasLicenseInfo" resultType="BasLicenseInfo">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from bas_licenseinfo
+		<where>
+			status = 0
+			<if test="license_name != null">
+				and license_name like #{license_name}
+			</if>
+			<if test="license_no != null">
+				and license_no like #{license_no}
+			</if>
+			<if test="license_issuer != null">
+				and license_issuer like #{license_issuer}
+			</if>
+			<if test="offset != null and offset !=0">
+				and license_id not in(select top ${offset} license_id from bas_licenseinfo where status = 0)
+			</if>
+			<if test="license_type != null">
+				and license_type like #{license_type}
+			</if>
+			<if test="license_type_id != null">
+				and license_type_id like #{license_type_id}
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="BasLicenseInfo" resultType="int">
+		select
+		count(license_id) as count
+		from
+		bas_licenseinfo
+		<where>
+			status = 0
+			<if test="license_name != null">
+				and license_name like #{license_name}
+			</if>
+			<if test="license_no != null">
+				and license_no like #{license_no}
+			</if>
+			<if test="license_issuer != null">
+				and license_issuer like #{license_issuer}
+			</if>
+			and license_type = #{license_type}
+			and license_type_id = #{license_type_id}
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="BasLicenseInfo" useGeneratedKeys="true"
+		keyProperty="license_id">
+		insert into bas_licenseinfo(
+		license_type_id,license_name,license_type,license_no,license_starttime,license_endtime,
+		license_tipdays,license_issuer,license_other,license_remark,license_scope,license_property,
+		license_fund,license_person,license_checkyeartime,
+		create_user, create_time, last_modify_user, last_modify_time, status )
+		
+		values
+		(#{license_type_id}, #{license_name}, #{license_type}, #{license_no}, #{license_starttime}, #{license_endtime},
+		 #{license_tipdays}, #{license_issuer}, #{license_other}, #{license_remark}, #{license_scope}, #{license_property},  
+ 		 #{license_fund}, #{license_person}, #{license_checkyeartime},
+     	 #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, #{status});
+
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="BasLicenseInfo">
+		update bas_licenseinfo
+		<set>
+			<if test="license_type_id != null">
+				license_type_id = #{license_type_id},
+			</if>
+			<if test="license_name != null">
+				license_name = #{license_name},
+			</if>
+		 	<if test="license_type != null">
+				license_type = #{license_type},
+			</if>
+			<if test="license_no != null">
+				license_no = #{license_no},
+			</if>
+			<if test="license_starttime != null">
+				license_starttime = #{license_starttime},
+			</if>
+			<if test="license_endtime != null">
+				license_endtime = #{license_endtime},
+			</if>
+ 		 	<if test="license_tipdays != null">
+				license_tipdays = #{license_tipdays},
+			</if>
+			<if test="license_issuer != null">
+				license_issuer = #{license_issuer},
+			</if>
+		 	<if test="license_other != null">
+				license_other = #{license_other},
+			</if>
+			<if test="license_remark != null">
+				license_remark = #{license_remark},
+			</if>
+			<if test="license_scope != null">
+				license_scope = #{license_scope},
+			</if>
+			<if test="license_property != null">
+				license_property = #{license_property},
+			</if>
+			<if test="license_fund != null">
+				license_fund = #{license_fund},
+			</if>
+		 	<if test="license_person != null">
+				license_person = #{license_person},
+			</if>
+			<if test="license_checkyeartime != null">
+				license_checkyeartime = #{license_checkyeartime},
+			</if>
+			 
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			
+		</set>
+		where license_id = #{license_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update bas_licenseinfo set
+		status = 9 where license_id = #{license_id}
+	</delete>
+	 
+</mapper> 

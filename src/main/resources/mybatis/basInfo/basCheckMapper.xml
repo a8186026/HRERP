@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.BasCheckDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="BasCheck">
+		select *
+		from bas_check
+		where check_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="BasCheck" resultType="BasCheck">
+
+		select *
+		from bas_check
+		where 
+			check_type_id = #{check_type_id}
+			and substring(check_comment_id,1,CHARINDEX('_', check_comment_id)-1)
+				= #{check_comment_id}	
+	</select>
+			
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="BasCheck" useGeneratedKeys="true"
+		keyProperty="check_id">
+		insert into bas_check(check_type,
+		check_type_id,check_comment_id,check_content,check_person_id,
+		check_result,check_time,create_user,create_time,check_person_name,
+		last_modify_user,last_modify_time,status,check_modified)
+		
+		values(#{check_type}, #{check_type_id},
+		#{check_comment_id}, #{check_content}, #{check_person_id},
+		 #{check_result},#{check_time},#{create_user},#{create_time},#{check_person_name},
+		 #{last_modify_user},#{last_modify_time},#{status},#{check_modified});
+	</insert>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addlog" parameterType="BasCheckLog" useGeneratedKeys="true"
+		keyProperty="log_id">
+		insert into bas_check_log(log_modifiedperson,log_modifiedspecification,
+		log_modifiedtime,log_number,log_type,log_typeid,log_checkid,
+		log_checkcomment,log_checkperson,log_checktime,log_checkresult,
+		create_user,create_time,last_modify_user,last_modify_time,status,check_modified)
+		
+		values(#{log_modifiedperson}, #{log_modifiedspecification},
+		#{log_modifiedtime}, #{log_number}, #{log_type}, #{log_typeid},#{log_checkid},
+		#{log_checkcomment},#{log_checkperson},#{log_checktime}, #{log_checkresult},
+		#{create_user},#{create_time},#{last_modify_user},#{last_modify_time},#{status},#{check_modified});
+	</insert>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="BasCheck">
+		update bas_check
+		<set>
+			<if test="check_content != null">
+				check_content = #{check_content},
+			</if>
+			<if test="check_person_id != null">
+				check_person_id = #{check_person_id},
+			</if>
+			<if test="check_result != null">
+				check_result = #{check_result},
+			</if>
+			<if test="check_time != null">
+				check_time = #{check_time},
+			</if>		
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="check_modified != null">
+				check_modified = #{check_modified},
+			</if>
+		</set>
+		where check_id = #{check_id}
+	</update>
+	
+	<!-- 根据check_type_id删除表中数据 -->
+	<delete id="deletecomment" parameterType="BasCheck">
+		delete from  bas_check
+		where check_type_id = #{check_type_id} and check_comment_id = #{check_comment_id}
+	</delete>
+	
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  bas_check
+		where check_id = #{id}
+	</delete>
+	
+	<!-- 获取某一对象已审批的环节数 -->
+	<select id="counts" parameterType="BasCheck" resultType="Integer">
+	     select COUNT(check_id)as c from bas_check 
+	     <where> 
+	        check_comment_id LIKE #{check_comment_id}+'_'+'%'
+	        and check_type_id = #{check_type_id};
+	     </where>
+	</select>
+
+</mapper> 

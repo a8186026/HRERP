@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.purchase.persist.PurOrderDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="PurOrder">
+		select *
+		from pur_order
+		where id = #{id}
+		and status &lt;= 1
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="PurOrder">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if>
+		from pur_order
+	<where>
+		 status = 0
+		<if test="type!=null">
+		and type = #{type}
+		</if>
+		<if test="ticket_id!=null">
+		and ticket_id like #{ticket_id}
+		</if>
+		<if test="orderDate!=null">
+		and orderDate = #{orderDate}
+		</if>
+		<if test="contactPerson!=null">
+		and contactPerson = #{contactPerson}
+		</if>
+		<if test="sum!=null">
+		and sum = #{sum}
+		</if>
+		<if test="orderabstract!=null">
+		and orderabstract = #{orderabstract}
+		</if>
+		<if test="brokerage!=null">
+		and brokerage = #{brokerage}
+		</if>
+		<if test="personinCharge!=null">
+		and personinCharge = #{personinCharge}
+		</if>
+		<if test="operator!=null">
+		and operator = #{operator}
+		</if>
+		<if test="draft!=null">
+		and draft = #{draft}
+		</if>
+		<if test="printCount!=null">
+		and printCount = #{printCount}
+		</if>
+		<if test="prepaidTicketId!=null">
+		and prepaidTicketId = #{prepaidTicketId}
+		</if>
+		<if test="explain!=null">
+		and explain = #{explain}
+		</if>
+		<if test="checkPerson!=null">
+		and checkPerson = #{checkPerson}
+		</if>
+		<if test="checkTime!=null">
+		and checkTime = #{checkTime}
+		</if>
+		<if test="remarks!=null">
+		and remarks = #{remarks}
+		</if>
+		<if test="prepaid!=null">
+		and prepaid = #{prepaid}
+		</if>
+		<if test="knotStyle!=null">
+		and knotStyle = #{knotStyle}
+		</if>
+		<if test="policyStyle!=null">
+		and policyStyle = #{policyStyle}
+		</if>
+		<if test="priceReason!=null">
+		and priceReason = #{priceReason}
+		</if>
+		<if test="goodsReceive!=null">
+		and goodsReceive = #{goodsReceive}
+		</if>
+		<if test="goodsReceivePerson!=null">
+		and goodsReceivePerson = #{goodsReceivePerson}
+		</if>
+		<if test="goodsReceiveTime!=null">
+		and goodsReceiveTime = #{goodsReceiveTime}
+		</if>
+		<if test="tempCtrlMode!=null">
+		and tempCtrlMode = #{tempCtrlMode}
+		</if>
+		<if test="tempCtrlSituation!=null">
+		and tempCtrlSituation = #{tempCtrlSituation}
+		</if>
+		<if test="transUnit!=null">
+		and transUnit = #{transUnit}
+		</if>
+		<if test="ambientTemp!=null">
+		and ambientTemp = #{ambientTemp}
+		</if>
+		<if test="receive!=null">
+		and receive = #{receive}
+		</if>
+		<if test="carryMode!=null">
+		and carryMode = #{carryMode}
+		</if>
+		<if test="carryCompany!=null">
+		and carryCompany = #{carryCompany}
+		</if>
+		<if test="delivaryPlace!=null">
+		and delivaryPlace = #{delivaryPlace}
+		</if>
+		<if test="arrivalDate!=null">
+		and arrivalDate = #{arrivalDate}
+		</if>
+		<if test="orderDepartureTime!=null">
+		and orderDepartureTime = #{orderDepartureTime}
+		</if>
+		<if test="orderTransMode!=null">
+		and orderTransMode = #{orderTransMode}
+		</if>
+		<if test="orderTransFunc!=null">
+		and orderTransFunc = #{orderTransFunc}
+		</if>
+		<if test="makeoutInvoiceTime!=null">
+		and makeoutInvoiceTime = #{makeoutInvoiceTime}
+		</if>
+		<if test="create_user!=null">
+		and create_user = #{create_user}
+		</if>
+		<if test="create_time!=null">
+		and create_time = #{create_time}
+		</if>
+		<if test="last_modify_user!=null">
+		and last_modify_user = #{last_modify_user}
+		</if>
+		<if test="last_modify_time!=null">
+		and last_modify_time = #{last_modify_time}
+		</if>
+		<if test="supply_id!=null">
+		and supply_id = #{supply_id}
+		</if>
+		<if test="supply_fullname!=null">
+		and supply_fullname = #{supply_fullname}
+		</if>
+		<if test="supply_code!=null">
+		and supply_code = #{supply_code}
+		</if>
+		<if test="checkStatus!=null">
+		and checkStatus = #{checkStatus}
+		</if>
+		<if test="offset != null">
+				and id not in(select top ${offset} id from pur_order where status = 0
+				<if test="type!=null">
+				and type = #{type}
+				</if>
+				<if test="ticket_id!=null">
+				and ticket_id = #{ticket_id}
+				</if>
+				<if test="orderDate!=null">
+				and orderDate = #{orderDate}
+				</if>
+				<if test="contactPerson!=null">
+				and contactPerson = #{contactPerson}
+				</if>
+				<if test="sum!=null">
+				and sum = #{sum}
+				</if>
+				<if test="orderabstract!=null">
+				and orderabstract = #{orderabstract}
+				</if>
+				<if test="brokerage!=null">
+				and brokerage = #{brokerage}
+				</if>
+				<if test="personinCharge!=null">
+				and personinCharge = #{personinCharge}
+				</if>
+				<if test="operator!=null">
+				and operator = #{operator}
+				</if>
+				<if test="draft!=null">
+				and draft = #{draft}
+				</if>
+				<if test="printCount!=null">
+				and printCount = #{printCount}
+				</if>
+				<if test="prepaidTicketId!=null">
+				and prepaidTicketId = #{prepaidTicketId}
+				</if>
+				<if test="explain!=null">
+				and explain = #{explain}
+				</if>
+				<if test="checkPerson!=null">
+				and checkPerson = #{checkPerson}
+				</if>
+				<if test="checkTime!=null">
+				and checkTime = #{checkTime}
+				</if>
+				<if test="remarks!=null">
+				and remarks = #{remarks}
+				</if>
+				<if test="prepaid!=null">
+				and prepaid = #{prepaid}
+				</if>
+				<if test="knotStyle!=null">
+				and knotStyle = #{knotStyle}
+				</if>
+				<if test="policyStyle!=null">
+				and policyStyle = #{policyStyle}
+				</if>
+				<if test="priceReason!=null">
+				and priceReason = #{priceReason}
+				</if>
+				<if test="goodsReceive!=null">
+				and goodsReceive = #{goodsReceive}
+				</if>
+				<if test="goodsReceivePerson!=null">
+				and goodsReceivePerson = #{goodsReceivePerson}
+				</if>
+				<if test="goodsReceiveTime!=null">
+				and goodsReceiveTime = #{goodsReceiveTime}
+				</if>
+				<if test="tempCtrlMode!=null">
+				and tempCtrlMode = #{tempCtrlMode}
+				</if>
+				<if test="tempCtrlSituation!=null">
+				and tempCtrlSituation = #{tempCtrlSituation}
+				</if>
+				<if test="transUnit!=null">
+				and transUnit = #{transUnit}
+				</if>
+				<if test="ambientTemp!=null">
+				and ambientTemp = #{ambientTemp}
+				</if>
+				<if test="receive!=null">
+				and receive = #{receive}
+				</if>
+				<if test="carryMode!=null">
+				and carryMode = #{carryMode}
+				</if>
+				<if test="carryCompany!=null">
+				and carryCompany = #{carryCompany}
+				</if>
+				<if test="delivaryPlace!=null">
+				and delivaryPlace = #{delivaryPlace}
+				</if>
+				<if test="arrivalDate!=null">
+				and arrivalDate = #{arrivalDate}
+				</if>
+				<if test="orderDepartureTime!=null">
+				and orderDepartureTime = #{orderDepartureTime}
+				</if>
+				<if test="orderTransMode!=null">
+				and orderTransMode = #{orderTransMode}
+				</if>
+				<if test="orderTransFunc!=null">
+				and orderTransFunc = #{orderTransFunc}
+				</if>
+				<if test="makeoutInvoiceTime!=null">
+				and makeoutInvoiceTime = #{makeoutInvoiceTime}
+				</if>
+				<if test="create_user!=null">
+				and create_user = #{create_user}
+				</if>
+				<if test="create_time!=null">
+				and create_time = #{create_time}
+				</if>
+				<if test="last_modify_user!=null">
+				and last_modify_user = #{last_modify_user}
+				</if>
+				<if test="last_modify_time!=null">
+				and last_modify_time = #{last_modify_time}
+				</if>
+				<if test="supply_id!=null">
+				and supply_id = #{supply_id}
+				</if>
+				<if test="supply_fullname!=null">
+				and supply_fullname = #{supply_fullname}
+				</if>
+				<if test="supply_code!=null">
+				and supply_code = #{supply_code}
+				</if>
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+</select>
+
+
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="MemCardManage" resultType="int">
+		select count(id) as count 
+		from pur_order
+		<where>
+			 status = 0
+			<if test="id!=null">
+			and id = #{id}
+			</if>
+			<if test="type!=null">
+			and type = #{type}
+			</if>
+			<if test="ticket_id!=null">
+			and ticket_id = #{ticket_id}
+			</if>
+			<if test="orderDate!=null">
+			and orderDate = #{orderDate}
+			</if>
+			<if test="contactPerson!=null">
+			and contactPerson = #{contactPerson}
+			</if>
+			<if test="sum!=null">
+			and sum = #{sum}
+			</if>
+			<if test="orderabstract!=null">
+			and orderabstract = #{orderabstract}
+			</if>
+			<if test="brokerage!=null">
+			and brokerage = #{brokerage}
+			</if>
+			<if test="personinCharge!=null">
+			and personinCharge = #{personinCharge}
+			</if>
+			<if test="operator!=null">
+			and operator = #{operator}
+			</if>
+			<if test="draft!=null">
+			and draft = #{draft}
+			</if>
+			<if test="printCount!=null">
+			and printCount = #{printCount}
+			</if>
+			<if test="prepaidTicketId!=null">
+			and prepaidTicketId = #{prepaidTicketId}
+			</if>
+			<if test="explain!=null">
+			and explain = #{explain}
+			</if>
+			<if test="checkPerson!=null">
+			and checkPerson = #{checkPerson}
+			</if>
+			<if test="checkTime!=null">
+			and checkTime = #{checkTime}
+			</if>
+			<if test="remarks!=null">
+			and remarks = #{remarks}
+			</if>
+			<if test="prepaid!=null">
+			and prepaid = #{prepaid}
+			</if>
+			<if test="knotStyle!=null">
+			and knotStyle = #{knotStyle}
+			</if>
+			<if test="policyStyle!=null">
+			and policyStyle = #{policyStyle}
+			</if>
+			<if test="priceReason!=null">
+			and priceReason = #{priceReason}
+			</if>
+			<if test="goodsReceive!=null">
+			and goodsReceive = #{goodsReceive}
+			</if>
+			<if test="goodsReceivePerson!=null">
+			and goodsReceivePerson = #{goodsReceivePerson}
+			</if>
+			<if test="goodsReceiveTime!=null">
+			and goodsReceiveTime = #{goodsReceiveTime}
+			</if>
+			<if test="tempCtrlMode!=null">
+			and tempCtrlMode = #{tempCtrlMode}
+			</if>
+			<if test="tempCtrlSituation!=null">
+			and tempCtrlSituation = #{tempCtrlSituation}
+			</if>
+			<if test="transUnit!=null">
+			and transUnit = #{transUnit}
+			</if>
+			<if test="ambientTemp!=null">
+			and ambientTemp = #{ambientTemp}
+			</if>
+			<if test="receive!=null">
+			and receive = #{receive}
+			</if>
+			<if test="carryMode!=null">
+			and carryMode = #{carryMode}
+			</if>
+			<if test="carryCompany!=null">
+			and carryCompany = #{carryCompany}
+			</if>
+			<if test="delivaryPlace!=null">
+			and delivaryPlace = #{delivaryPlace}
+			</if>
+			<if test="arrivalDate!=null">
+			and arrivalDate = #{arrivalDate}
+			</if>
+			<if test="orderDepartureTime!=null">
+			and orderDepartureTime = #{orderDepartureTime}
+			</if>
+			<if test="orderTransMode!=null">
+			and orderTransMode = #{orderTransMode}
+			</if>
+			<if test="orderTransFunc!=null">
+			and orderTransFunc = #{orderTransFunc}
+			</if>
+			<if test="makeoutInvoiceTime!=null">
+			and makeoutInvoiceTime = #{makeoutInvoiceTime}
+			</if>
+			<if test="status!=null">
+			and status = #{status}
+			</if>
+			<if test="create_user!=null">
+			and create_user = #{create_user}
+			</if>
+			<if test="create_time!=null">
+			and create_time = #{create_time}
+			</if>
+			<if test="last_modify_user!=null">
+			and last_modify_user = #{last_modify_user}
+			</if>
+			<if test="last_modify_time!=null">
+			and last_modify_time = #{last_modify_time}
+			</if>
+			<if test="supply_id!=null">
+			and supply_id = #{supply_id}
+			</if>
+			<if test="supply_fullname!=null">
+			and supply_fullname = #{supply_fullname}
+			</if>
+			<if test="supply_code!=null">
+			and supply_code = #{supply_code}
+			</if>
+			<if test="checkStatus!=null">
+			and checkStatus = #{checkStatus}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="PurOrder" useGeneratedKeys="true" keyProperty="id">
+	 	insert into pur_order(
+		type, ticket_id, orderDate, contactPerson, sum, 
+		orderabstract, brokerage, personinCharge, operator, draft, 
+		printCount, prepaidTicketId, explain, checkPerson, checkTime, 
+		remarks, prepaid, knotStyle, policyStyle, priceReason, 
+		goodsReceive, goodsReceivePerson, goodsReceiveTime, tempCtrlMode, tempCtrlSituation, transUnit, 
+		ambientTemp, receive, carryMode, carryCompany, delivaryPlace, 
+		arrivalDate, orderDepartureTime, orderTransMode, orderTransFunc, makeoutInvoiceTime, 
+		status, create_user, create_time, last_modify_user, last_modify_time, 
+		supply_id, supply_fullname,supply_code,checkStatus)
+		values(
+		#{type}, #{ticket_id}, #{orderDate}, #{contactPerson}, #{sum}, 
+		#{orderabstract}, #{brokerage}, #{personinCharge}, #{operator}, #{draft}, 
+		#{printCount}, #{prepaidTicketId}, #{explain}, #{checkPerson}, #{checkTime}, 
+		#{remarks}, #{prepaid}, #{knotStyle}, #{policyStyle}, #{priceReason}, 
+		#{goodsReceive}, #{goodsReceivePerson}, #{goodsReceiveTime}, #{tempCtrlMode}, #{tempCtrlSituation}, #{transUnit}, 
+		#{ambientTemp}, #{receive}, #{carryMode}, #{carryCompany}, #{delivaryPlace}, 
+		#{arrivalDate}, #{orderDepartureTime}, #{orderTransMode}, #{orderTransFunc}, #{makeoutInvoiceTime}, 
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, 
+		#{supply_id}, #{supply_fullname},#{supply_code},#{checkStatus});
+</insert>
+
+<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addlog" parameterType="PurOrder" useGeneratedKeys="true" keyProperty="po_log_id">
+	 	insert into pur_order_log(
+		id, type, ticket_id, orderDate, contactPerson, sum, 
+		orderabstract, brokerage, personinCharge, operator, draft, 
+		printCount, prepaidTicketId, explain, checkPerson, checkTime, 
+		remarks, prepaid, knotStyle, policyStyle, priceReason, 
+		goodsReceive, goodsReceivePerson, goodsReceiveTime, tempCtrlMode, tempCtrlSituation, transUnit, 
+		ambientTemp, receive, carryMode, carryCompany, delivaryPlace, 
+		arrivalDate, orderDepartureTime, orderTransMode, orderTransFunc, makeoutInvoiceTime, 
+		status, create_user, create_time, last_modify_user, last_modify_time, 
+		supply_id, supply_fullname,supply_code,checkStatus)
+		values(
+		#{id},#{type}, #{ticket_id}, #{orderDate}, #{contactPerson}, #{sum}, 
+		#{orderabstract}, #{brokerage}, #{personinCharge}, #{operator}, #{draft}, 
+		#{printCount}, #{prepaidTicketId}, #{explain}, #{checkPerson}, #{checkTime}, 
+		#{remarks}, #{prepaid}, #{knotStyle}, #{policyStyle}, #{priceReason}, 
+		#{goodsReceive}, #{goodsReceivePerson}, #{goodsReceiveTime}, #{tempCtrlMode}, #{tempCtrlSituation}, #{transUnit}, 
+		#{ambientTemp}, #{receive}, #{carryMode}, #{carryCompany}, #{delivaryPlace}, 
+		#{arrivalDate}, #{orderDepartureTime}, #{orderTransMode}, #{orderTransFunc}, #{makeoutInvoiceTime}, 
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, 
+		#{supply_id}, #{supply_fullname},#{supply_code},#{checkStatus});
+</insert>
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="PurOrder">
+	 update pur_order
+	<set>
+		<if test="type != null">
+		type = #{type},
+		</if>
+		<if test="ticket_id != null">
+		ticket_id = #{ticket_id},
+		</if>
+		<if test="orderDate != null">
+		orderDate = #{orderDate},
+		</if>
+		<if test="contactPerson != null">
+		contactPerson = #{contactPerson},
+		</if>
+		<if test="sum != null">
+		sum = #{sum},
+		</if>
+		<if test="orderabstract != null">
+		orderabstract = #{orderabstract},
+		</if>
+		<if test="brokerage != null">
+		brokerage = #{brokerage},
+		</if>
+		<if test="personinCharge != null">
+		personinCharge = #{personinCharge},
+		</if>
+		<if test="operator != null">
+		operator = #{operator},
+		</if>
+		<if test="draft != null">
+		draft = #{draft},
+		</if>
+		<if test="printCount != null">
+		printCount = #{printCount},
+		</if>
+		<if test="prepaidTicketId != null">
+		prepaidTicketId = #{prepaidTicketId},
+		</if>
+		<if test="explain != null">
+		explain = #{explain},
+		</if>
+		<if test="checkPerson != null">
+		checkPerson = #{checkPerson},
+		</if>
+		<if test="checkTime != null">
+		checkTime = #{checkTime},
+		</if>
+		<if test="remarks != null">
+		remarks = #{remarks},
+		</if>
+		<if test="prepaid != null">
+		prepaid = #{prepaid},
+		</if>
+		<if test="knotStyle != null">
+		knotStyle = #{knotStyle},
+		</if>
+		<if test="policyStyle != null">
+		policyStyle = #{policyStyle},
+		</if>
+		<if test="priceReason != null">
+		priceReason = #{priceReason},
+		</if>
+		<if test="goodsReceive != null">
+		goodsReceive = #{goodsReceive},
+		</if>
+		<if test="goodsReceivePerson != null">
+		goodsReceivePerson = #{goodsReceivePerson},
+		</if>
+		<if test="goodsReceiveTime != null">
+		goodsReceiveTime = #{goodsReceiveTime},
+		</if>
+		<if test="tempCtrlMode != null">
+		tempCtrlMode = #{tempCtrlMode},
+		</if>
+		<if test="tempCtrlSituation != null">
+		tempCtrlSituation = #{tempCtrlSituation},
+		</if>
+		<if test="transUnit != null">
+		transUnit = #{transUnit},
+		</if>
+		<if test="ambientTemp != null">
+		ambientTemp = #{ambientTemp},
+		</if>
+		<if test="receive != null">
+		receive = #{receive},
+		</if>
+		<if test="carryMode != null">
+		carryMode = #{carryMode},
+		</if>
+		<if test="carryCompany != null">
+		carryCompany = #{carryCompany},
+		</if>
+		<if test="delivaryPlace != null">
+		delivaryPlace = #{delivaryPlace},
+		</if>
+		<if test="arrivalDate != null">
+		arrivalDate = #{arrivalDate},
+		</if>
+		<if test="orderDepartureTime != null">
+		orderDepartureTime = #{orderDepartureTime},
+		</if>
+		<if test="orderTransMode != null">
+		orderTransMode = #{orderTransMode},
+		</if>
+		<if test="orderTransFunc != null">
+		orderTransFunc = #{orderTransFunc},
+		</if>
+		<if test="makeoutInvoiceTime != null">
+		makeoutInvoiceTime = #{makeoutInvoiceTime},
+		</if>
+		<if test="status != null">
+		status = #{status},
+		</if>
+		<if test="create_user != null">
+		create_user = #{create_user},
+		</if>
+		<if test="create_time != null">
+		create_time = #{create_time},
+		</if>
+		<if test="last_modify_user != null">
+		last_modify_user = #{last_modify_user},
+		</if>
+		<if test="last_modify_time != null">
+		last_modify_time = #{last_modify_time},
+		</if>
+		<if test="supply_id != null">
+		supply_id = #{supply_id},
+		</if>
+		<if test="supply_fullname != null">
+		supply_fullname = #{supply_fullname},
+		</if>
+		<if test="supply_code!=null">
+		supply_code = #{supply_code},
+		</if>
+		<if test="checkStatus!=null">
+		checkStatus = #{checkStatus},
+		</if>
+		</set>where id = #{id}
+	</update>
+
+	<update id="delete" parameterType="int">
+		update pur_order
+		<set>
+			status = 9
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="deletePurderByBean" parameterType="PurOrder">
+		update pur_order
+		<set>
+			status = 9
+		</set>
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="ticket_id != null">
+			and ticket_id = #{ticket_id}
+		</if>
+	</update>
+	
+	<!-- 返回当前数据库表中最大票号 -->
+	<select id="getMaxTicketID"  resultType="Integer">
+		select max(cast(substring(ticket_id,9,4) as INT)) 
+		from pur_order
+		where substring(ticket_id,1,8) = #{date}
+		and status = 0
+	</select>
+	
+	<!-- 查询订单小单关联产品 -->
+	<select id="getPurOrderListAndProductInfo" parameterType="map" resultType="PurOrderListAndProInfo">
+		select pi.*, pol.id,
+		pol.ticket_id, pol.quantity, pol.unitprice, 
+	    pol.sum, pol.settlementPrice, pol.referencePrice, pol.orderSettlementPrice, pol.arrivalDate, pol.prepaidForList,
+		pol.isArrival
+		
+		from pro_infoManage pi, pur_order_list pol 
+		where pi.product_id = pol.product_id and pol.status = 0
+		<if test="ticket_id!=null">
+			and pol.ticket_id = #{ticket_id}
+		</if>
+		<if test="id!=null">
+			and pol.id = #{id}
+		</if>
+	</select>
+	
+	<select id="getPurOrderListAndProductInfoFor" parameterType="map" resultType="PurOrderListAndProInfo">
+		select pi.*, pol.id,
+		pol.ticket_id, pol.quantity, pol.unitprice, 
+	    pol.sum, pol.settlementPrice, pol.referencePrice, pol.orderSettlementPrice, pol.arrivalDate, pol.prepaidForList,
+		pol.isArrival
+		
+		from pro_infoManage pi, pur_order_list pol 
+		where pi.product_id = pol.product_id and pol.status = 0
+		<if test="ticket_id!=null">
+			and pol.ticket_id = #{ticket_id}
+		</if>
+		<if test="id!=null">
+			and pol.id = #{id}
+		</if>
+		<if test="isArrival!=null">
+			and pol.isArrival = #{isArrival}
+		</if>
+	</select>
+	
+	<!-- 通过ticket_id查询大单id -->
+	<select id="getOrderIdByTicketid" parameterType="String" resultType="int">
+		select po.id
+		from pur_order po
+		where po.ticket_id = #{ticket_id} and po.status = 0 and po.draft=0
+	</select>
+	
+	<select id="listCheckOrder" parameterType="map" resultType="PurOrder">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if>
+		from pur_order
+	<where>
+		 status = 0  and  checkStatus = 1 and draft = 0
+		 
+		<if test="offset != null">
+				and id not in(select top ${offset} id from pur_order where status = 0 and checkStatus = 1 and draft = 0
+				 
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+	</select>
+		
+	<select id="listRecepitOrder" parameterType="map" resultType="PurOrder">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if>
+		from pur_order
+	<where>
+		 status = 0  and  checkStatus = 0 and goodsReceive = 1 
+		 
+		<if test="offset != null">
+				and id not in(select top ${offset} id from pur_order where status = 0 and checkStatus = 0 and goodsReceive = 1
+				 
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+	</select>
+</mapper> 

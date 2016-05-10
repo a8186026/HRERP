@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysPermissionDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="SysPermission">
+		select g.*
+		from sys_group g
+		where g.group_id = #{group_id}
+		and g.status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="SysPermission" resultType="SysPermission">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from sys_group g
+		<where>
+			<if test="group_name != null and group_name != null">
+				g.group_name like #{group_name}
+			</if>
+			and g.status = 0
+			 <if test="offset != null and offset !=0">
+				and group_id not in(select top ${offset} group_id from sys_group)
+			</if> 
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<!--获取所有用户组权限记录 -->
+	<select id="listLogs" parameterType="SysGroupMenuLog" resultType="SysGroupMenuLog">
+		
+	</select>
+	
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="findCount" parameterType="SysPermission" resultType="int">
+		select g.*, gm.*
+		from sys_group g
+		<where>
+			<if test="group_name != null and group_name != null">
+				g.group_name like #{group_name}
+			</if>
+			and g.status = 0
+		</where>
+	</select>
+
+	<!-- 获取用户组菜单-->
+	<select id="getGroupMenu" parameterType="int" resultType="SysMenu">
+		select m.*
+		from sys_menu m, sys_group_menu gm
+		<where>
+			m.menu_id = gm.menu_id
+			and gm.group_id = #{group_id}
+			and m.status = 0
+		</where>
+	</select>
+
+	<!-- -->
+	<select id="getMenuFuncs" parameterType="int" resultType="SysGroupMenu">
+		select gm.group_menu_id, gm.group_id, gm.menu_func, m.menu_id,
+		m.menu_name, m.menu_code, m.parent_menu
+		from sys_menu m left join sys_group_menu gm on gm.menu_id = m.menu_id and
+		gm.group_id = #{group_id}
+		<where>
+			m.status = 0
+		</where>
+	</select>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysGroupMenu" useGeneratedKeys="true"
+		keyProperty="group_menu_id">
+		insert into sys_group_menu(group_id, menu_id, sgm_status)
+		values(#{group_id}, #{menu_id}, #{sgm_status});
+	</insert>
+	
+	<!-- 添加组与权限记录-->
+	<insert id="addSysGroupMenuLog" parameterType="SysGroupMenuLog" useGeneratedKeys="true"
+		keyProperty="group_menu_id">
+		insert into sys_group_menu_log(group_id, menu_id,create_user,create_time,status,remark)
+		values(#{group_id}, #{menu_id}, #{create_user},#{create_time},#{status},#{remark});
+	</insert>
+	
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		delete from sys_group_menu
+		where group_id = #{id}
+	</delete>
+	
+	<!-- 查询用户组菜单权限-->
+	<select id="getGroupMenuList" parameterType="SysGroupMenu" resultType="SysGroupMenu">
+		select sgm.group_menu_id, sgm.group_id, sgm.menu_id, sgm.sgm_status, 
+		sg.group_name,
+		sm.menu_name, sm.menu_code, sm.parent_menu
+		from sys_menu sm, sys_group sg, sys_group_menu sgm
+		<where>
+			sm.menu_id = sgm.menu_id
+			and sg.group_id = sgm.group_id
+			<if test="group_id != null">
+				and sgm.group_id = #{group_id}
+			</if>
+			<if test="menu_id != null">
+				and sgm.menu_id = #{menu_id}
+			</if>
+			<if test="group_menu_id != null">
+				and sgm.group_menu_id = #{group_menu_id}
+			</if>
+			<if test="sgm_status != null">
+				and sgm.sgm_status = #{sgm_status}
+			</if>
+			<if test="menu_name != null">
+				and sm.menu_name like #{menu_name}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 保存用户习惯， -->
+	<update id="updateSysGroupMenu" parameterType="SysGroupMenu">
+		update sys_group_menu
+		<set>
+			<if test="sgm_status != null">
+				sgm_status = #{sgm_status},
+			</if>
+		</set>
+		where 1=1
+		<if test="group_id != null">
+			and group_id = #{group_id}
+		</if>
+		<if test="menu_id != null">
+			and menu_id = #{menu_id}
+		</if>
+		<if test="group_menu_id != null">
+			and group_menu_id = #{group_menu_id}
+		</if>
+	</update>
+	
+	<!-- 根据数据ID删除表中数据 -->
+	<delete id="deleteByGroupMenuId" parameterType="int">
+		delete from sys_group_menu
+		where group_menu_id = #{group_menu_id}
+	</delete>
+	
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="getSysGroupMenuLogList" parameterType="SysGroupMenuLog" resultType="SysGroupMenuLog">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select sgml.group_menu_id, sgml.group_id, sgml.menu_id, sgml.create_user, sgml.create_time, sgml.status, sgml.remark, 
+		sg.group_name,
+		sm.menu_name, sm.menu_code, sm.parent_menu
+		</if>
+		from sys_menu sm, sys_group sg, sys_group_menu_log sgml
+		<where>
+			sm.menu_id = sgml.menu_id
+			and sg.group_id = sgml.group_id
+			<if test="group_id != null">
+				and sgml.group_id = #{group_id}
+			</if>
+			<if test="menu_id != null">
+				and sgml.menu_id = #{menu_id}
+			</if>
+			<if test="group_menu_id != null">
+				and sgml.group_menu_id = #{group_menu_id}
+			</if>
+			<if test="status != null">
+				and sgml.status = #{status}
+			</if>
+			<if test="menu_name != null">
+				and sm.menu_name like #{menu_name}
+			</if>
+			<if test="offset != null and offset !=0">
+				and sgml.group_menu_id not in(select top ${offset} sgml.group_menu_id from sys_menu sm, sys_group sg, sys_group_menu_log sgml where
+					sm.menu_id = sgml.menu_id
+					and sg.group_id = sgml.group_id
+				<if test="group_id != null">
+					and sgml.group_id = #{group_id}
+				</if>
+				<if test="menu_id != null">
+					and sgml.menu_id = #{menu_id}
+				</if>
+				<if test="group_menu_id != null">
+					and sgml.group_menu_id = #{group_menu_id}
+				</if>
+				<if test="status != null">
+					and sgml.status = #{status}
+				</if>
+				<if test="menu_name != null">
+					and sm.menu_name like #{menu_name}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="getSysGroupMenuLogCount" parameterType="SysGroupMenuLog" resultType="int">
+		select
+		count(sgml.group_menu_id) as count
+		from sys_menu sm, sys_group sg, sys_group_menu_log sgml
+		<where>
+			sm.menu_id = sgml.menu_id
+			and sg.group_id = sgml.group_id
+			<if test="group_id != null">
+				and sgml.group_id = #{group_id}
+			</if>
+			<if test="menu_id != null">
+				and sgml.menu_id = #{menu_id}
+			</if>
+			<if test="group_menu_id != null">
+				and sgml.group_menu_id = #{group_menu_id}
+			</if>
+			<if test="status != null">
+				and sgml.status = #{status}
+			</if>
+			<if test="menu_name != null">
+				and sm.menu_name like #{menu_name}
+			</if>
+		</where>
+	</select>
+</mapper> 

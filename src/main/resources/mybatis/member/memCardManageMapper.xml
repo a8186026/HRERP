@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.member.persist.MemCardManageDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="MemCardManage">
+		select *
+		from mem_cardManage
+		where mem_card_id = #{id}
+		and status &lt;= 1
+	</select>
+	<!-- 获取会员卡 -->
+	<select id="getMemCardByNumber" parameterType="String" resultType="MemCardManage">
+		select *
+		from mem_cardManage
+		where mem_card_number = #{number}
+		and status &lt;= 1
+	</select>
+
+	<!-- 获取会员卡消费记录 -->
+	<select id="getPurchasesByNum" resultType="RetailBatchVO">
+	<if test="bean.rows!=null">
+		 select top ${bean.rows}*
+	</if>
+	<if test="bean.rows == null">
+		select *
+	</if>
+	from retail_order_batch as rob,pro_infoManage as pim,bas_departmentinfo as bdi
+	where rob.order_batch_member = #{number}
+	<if test="startTime !=null and startTime !=''">
+		and DATEDIFF(day,#{startTime},rob.order_batch_date) >=0
+	</if> 
+	<if test="endTime !=null and endTime !=''">
+		and DATEDIFF(day,rob.order_batch_date,#{endTime}) >=0
+	</if>
+	<choose>
+		<when test="type >0">
+			and rob.order_batch_quantity>0
+		</when>
+		<otherwise>
+			and rob.order_batch_quantity &lt; 0
+		</otherwise>
+	</choose>
+	and rob.product_id = pim.product_id and rob.stock_storage = bdi.department_id
+	<if test="bean.offset != null and bean.offset !=0">
+			and order_batch_id not in(select top ${bean.offset} order_batch_id 
+			from retail_order_batch as rob1,pro_infoManage as pim1,bas_departmentinfo as bdi1
+			where rob1.order_batch_member = #{number}
+			<if test="startTime !=null and startTime !=''">
+				and DATEDIFF(day,#{startTime},rob1.order_batch_date) >=0
+			</if> 
+			<if test="endTime !=null and endTime !=''">
+				and DATEDIFF(day,rob1.order_batch_date,#{endTime}) >=0
+			</if>
+			<choose>
+				<when test="type >0">
+					and rob.order_batch_quantity>0
+				</when>
+				<otherwise>
+					and rob.order_batch_quantity &lt; 0
+				</otherwise>
+			</choose>
+			and rob1.product_id = pim1.product_id and rob1.stock_storage = bdi1.department_id
+			)
+	</if>
+	</select>
+
+
+	<select id="countPurchasesByNum" resultType="Integer">
+	select count(*) 
+	from retail_order_batch as rob,pro_infoManage as pim,bas_departmentinfo as bdi
+	where rob.order_batch_member = #{number}
+	<if test="startTime !=null and startTime !=''">
+		and DATEDIFF(day,#{startTime},rob.order_batch_date) >=0
+	</if> 
+	<if test="endTime !=null and endTime !=''">
+		and DATEDIFF(day,rob.order_batch_date,#{endTime}) >=0
+	</if>
+	<choose>
+		<when test="type >0">
+			and rob.order_batch_quantity>0
+		</when>
+		<otherwise>
+			and rob.order_batch_quantity &lt; 0
+		</otherwise>
+	</choose>
+	and rob.product_id = pim.product_id and rob.stock_storage = bdi.department_id
+	</select>
+
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="MemCardManage">
+	<if test="rows!=null">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null">
+		select *
+	</if>
+		from mem_cardManage
+	<where>
+		 status &lt;= 1
+		<if test="mem_card_id!=null">
+		and mem_card_id = #{mem_card_id}
+		</if>
+		<if test="mem_card_type!=null">
+		and mem_card_type = #{mem_card_type}
+		</if>
+		<if test="mem_card_number!=null">
+		and mem_card_number = #{mem_card_number}
+		</if>
+		<if test="mem_card_name!=null">
+		and mem_card_name like #{mem_card_name}
+		</if>
+		<if test="mem_card_chn!=null">
+		and mem_card_chn like #{mem_card_chn}
+		</if>
+		<if test="mem_card_gender!=null">
+		and mem_card_gender = #{mem_card_gender}
+		</if>
+		<if test="mem_card_tel!=null">
+		and mem_card_tel like #{mem_card_tel}
+		</if>
+		<if test="mem_card_cellPhone!=null">
+		and mem_card_cellPhone like #{mem_card_cellPhone}
+		</if>
+		<if test="mem_card_postCode!=null">
+		and mem_card_postCode like #{mem_card_postCode}
+		</if>
+		<if test="mem_card_idCard!=null">
+		and mem_card_idCard = #{mem_card_idCard}
+		</if>
+		<if test="create_user!=null">
+		and create_user = #{create_user}
+		</if>
+		<if test="create_time!=null">
+		and create_time = #{create_time}
+		</if>
+		<if test="last_modify_user!=null">
+		and last_modify_user = #{last_modify_user}
+		</if>
+		<if test="last_modify_time!=null">
+		and last_modify_time = #{last_modify_time}
+		</if>
+		<if test="offset != null and offset !=0">
+			and mem_card_id not in(select top ${offset} mem_card_id from mem_cardManage where status = 0
+				<if test="mem_card_id!=null">
+					and mem_card_id = #{mem_card_id}
+				</if>
+				<if test="mem_card_type!=null">
+					and mem_card_type = #{mem_card_type}
+				</if>
+				<if test="mem_card_number!=null">
+					and mem_card_number = #{mem_card_number}
+				</if>
+				<if test="mem_card_name!=null">
+					and mem_card_name like #{mem_card_name}
+				</if>
+				<if test="mem_card_chn!=null">
+					and mem_card_chn like #{mem_card_chn}
+				</if>
+				<if test="mem_card_gender!=null">
+					and mem_card_gender = #{mem_card_gender}
+				</if>
+				<if test="mem_card_tel!=null">
+					and mem_card_tel like #{mem_card_tel}
+				</if>
+				<if test="mem_card_cellPhone!=null">
+					and mem_card_cellPhone like #{mem_card_cellPhone}
+				</if>
+				<if test="mem_card_postCode!=null">
+					and mem_card_postCode like #{mem_card_postCode}
+				</if>
+				<if test="mem_card_idCard!=null">
+					and mem_card_idCard = #{mem_card_idCard}
+				</if>
+				<if test="create_user!=null">
+					and create_user = #{create_user}
+				</if>
+				<if test="create_time!=null">
+					and create_time = #{create_time}
+				</if>
+				<if test="last_modify_user!=null">
+					and last_modify_user = #{last_modify_user}
+				</if>
+				<if test="last_modify_time!=null">
+					and last_modify_time = #{last_modify_time}
+				</if>
+			)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+		<select id="count" parameterType="MemCardManage" resultType="int">
+		select count(mem_card_id) as count 
+		from mem_cardManage
+		<where>
+		 status &lt;= 1
+		<if test="mem_card_id!=null">
+		and mem_card_id = #{mem_card_id}
+		</if>
+		<if test="mem_card_type!=null">
+		and mem_card_type = #{mem_card_type}
+		</if>
+		<if test="mem_card_number!=null">
+		and mem_card_number = #{mem_card_number}
+		</if>
+		<if test="mem_card_name!=null">
+		and mem_card_name like #{mem_card_name}
+		</if>
+		<if test="mem_card_chn!=null">
+		and mem_card_chn like #{mem_card_chn}
+		</if>
+		<if test="mem_card_gender!=null">
+		and mem_card_gender = #{mem_card_gender}
+		</if>
+		<if test="mem_card_tel!=null">
+		and mem_card_tel like #{mem_card_tel}
+		</if>
+		<if test="mem_card_cellPhone!=null">
+		and mem_card_cellPhone like #{mem_card_cellPhone}
+		</if>
+		<if test="mem_card_postCode!=null">
+		and mem_card_postCode like #{mem_card_postCode}
+		</if>
+		<if test="mem_card_idCard!=null">
+		and mem_card_idCard = #{mem_card_idCard}
+		</if>
+		<if test="create_user!=null">
+		and create_user = #{create_user}
+		</if>
+		<if test="create_time!=null">
+		and create_time = #{create_time}
+		</if>
+		<if test="last_modify_user!=null">
+		and last_modify_user = #{last_modify_user}
+		</if>
+		<if test="last_modify_time!=null">
+		and last_modify_time = #{last_modify_time}
+		</if>
+	</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="MemCardManage" useGeneratedKeys="true" keyProperty="mem_card_id">
+	 insert into mem_cardManage(
+	mem_card_type, mem_card_number, mem_card_name, mem_card_chn, mem_card_gender, 
+	mem_card_allCost, mem_card_pointCost, mem_card_acountMoney, mem_card_startMoney, mem_card_point, 
+	mem_point_toMoney,mem_card_discount, mem_lowest_discount, mem_card_barCode, 
+	mem_card_tel, mem_card_cellPhone, mem_card_address, mem_card_postCode, 
+	mem_card_idCard, mem_card_applyDate, mem_card_failedDate, mem_card_business1, mem_card_business2, 
+	mem_card_business3, mem_card_usedPoint, mem_card_originalPoint, mem_card_indroduction, 
+	mem_card_dept, mem_card_giftCard, mem_card_addPoint, mem_card_history, mem_card_holder, 
+	mem_card_unit, mem_card_mold, mem_card_credentialNumber,
+	mem_card_allergicHistory, mem_card_remark, mem_card_modifyNumber, 
+	mem_card_age,mem_point_toMoney
+	mem_card_lastGiftTime, status, create_user, create_time, last_modify_user, 
+	last_modify_time, mem_card_birthday)
+	values(
+	#{mem_card_type}, #{mem_card_number}, #{mem_card_name}, #{mem_card_chn}, #{mem_card_gender}, 
+	#{mem_card_allCost}, #{mem_card_pointCost}, #{mem_card_acountMoney}, #{mem_card_startMoney}, #{mem_card_point}, 
+	#{mem_point_toMoney},#{mem_card_discount,jdbcType=NUMERIC}, #{mem_lowest_discount,jdbcType=NUMERIC}, #{mem_card_barCode},
+	#{mem_card_tel}, #{mem_card_cellPhone}, #{mem_card_address}, #{mem_card_postCode}, 
+	#{mem_card_idCard}, #{mem_card_applyDate}, #{mem_card_failedDate}, #{mem_card_business1}, #{mem_card_business2}, 
+	#{mem_card_business3}, #{mem_card_usedPoint}, #{mem_card_originalPoint}, #{mem_card_indroduction}, 
+	#{mem_card_dept}, #{mem_card_giftCard}, #{mem_card_addPoint}, #{mem_card_history}, #{mem_card_holder}, 
+	#{mem_card_unit}, #{mem_card_mold}, #{mem_card_credentialNumber}, 
+	#{mem_card_allergicHistory}, #{mem_card_remark}, #{mem_card_modifyNumber}, 
+	#{mem_card_age},#{mem_point_toMoney}  
+	#{mem_card_lastGiftTime}, #{status}, #{create_user}, #{create_time}, #{last_modify_user}, 
+	#{last_modify_time}, #{mem_card_birthday});
+</insert>
+
+
+<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addLog" parameterType="MemCardManage" useGeneratedKeys="true" keyProperty="mem_card_log_id">
+	 insert into mem_cardManage_log(mem_card_id,
+	mem_card_type, mem_card_number, mem_card_name, mem_card_chn, mem_card_gender, 
+	mem_card_allCost, mem_card_pointCost, mem_card_acountMoney, mem_card_startMoney, mem_card_point, 
+	mem_point_toMoney,mem_card_discount, mem_lowest_discount, mem_card_barCode, 
+	mem_card_tel, mem_card_cellPhone, mem_card_address, mem_card_postCode, 
+	mem_card_idCard, mem_card_applyDate, mem_card_failedDate, mem_card_business1, mem_card_business2, 
+	mem_card_business3, mem_card_usedPoint, mem_card_originalPoint, mem_card_indroduction, 
+	mem_card_dept, mem_card_giftCard, mem_card_addPoint, mem_card_history, mem_card_holder, 
+	mem_card_unit, mem_card_mold, mem_card_credentialNumber,
+	mem_card_allergicHistory, mem_card_remark, mem_card_modifyNumber, 
+	mem_card_age,
+	mem_card_lastGiftTime, status, create_user, create_time, last_modify_user, 
+	last_modify_time, mem_card_birthday)
+	values(#{mem_card_id},
+	#{mem_card_type}, #{mem_card_number}, #{mem_card_name}, #{mem_card_chn}, #{mem_card_gender}, 
+	#{mem_card_allCost}, #{mem_card_pointCost}, #{mem_card_acountMoney}, #{mem_card_startMoney}, #{mem_card_point}, 
+	#{mem_card_discount}, #{mem_lowest_discount}, #{mem_card_barCode},
+	#{mem_point_toMoney},#{mem_card_tel}, #{mem_card_cellPhone}, #{mem_card_address}, #{mem_card_postCode}, 
+	#{mem_card_idCard}, #{mem_card_applyDate}, #{mem_card_failedDate}, #{mem_card_business1}, #{mem_card_business2}, 
+	#{mem_card_business3}, #{mem_card_usedPoint}, #{mem_card_originalPoint}, #{mem_card_indroduction}, 
+	#{mem_card_dept}, #{mem_card_giftCard}, #{mem_card_addPoint}, #{mem_card_history}, #{mem_card_holder}, 
+	#{mem_card_unit}, #{mem_card_mold}, #{mem_card_credentialNumber}, 
+	#{mem_card_allergicHistory}, #{mem_card_remark}, #{mem_card_modifyNumber}, 
+	#{mem_card_age},  
+	#{mem_card_lastGiftTime}, #{status}, #{create_user}, #{create_time}, #{last_modify_user}, 
+	#{last_modify_time}, #{mem_card_birthday});
+</insert>
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="MemCardManage">
+	update mem_cardManage 
+	<set>
+		<if test="mem_card_type != null">
+		mem_card_type = #{mem_card_type},
+		</if>
+		<if test="mem_card_number != null">
+		mem_card_number = #{mem_card_number},
+		</if>
+		<if test="mem_card_name != null">
+		mem_card_name = #{mem_card_name},
+		</if>
+		<if test="mem_card_chn != null">
+		mem_card_chn = #{mem_card_chn},
+		</if>
+		<if test="mem_card_gender != null">
+		mem_card_gender = #{mem_card_gender},
+		</if>
+		<if test="mem_card_allCost != null">
+		mem_card_allCost = #{mem_card_allCost},
+		</if>
+		<if test="mem_card_pointCost != null">
+		mem_card_pointCost = #{mem_card_pointCost},
+		</if>
+		<if test="mem_card_acountMoney != null">
+		mem_card_acountMoney = #{mem_card_acountMoney},
+		</if>
+		<if test="mem_card_startMoney != null">
+		mem_card_startMoney = #{mem_card_startMoney},
+		</if>
+		<if test="mem_card_point != null">
+		mem_card_point = #{mem_card_point},
+		</if>
+		<if test="mem_point_toMoney != null">
+		mem_point_toMoney = #{mem_point_toMoney},
+		</if>
+		<if test="mem_card_discount != null">
+		mem_card_discount = #{mem_card_discount},
+		</if>
+		<if test="mem_lowest_discount != null">
+		mem_lowest_discount = #{mem_lowest_discount},
+		</if>
+		<if test="mem_card_barCode != null">
+		mem_card_barCode = #{mem_card_barCode},
+		</if>
+		<if test="mem_card_tel != null">
+		mem_card_tel = #{mem_card_tel},
+		</if>
+		<if test="mem_card_cellPhone != null">
+		mem_card_cellPhone = #{mem_card_cellPhone},
+		</if>
+		<if test="mem_card_address != null">
+		mem_card_address = #{mem_card_address},
+		</if>
+		<if test="mem_card_postCode != null">
+		mem_card_postCode = #{mem_card_postCode},
+		</if>
+		<if test="mem_card_idCard != null">
+		mem_card_idCard = #{mem_card_idCard},
+		</if>
+		<if test="mem_card_applyDate != null">
+		mem_card_applyDate = #{mem_card_applyDate},
+		</if>
+		<if test="mem_card_failedDate != null">
+		mem_card_failedDate = #{mem_card_failedDate},
+		</if>
+		<if test="mem_card_business1 != null">
+		mem_card_business1 = #{mem_card_business1},
+		</if>
+		<if test="mem_card_business2 != null">
+		mem_card_business2 = #{mem_card_business2},
+		</if>
+		<if test="mem_card_business3 != null">
+		mem_card_business3 = #{mem_card_business3},
+		</if>
+		<if test="mem_card_usedPoint != null">
+		mem_card_usedPoint = #{mem_card_usedPoint},
+		</if>
+		<if test="mem_card_originalPoint != null">
+		mem_card_originalPoint = #{mem_card_originalPoint},
+		</if>
+		<if test="mem_card_indroduction != null">
+		mem_card_indroduction = #{mem_card_indroduction},
+		</if>
+		<if test="mem_card_dept != null">
+		mem_card_dept = #{mem_card_dept},
+		</if>
+		<if test="mem_card_giftCard != null">
+		mem_card_giftCard = #{mem_card_giftCard},
+		</if>
+		<if test="mem_card_addPoint != null">
+		mem_card_addPoint = #{mem_card_addPoint},
+		</if>
+		<if test="mem_card_history != null">
+		mem_card_history = #{mem_card_history},
+		</if>
+		<if test="mem_card_holder != null">
+		mem_card_holder = #{mem_card_holder},
+		</if>
+		<if test="mem_card_unit != null">
+		mem_card_unit = #{mem_card_unit},
+		</if>
+		<if test="mem_card_mold != null">
+		mem_card_mold = #{mem_card_mold},
+		</if>
+		<if test="mem_card_credentialNumber != null">
+		mem_card_credentialNumber = #{mem_card_credentialNumber},
+		</if>
+		<if test="mem_card_allergicHistory != null">
+		mem_card_allergicHistory = #{mem_card_allergicHistory},
+		</if>
+		<if test="mem_card_remark != null">
+		mem_card_remark = #{mem_card_remark},
+		</if>
+		<if test="mem_card_modifyNumber != null">
+		mem_card_modifyNumber = #{mem_card_modifyNumber},
+		</if>
+		<if test="mem_card_age != null">
+		mem_card_age = #{mem_card_age},
+		</if>
+		<if test="mem_card_lastGiftTime != null">
+		mem_card_lastGiftTime = #{mem_card_lastGiftTime},
+		</if>
+		<if test="status != null">
+		status = #{status},
+		</if>
+		<if test="create_user != null">
+		create_user = #{create_user},
+		</if>
+		<if test="create_time != null">
+		create_time = #{create_time},
+		</if>
+		<if test="last_modify_user != null">
+		last_modify_user = #{last_modify_user},
+		</if>
+		<if test="last_modify_time != null">
+		last_modify_time = #{last_modify_time},
+		</if>
+		<if test="mem_card_birthday != null">
+		mem_card_birthday = #{mem_card_birthday},
+		</if>
+	</set>
+		where mem_card_id = #{mem_card_id}
+	</update>
+
+	<update id="delete" parameterType="int">
+		update mem_cardManage
+		<set>
+			status = 9,
+		</set>
+		where mem_card_id = #{id}
+	</update>
+
+</mapper> 

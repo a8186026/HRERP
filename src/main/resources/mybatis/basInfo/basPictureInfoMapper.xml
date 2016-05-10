@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.BasPictureInfoDao">
+	<!-- 获取厂家档案信息 -->
+	<select id="get" parameterType="Integer" resultType="BasPictureInfo">
+		select *
+		from bas_pictureinfo
+		where picture_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="BasPictureInfo" resultType="BasPictureInfo">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from bas_pictureinfo
+		<where>
+			status = 0
+			<if test="picture_name != null">
+				and picture_name like #{picture_name}
+			</if>
+			<if test="picture_remark != null">
+				and picture_remark like #{picture_remark}
+			</if>
+			<if test="picture_type != null">
+				and picture_type = #{picture_type}
+			</if>
+			<if test="picture_type_id != null">
+				and picture_type_id = #{picture_type_id}
+			</if>
+			<if test="offset != null and offset !=0">
+				and picture_id not in(select top ${offset} picture_id from bas_pictureInfo where status = 0)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="BasPictureInfo" resultType="int">
+		select
+		count(picture_id) as count
+		from
+		bas_pictureinfo
+		<where>
+			status = 0
+			<if test="picture_name != null">
+				and picture_name like #{picture_name}
+			</if>
+			<if test="picture_remark != null">
+				and picture_remark like #{picture_remark}
+			</if>
+			<if test="picture_type != null">
+				and picture_type = #{picture_type}
+			</if>
+			<if test="picture_type_id != null">
+				and picture_type_id = #{picture_type_id}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="BasPictureInfo" useGeneratedKeys="true"
+		keyProperty="picture_id">
+		insert into bas_pictureinfo(
+		picture_type_id, picture_name, picture_type, picture_position, picture_remark,
+		create_user, create_time, last_modify_user, last_modify_time, status )
+		
+		values
+		(#{picture_type_id}, #{picture_name}, #{picture_type}, #{picture_position}, #{picture_remark},   
+     	 #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, #{status});
+
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="BasPictureInfo">
+		update bas_pictureinfo
+		<set>
+			<if test="picture_type_id != null">
+				picture_type_id = #{picture_type_id},
+			</if>
+			<if test="picture_name != null">
+				picture_name = #{picture_name},
+			</if>
+		 	<if test="picture_type != null">
+				picture_type = #{picture_type},
+			</if>
+			<if test="picture_position != null">
+				picture_position = #{picture_position},
+			</if>
+			<if test="picture_remark != null">
+				picture_remark = #{picture_remark},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			
+		</set>
+		where picture_id = #{picture_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update bas_pictureinfo set
+		status = 9 where picture_id = #{picture_id}
+	</delete>
+	 
+</mapper> 

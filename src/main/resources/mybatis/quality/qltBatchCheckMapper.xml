@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.quality.persist.QltBatchCheckDao">
+	<select id="get" parameterType="Integer" resultType="QltBatchCheck">
+		select *
+		from qlt_batch_check
+		where batch_checkId = #{id}
+		and status = 0
+	</select>
+	
+	<select id="getVOById" parameterType="Integer" resultType="QltBatchCheckVO">
+		select *
+		from qlt_batch_check as qbc , pro_infoManage as pi , stock_info as si
+		where batch_checkId = #{id} and qbc.product_id = pi.product_id and qbc.product_id = si.product_id 
+		and si.stock_info_id = qbc.stock_info_id and qbc.status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="QltBatchCheckVO" resultType="QltBatchCheckVO">
+		<if test="rows != null and rows !=0">
+			select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+			select *
+		</if>
+			from qlt_batch_check as qbc , pro_infoManage as pi , stock_info as si
+		<where>
+			qbc.status = 0 and qbc.product_id = pi.product_id and qbc.product_id = si.product_id and si.stock_info_id = qbc.stock_info_id
+			<if test="product_code != null">
+				and pi.product_code like #{product_code}
+			</if>
+			<if test="batch_no != null">
+				and qbc.batch_no like #{batch_no}
+			</if>
+			
+			<if test="offset != null and offset !=0">
+				and qbc.batch_checkId not in(select top ${offset} batch_checkId from qlt_batch_check as qbc ,pro_infoManage as pi
+				where qbc.status = 0
+				and qbc.product_id = pi.product_id
+				<if test="product_code != null">
+					and pi.product_code like #{product_code}
+				</if>
+				<if test="batch_no != null">
+					and qbc.batch_no like #{batch_no}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="QltBatchCheckVO" resultType="int">
+		select
+		count(batch_checkId) as count
+		from
+		qlt_batch_check as qbc, pro_infoManage as pi
+		<where>
+			qbc.status = 0 and qbc.product_id = pi.product_id 
+			<if test="product_code != null">
+				and pi.product_code like #{product_code}
+			</if>
+			<if test="batch_no != null">
+				and qbc.batch_no like #{batch_no}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="QltBatchCheck" useGeneratedKeys="true" keyProperty="batch_checkId">
+	 insert into qlt_batch_check(
+		stock_info_id, product_id, batch_checkTime, batch_checkPerson, batch_checkReason, 
+		batch_majorMaintain, batch_remark, batch_no, batch_startTime, batch_endTime, 
+		create_user, create_time, last_modify_user, last_modify_time, status)
+	values(
+		#{stock_info_id}, #{product_id}, #{batch_checkTime}, #{batch_checkPerson}, #{batch_checkReason}, 
+		#{batch_majorMaintain}, #{batch_remark}, #{batch_no}, #{batch_startTime}, #{batch_endTime}, 
+		#{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, #{status});
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="QltBatchCheck">
+		 update qlt_batch_check
+		<set>
+			<if test="stock_info_id != null">
+			stock_info_id = #{stock_info_id},
+			</if>
+			<if test="product_id != null">
+			product_id = #{product_id},
+			</if>
+			<if test="batch_checkTime != null">
+			batch_checkTime = #{batch_checkTime},
+			</if>
+			<if test="batch_checkPerson != null">
+			batch_checkPerson = #{batch_checkPerson},
+			</if>
+			<if test="batch_checkReason != null">
+			batch_checkReason = #{batch_checkReason},
+			</if>
+			<if test="batch_majorMaintain != null">
+			batch_majorMaintain = #{batch_majorMaintain},
+			</if>
+			<if test="batch_remark != null">
+			batch_remark = #{batch_remark},
+			</if>
+			<if test="batch_no != null">
+			batch_no = #{batch_no},
+			</if>
+			<if test="batch_startTime != null">
+			batch_startTime = #{batch_startTime},
+			</if>
+			<if test="batch_endTime != null">
+			batch_endTime = #{batch_endTime},
+			</if>
+			<if test="create_user != null">
+			create_user = #{create_user},
+			</if>
+			<if test="create_time != null">
+			create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+			status = #{status},
+			</if>
+		</set>where batch_checkId = #{batch_checkId}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update qlt_batch_check set
+		status = 9 where batch_checkId = #{batch_checkId}
+	</delete>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="listStock" parameterType="QltBatchCheckVO" resultType="QltBatchCheckVO">
+			select * from
+			stock_info as si , pro_infoManage as pi  
+			where
+			si.product_id = pi.product_id  and si.product_id = #{product_id} and si.stock_storageNumber > 0
+	</select>
+</mapper> 

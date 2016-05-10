@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.EthicalPersonDao">
+
+	<!-- 获取处方药人员档案信息 -->
+	<select id="get" parameterType="Integer" resultType="EthicalPerson">
+		select *
+		from ethical_person
+		where ethical_personId = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="EthicalPerson" resultType="EthicalPerson">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from ethical_person
+		<where>
+			status = 0
+			<if test="ethical_personName != null">
+				and ethical_personName like #{ethical_personName}
+			</if>
+			<if test="ethical_personCode != null">
+				and ethical_personCode like #{ethical_personCode}
+			</if>
+			<if test="offset != null and offset !=0">
+				and ethical_personId not in(select top ${offset} ethical_personId from ethical_person where status = 0)
+			</if>
+
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="EthicalPerson" resultType="int">
+		select
+		count(ethical_personId) as count
+		from
+		ethical_person
+		<where>
+			status = 0
+			<if test="ethical_personName != null">
+				and ethical_personName like #{ethical_personName}
+			</if>
+			<if test="ethical_personCode != null">
+				and ethical_personCode like #{ethical_personCode}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="EthicalPerson" useGeneratedKeys="true"
+		keyProperty="ethical_personId">
+		insert into ethical_person(
+		ethical_personCode, ethical_personName, ethical_personPassword,status,
+		create_user, create_time, last_modify_user, last_modify_time)
+		
+		values(#{ethical_personCode},#{ethical_personName},#{ethical_personPassword},#{status},
+		#{create_user},#{create_time},#{last_modify_user},#{last_modify_time});
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="EthicalPerson">
+		update ethical_person
+		<set>
+			<if test="ethical_personCode != null">
+				ethical_personCode = #{ethical_personCode},
+			</if>
+			<if test="ethical_personName != null">
+				ethical_personName = #{ethical_personName},
+			</if>
+		 	<if test="ethical_personPassword != null">
+				ethical_personPassword = #{ethical_personPassword},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="create_user != null">
+				create_user = #{create_user},
+			</if>
+			<if test="create_time != null">
+				create_time = #{create_time},
+			</if>
+ 		 	<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where ethical_personId = #{ethical_personId}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update ethical_person set
+		status = 9 where ethical_personId = #{ethical_personId}
+	</delete>
+	 
+</mapper> 

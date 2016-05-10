@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.log.persist.SupPhotosManageDao">
+	<!-- 获取供方档案信息 -->
+	<select id="get" parameterType="Integer" resultType="SupInfoManage">
+		select *
+		from sup_infoManage
+		where sup_id = #{id}
+		and status = 0
+	</select>
+	
+	
+	
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="SupInfoManage" resultType="SupInfoManage">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from sup_infoManage
+		<where>
+			status = 0			
+			<if test="sup_code != null">
+				and sup_code like #{sup_code}
+			</if>
+			<if test="sup_name != null">
+				and sup_name like #{sup_name}
+			</if>
+			<if test="sup_shortname != null">
+				and sup_shortname like #{sup_shortname}
+			</if>
+			<if test="sup_chnpy != null">
+				and sup_chnpy like #{sup_chnpy}
+			</if>
+			<if test="sup_check != null">
+				and sup_check = #{sup_check}
+			</if>
+			<if test="sup_drugid != null">
+				<if test="sup_drugid == -1">
+				and sup_drugid is null
+				</if>
+				<if test="sup_drugid == -2">
+				and sup_drugid >0
+				</if>
+			</if>
+			<if test="offset != null and offset !=0">
+				and sup_id not in(select top ${offset} sup_id from sup_infoManage where status = 0
+				<if test="sup_code != null">
+				and sup_code like #{sup_code}
+				</if>
+				<if test="sup_name != null">
+					and sup_name like #{sup_name}
+				</if>
+				<if test="sup_shortname != null">
+					and sup_shortname like #{sup_shortname}
+				</if>
+				<if test="sup_chnpy != null">
+					and sup_chnpy like #{sup_chnpy}
+				</if>
+				<if test="sup_check != null">
+					and sup_check = #{sup_check}
+				</if>
+				<if test="sup_drugid != null">
+					<if test="sup_drugid == -1">
+					and sup_drugid is null
+					</if>
+					<if test="sup_drugid == -2">
+					and sup_drugid >0
+					</if>
+				</if>
+				<if test="sort != null and order != null">
+					order by ${sort} ${order}
+				</if>
+				)
+			</if>
+		</where>
+		
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+</mapper> 

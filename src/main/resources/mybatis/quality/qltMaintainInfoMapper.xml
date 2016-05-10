@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.quality.persist.QltMaintainInfoDao">
+	<select id="get" parameterType="Integer" resultType="QltMaintainInfo">
+		select *
+		from qlt_maintain_info
+		where maintain_id = #{id}
+		and status = 0
+	</select>
+	
+	<select id="getVOById" parameterType="Integer" resultType="QltMaintainInfoVO">
+		select *
+		from qlt_maintain_info
+		where 
+		status = 0 and maintain_id = #{id} 
+	</select>
+	 
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="listMaintainInfoVO" parameterType="map" resultType="QltMaintainInfoVO">
+		select * from (
+		<if test="bean.rows!=null">
+			 select top ${bean.rows}*
+		</if>
+		<if test="bean.rows == null">
+			select *
+		</if>
+			from stock_info as si ,bas_departmentinfo as di
+		<where>
+			<if test="product_immaintain !=null">
+				and si.product_id in (select product_id from pro_infoManage where product_immaintain = #{product_immaintain})
+			</if>
+			<if test="stock_storage !=null">
+				and si.stock_storage = #{stock_storage}
+			</if>
+			<if test="pro_group_no !=null">
+				and si.product_id in (select product_id from pro_stockPrice where department_id = si.stock_storage and pro_group_no = #{pro_group_no})
+			</if>
+				and si.stock_storage = di.department_id
+			<if test="bean.offset != null and bean.offset !=0">
+				and si.stock_info_id not in(select top ${bean.offset} stock_info_id from stock_info as si 
+				<where>
+					<if test="product_immaintain !=null">
+					and si.product_id in (select product_id from pro_infoManage where product_immaintain = #{product_immaintain})
+					</if>
+					<if test="stock_storage !=null">
+						and si.stock_storage = #{stock_storage}
+					</if>
+					<if test="pro_group_no !=null">
+						and si.product_id in (select product_id from pro_stockPrice where department_id = si.stock_storage and pro_group_no = #{pro_group_no})
+					</if>
+					and si.stock_storage = di.department_id
+				</where>
+				)
+			</if>
+		</where>
+		<if test="bean.sort != null and bean.order != null">
+			order by ${bean.sort} ${bean.order}
+		</if>
+		)as stock LEFT JOIN pro_stockPrice psp ON stock.product_id = psp.product_id , pro_infoManage pim
+		where  stock.product_id = pim.product_id
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="countMaintainInfoVO" parameterType="QltMaintainInfoVO" resultType="int">
+		select
+		count(si.stock_info_id) as count
+		from stock_info as si , bas_departmentinfo as di
+		<where>
+			<if test="product_immaintain !=null">
+				and si.product_id in (select product_id from pro_infoManage where product_immaintain = #{product_immaintain})
+			</if>
+			<if test="stock_storage !=null">
+				and si.stock_storage = #{stock_storage}
+			</if>
+			<if test="pro_group_no !=null">
+				and si.product_id in (select product_id from pro_stockPrice where department_id = si.stock_storage and pro_group_no = #{pro_group_no})
+			</if>
+			and si.stock_storage = di.department_id
+		</where>
+	</select>
+	
+	<select id="lists" parameterType="QltMaintainInfoVO" resultType="QltMaintainInfoVO">
+		<if test="rows != null and rows !=0">
+			select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+			select *
+		</if>
+			from qlt_maintain_info as qmi , pro_infoManage as pi , stock_info as si LEFT JOIN pro_stockPrice as ps ON
+			si.product_id = ps.product_id and ps.department_id = si.stock_storage 
+		<where>
+			qmi.status = 0 and qmi.product_id = pi.product_id and qmi.product_id = si.product_id 
+			and qmi.stock_info_id = si.stock_info_id  
+			<if test="product_name != null">
+					and pi.product_name like #{product_name}
+			</if>
+			<if test="maintain_ticketNo != null">
+				and qmi.maintain_ticketNo like #{maintain_ticketNo}
+			</if>
+			
+			<if test="offset != null and offset !=0">
+				and qmi.maintain_id not in(select top ${offset} maintain_id from qlt_maintain_info as qmi , pro_infoManage as pi , stock_info as si LEFT JOIN pro_stockPrice as ps ON
+							si.product_id = ps.product_id and ps.department_id = si.stock_storage 
+				where qmi.status = 0 and qmi.product_id = pi.product_id and qmi.product_id = si.product_id 
+					  and qmi.stock_info_id = si.stock_info_id  
+				<if test="product_name != null">
+					and pi.product_name like #{product_name}
+				</if>
+				<if test="maintain_ticketNo != null">
+					and qbc.maintain_ticketNo like #{maintain_ticketNo}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="QltMaintainInfoVO" resultType="int">
+		select
+		count(maintain_id) as count
+		from qlt_maintain_info as qmi , pro_infoManage as pi , stock_info as si LEFT JOIN pro_stockPrice as ps ON
+			si.product_id = ps.product_id and ps.department_id = si.stock_storage 
+		<where>
+			qmi.status = 0 and qmi.product_id = pi.product_id and qmi.product_id = si.product_id 
+			and qmi.stock_info_id = si.stock_info_id  
+			<if test="product_name != null">
+				and pi.product_name like #{product_name}
+			</if>
+			<if test="maintain_ticketNo != null">
+				and qmi.maintain_ticketNo like #{maintain_ticketNo}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="QltMaintainInfo" useGeneratedKeys="true" keyProperty="maintain_id"> -->
+	 insert into qlt_maintain_info(
+		stock_info_id,  product_id, maintain_checkTime, maintain_number, 
+		maintain_storagePlace, maintain_measure, maintain_time, maintain_person, maintain_days, 
+		maintain_quality, maintain_suggestion, maintain_remark, maintain_ticketNo, create_user, 
+		create_time, last_modify_user, last_modify_time, status)
+	values(
+		#{stock_info_id}, #{product_id}, #{maintain_checkTime}, #{maintain_number}, 
+		#{maintain_storagePlace}, #{maintain_measure}, #{maintain_time}, #{maintain_person}, #{maintain_days}, 
+		#{maintain_quality}, #{maintain_suggestion}, #{maintain_remark}, #{maintain_ticketNo}, #{create_user}, 
+		#{create_time}, #{last_modify_user}, #{last_modify_time}, #{status});
+	</insert>
+
+
+	<!-- 批量添加 -->
+	<insert id="addMaintainInfos" parameterType="java.util.List" useGeneratedKeys="true">
+		<selectKey resultType="long" keyProperty="maintain_id" order="AFTER">  
+	        SELECT  
+	        SCOPE_IDENTITY() 
+    	</selectKey>
+	 insert into qlt_maintain_info(
+		stock_info_id, product_id, maintain_checkTime, maintain_number, maintain_days, maintain_storagePlace,
+		maintain_time,maintain_ticketNo, create_user, create_time, last_modify_user, last_modify_time, status)
+	values
+		<foreach collection="list" item="qltMaintainInfo" index="index" open="" separator="," close="" > 
+		(#{qltMaintainInfo.stock_info_id}, #{qltMaintainInfo.product_id}, #{qltMaintainInfo.maintain_checkTime}, #{qltMaintainInfo.maintain_number},
+		 #{qltMaintainInfo.maintain_days}, #{qltMaintainInfo.maintain_storagePlace}, #{qltMaintainInfo.maintain_time}, #{qltMaintainInfo.maintain_ticketNo}, 
+		#{qltMaintainInfo.create_user}, #{qltMaintainInfo.create_time}, #{qltMaintainInfo.last_modify_user}, #{qltMaintainInfo.last_modify_time}, #{qltMaintainInfo.status})
+		</foreach>
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="QltMaintainInfo">
+	 update qlt_maintain_info
+	<set>
+		<if test="stock_info_id != null">
+			stock_info_id = #{stock_info_id},
+		</if>
+		<if test="product_id != null">
+			product_id = #{product_id},
+		</if>
+		<if test="maintain_checkTime != null">
+			maintain_checkTime = #{maintain_checkTime},
+		</if>
+		<if test="maintain_number != null">
+			maintain_number = #{maintain_number},
+		</if>
+		<if test="maintain_storagePlace != null">
+			maintain_storagePlace = #{maintain_storagePlace},
+		</if>
+		<if test="maintain_measure != null">
+			maintain_measure = #{maintain_measure},
+		</if>
+		<if test="maintain_time != null">
+			maintain_time = #{maintain_time},
+		</if>
+		<if test="maintain_person != null">
+			maintain_person = #{maintain_person},
+		</if>
+		<if test="maintain_days != null">
+			maintain_days = #{maintain_days},
+		</if>
+		<if test="maintain_quality != null">
+			maintain_quality = #{maintain_quality},
+		</if>
+		<if test="maintain_suggestion != null">
+			maintain_suggestion = #{maintain_suggestion},
+		</if>
+		<if test="maintain_remark != null">
+			maintain_remark = #{maintain_remark},
+		</if>
+		<if test="maintain_ticketNo != null">
+			maintain_ticketNo = #{maintain_ticketNo},
+		</if>
+		<if test="create_user != null">
+			create_user = #{create_user},
+		</if>
+		<if test="create_time != null">
+			create_time = #{create_time},
+		</if>
+		<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+		</if>
+		<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+	</set>where maintain_id = #{maintain_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update qlt_maintain_info set
+		status = 9 where maintain_id = #{maintain_id}
+	</delete>
+	
+	<!-- 返回当前数据库表中最大养护票号 -->
+	<select id="getMaxMaintainTicket"  resultType="Integer">
+		select max(cast(substring(maintain_ticketNo,10,14) as INT)) 
+		from qlt_maintain_info
+		where substring(maintain_ticketNo,2,8) = #{date}
+	</select>
+	
+</mapper> 

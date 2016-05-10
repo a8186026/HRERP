@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysComponentCtrlDao">
+	
+
+	<!-- 分页查询 ，返回List<SysComponentCtrl>对象， -->
+	<select id="list" parameterType="int" resultType="SysComponentCtrl">
+		
+		select *
+	
+		from sys_ctrl g
+		<where>
+			<if test="page_id != null ">
+				g.page_id like #{page_id}
+			</if>
+			<if test="ctrl_name != null">
+				and g.ctrl_name like #{ctrl_name}
+			</if>
+			<if test="ctrl_type != null">
+				and g.ctrl_type like #{ctrl_type}
+			</if>
+			    and g.status = 0
+		
+		</where>
+	
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="findCount" parameterType="SysComponentCtrl" resultType="int">
+		select g.*
+		from sys_ctrl g
+		<where>
+			<if test="ctrl_name != null">
+				g.ctrl_name like #{ctrl_name}
+			</if>
+			<if test="ctrl_type != null">
+				g.ctrl_type like #{ctrl_type}
+			</if>
+			and g.status = 0
+		</where>
+	</select>
+
+	<!--通过id得到一条SysComponentCtrl数据-->
+	<select id="get" parameterType="int" resultType="SysComponentCtrl">
+		select g.*
+		from sys_ctrl g
+		<where>
+			g.id = #{id}
+			and g.status = 0
+		</where>
+	</select>
+
+	
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysComponentCtrl" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into sys_ctrl(page_id, ctrl_div_id,ctrl_name,ctrl_id,ctrl_type,create_user,create_time,last_modify_user,
+		last_modify_time,status)
+		values(#{page_id}, #{ctrl_div_id}, #{ctrl_name}, #{ctrl_id}, #{ctrl_type}, #{create_user}, #{create_time}, 
+		#{last_modify_user},#{last_modify_time},#{status});
+	</insert>
+	
+<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysComponentCtrl">
+		update sys_ctrl
+		<set>
+			<if test="page_id!= null">
+				page_id = #{page_id},
+			</if>
+			<if test="ctrl_div_id != null">
+				ctrl_div_id = #{ctrl_div_id},
+			</if>
+			<if test="ctrl_name!= null">
+				ctrl_name = #{ctrl_name},
+			</if>
+			<if test="ctrl_id != null">
+				ctrl_id = #{ctrl_id},
+			</if>
+			<if test="ctrl_type != null">
+				ctrl_type = #{ctrl_type},
+			</if>
+			<if test="create_user != null">
+				create_user= #{create_user},
+			</if>
+			<if test="create_time != null">
+				create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+		</set>
+		where 
+		<if test="id != null">
+		id = #{id}
+		</if>
+		<if test="page_id!= null">
+			and	page_id = #{page_id}
+		</if>
+	</update>
+	
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		delete from sys_ctrl
+		where id = #{id}
+
+	</delete>
+</mapper> 

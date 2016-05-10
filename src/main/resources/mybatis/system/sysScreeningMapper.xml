@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysScreeningDao">
+	<!-- 获取用户 -->
+	<select id="search" resultType="map">
+		select *
+		from ${sqlName}
+		<where>
+		<foreach collection="list" item="item" index="index" open="" separator="" close="" > 
+			(
+		</foreach>
+		<foreach collection="list" item="item" index="index" open="" separator="" close="" > 
+			${item.contact}
+			<choose>
+				<!--如果有主键过滤  -->
+				<when test="item.ids!=null and item.ids.size() > 0">
+					${item.field} not in (
+					<foreach collection="item.ids" item="id" index="index" open="" separator="," close="" >
+						#{id}
+					</foreach>
+					)
+				</when>
+				<when test = "item.compare_realation == 971">
+					${item.field} = #{item.keyWord}
+				</when>
+				<when test = "item.compare_realation == 972">
+					${item.field} != #{item.keyWord}
+				</when>
+				<when test = "item.compare_realation == 973">
+					<choose>
+						<when test="item.fieldType == 'Date'">
+							DATEDIFF(second, ${item.field} , #{item.keyWord}) >0
+						</when>
+						<otherwise>
+							${item.field} > #{item.keyWord}
+						</otherwise>
+					</choose>
+				</when>
+				<when test = "item.compare_realation == 974">
+					<choose>
+						<when test="item.fieldType == 'Date'">
+							DATEDIFF(second, ${item.field} , #{item.keyWord}) >=0
+						</when>
+						<otherwise>
+							${item.field} > #{item.keyWord}
+						</otherwise>
+					</choose>
+				</when>
+				<when test = "item.compare_realation == 974">
+					<choose>
+						<when test="item.fieldType == 'Date'">
+							DATEDIFF(second, ${item.field} , #{item.keyWord}) &lt; 0
+						</when>
+						<otherwise>
+							${item.field} > #{item.keyWord}
+						</otherwise>
+					</choose>
+				</when>
+				<when test = "item.compare_realation == 975">
+					<choose>
+						<when test="item.fieldType == 'Date'">
+							DATEDIFF(second, ${item.field} , #{item.keyWord}) &lt;= 0
+						</when>
+						<otherwise>
+							${item.field} > #{item.keyWord}
+						</otherwise>
+					</choose>
+				</when>
+				<when test = "item.compare_realation == 977">
+					${item.field} like #{item.keyWord}+'%'
+				</when>
+				<when test = "item.compare_realation == 978">
+					CHARINDEX(#{item.keyWord},${item.field}) !=1
+				</when>
+				<when test = "item.compare_realation == 979">
+					${item.field} like '%'+#{item.keyWord}
+				</when>
+				<when test = "item.compare_realation == 980">
+					CHARINDEX(REVERSE(#{item.keyWord}),REVERSE(${item.field})) != 1
+				</when>
+				<when test = "item.compare_realation == 981">
+					CHARINDEX(#{item.keyWord},${item.field}) >0
+				</when>
+				<when test = "item.compare_realation == 982">
+					CHARINDEX(#{item.keyWord},${item.field}) =0
+				</when>
+			</choose>
+			)
+		</foreach>
+		</where>
+	</select>
+	<!-- 获取某个表的主键名称 -->
+	<select id="getPK" parameterType="String" resultType="String">
+		SELECT COLUMN_NAME
+ 			FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+			WHERE TABLE_NAME=#{sqlName}
+	</select>
+	
+	
+</mapper> 

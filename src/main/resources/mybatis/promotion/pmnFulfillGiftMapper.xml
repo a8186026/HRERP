@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.promotion.persist.PmnFulfillGiftDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="PmnFulfillGift">
+		select *
+		from pmn_fulfill_gift 
+		where full_gift_id = #{id} 
+	</select>
+
+
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+<select id="list" parameterType="map" resultType="PmnFulfillGift">
+	<if test="rows!=null">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null">
+		select *
+	</if>
+		from pmn_fulfill_gift
+	<where>
+		<if test="full_gift_id!=null">
+		and full_gift_id like #{full_gift_id}
+		</if>
+		<if test="product_id!=null">
+		and product_id like #{product_id}
+		</if>
+		<if test="full_gift_unitPrice!=null">
+		and full_gift_unitPrice like #{full_gift_unitPrice}
+		</if>
+		<if test="full_gift_amount!=null">
+		and full_gift_amount like #{full_gift_amount}
+		</if>
+		<if test="full_gift_exchangeAmount!=null">
+		and full_gift_exchangeAmount like #{full_gift_exchangeAmount}
+		</if>
+		<if test="full_gift_exchangeRule!=null">
+		and full_gift_exchangeRule like #{full_gift_exchangeRule}
+		</if>
+		<if test="full_gift_startDate!=null">
+		and DATEDIFF(day, full_gift_startDate , #{full_gift_startDate})&lt; 0
+		</if>
+		<if test="full_gift_endDate!=null">
+		and DATEDIFF(day, full_gift_endDate , #{full_gift_endDate})&lt; 0
+		</if>
+		<if test="full_gift_productPoint!=null">
+		and full_gift_productPoint like #{full_gift_productPoint}
+		</if>
+		<if test="full_gift_retailCommission!=null">
+		and full_gift_retailCommission like #{full_gift_retailCommission}
+		</if>
+		<if test="full_gift_joinDepartment!=null">
+		and full_gift_joinDepartment like #{full_gift_joinDepartment}
+		</if>
+		<if test="full_gift_remark!=null">
+		and full_gift_remark like #{full_gift_remark}
+		</if>
+		<if test="full_gift_onlyMemberJoin!=null">
+		and full_gift_onlyMemberJoin like #{full_gift_onlyMemberJoin}
+		</if>
+		<if test="full_gift_specialBatch!=null">
+		and full_gift_specialBatch like #{full_gift_specialBatch}
+		</if>
+		<if test="full_gift_joinProduct">
+		and full_gift_joinProduct like #{full_gift_joinProduct}
+		</if>
+			<if test="offset != null and offset !=0">
+			and full_gift_id not in(select top ${offset} full_gift_id from pmn_gift_info where 0 = 0
+				<if test="full_gift_id!=null">
+				and full_gift_id like #{full_gift_id}
+				</if>
+				<if test="product_id!=null">
+				and product_id like #{product_id}
+				</if>
+				<if test="full_gift_unitPrice!=null">
+				and full_gift_unitPrice like #{full_gift_unitPrice}
+				</if>
+				<if test="full_gift_amount!=null">
+				and full_gift_amount like #{full_gift_amount}
+				</if>
+				<if test="full_gift_exchangeAmount!=null">
+				and full_gift_exchangeAmount like #{full_gift_exchangeAmount}
+				</if>
+				<if test="full_gift_exchangeRule!=null">
+				and full_gift_exchangeRule like #{full_gift_exchangeRule}
+				</if>
+				<if test="full_gift_startDate!=null">
+				and full_gift_startDate like #{full_gift_startDate}
+				</if>
+				<if test="full_gift_endDate!=null">
+				and full_gift_endDate like #{full_gift_endDate}
+				</if>
+				<if test="full_gift_productPoint!=null">
+				and full_gift_productPoint like #{full_gift_productPoint}
+				</if>
+				<if test="full_gift_retailCommission!=null">
+				and full_gift_retailCommission like #{full_gift_retailCommission}
+				</if>
+				<if test="full_gift_joinDepartment!=null">
+				and full_gift_joinDepartment like #{full_gift_joinDepartment}
+				</if>
+				<if test="full_gift_remark!=null">
+				and full_gift_remark like #{full_gift_remark}
+				</if>
+				<if test="full_gift_onlyMemberJoin!=null">
+				and full_gift_onlyMemberJoin like #{full_gift_onlyMemberJoin}
+				</if>
+				<if test="full_gift_specialBatch!=null">
+				and full_gift_specialBatch like #{full_gift_specialBatch}
+				</if>
+				<if test="full_gift_joinProduct">
+				and full_gift_joinProduct like #{full_gift_joinProduct}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+
+
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="PmnFulfillGift" resultType="int">
+		select count(full_gift_id) as count 
+		from pmn_fulfill_gift
+		<where>
+			<if test="full_gift_id!=null">
+			and full_gift_id like #{full_gift_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="full_gift_unitPrice!=null">
+			and full_gift_unitPrice like #{full_gift_unitPrice}
+			</if>
+			<if test="full_gift_amount!=null">
+			and full_gift_amount like #{full_gift_amount}
+			</if>
+			<if test="full_gift_exchangeAmount!=null">
+			and full_gift_exchangeAmount like #{full_gift_exchangeAmount}
+			</if>
+			<if test="full_gift_exchangeRule!=null">
+			and full_gift_exchangeRule like #{full_gift_exchangeRule}
+			</if>
+			<if test="full_gift_startDate!=null">
+			and full_gift_startDate like #{full_gift_startDate}
+			</if>
+			<if test="full_gift_endDate!=null">
+			and full_gift_endDate like #{full_gift_endDate}
+			</if>
+			<if test="full_gift_productPoint!=null">
+			and full_gift_productPoint like #{full_gift_productPoint}
+			</if>
+			<if test="full_gift_retailCommission!=null">
+			and full_gift_retailCommission like #{full_gift_retailCommission}
+			</if>
+			<if test="full_gift_joinDepartment!=null">
+			and full_gift_joinDepartment like #{full_gift_joinDepartment}
+			</if>
+			<if test="full_gift_remark!=null">
+			and full_gift_remark like #{full_gift_remark}
+			</if>
+			<if test="full_gift_onlyMemberJoin!=null">
+			and full_gift_onlyMemberJoin like #{full_gift_onlyMemberJoin}
+			</if>
+			<if test="full_gift_specialBatch!=null">
+			and full_gift_specialBatch like #{full_gift_specialBatch}
+			</if>
+			<if test="full_gift_joinProduct">
+			and full_gift_joinProduct like #{full_gift_joinProduct}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="PmnFulfillGift" useGeneratedKeys="true" keyProperty="full_gift_id">
+		insert into pmn_fulfill_gift(
+		product_id, full_gift_unitPrice, full_gift_amount, full_gift_exchangeAmount, full_gift_exchangeRule, 
+		full_gift_startDate, full_gift_endDate, full_gift_productPoint, full_gift_retailCommission, full_gift_joinDepartment, 
+		full_gift_remark, full_gift_onlyMemberJoin, full_gift_specialBatch, full_gift_joinProduct)
+		values(
+		#{product_id}, #{full_gift_unitPrice}, #{full_gift_amount}, #{full_gift_exchangeAmount}, #{full_gift_exchangeRule}, 
+		#{full_gift_startDate}, #{full_gift_endDate}, #{full_gift_productPoint}, #{full_gift_retailCommission}, #{full_gift_joinDepartment}, 
+		#{full_gift_remark}, #{full_gift_onlyMemberJoin}, #{full_gift_specialBatch}, #{full_gift_joinProduct});
+	</insert>
+
+
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="PmnFulfillGift">
+		update pmn_fulfill_gift
+		<set>
+			<if test="product_id != null">
+			product_id = #{product_id},
+			</if>
+			<if test="full_gift_unitPrice != null">
+			full_gift_unitPrice = #{full_gift_unitPrice},
+			</if>
+			<if test="full_gift_amount != null">
+			full_gift_amount = #{full_gift_amount},
+			</if>
+			<if test="full_gift_exchangeAmount != null">
+			full_gift_exchangeAmount = #{full_gift_exchangeAmount},
+			</if>
+			<if test="full_gift_exchangeRule != null">
+			full_gift_exchangeRule = #{full_gift_exchangeRule},
+			</if>
+			<if test="full_gift_startDate != null">
+			full_gift_startDate = #{full_gift_startDate},
+			</if>
+			<if test="full_gift_endDate != null">
+			full_gift_endDate = #{full_gift_endDate},
+			</if>
+			<if test="full_gift_productPoint != null">
+			full_gift_productPoint = #{full_gift_productPoint},
+			</if>
+			<if test="full_gift_retailCommission != null">
+			full_gift_retailCommission = #{full_gift_retailCommission},
+			</if>
+			<if test="full_gift_joinDepartment != null">
+			full_gift_joinDepartment = #{full_gift_joinDepartment},
+			</if>
+			<if test="full_gift_remark != null">
+			full_gift_remark = #{full_gift_remark},
+			</if>
+			<if test="full_gift_onlyMemberJoin != null">
+			full_gift_onlyMemberJoin = #{full_gift_onlyMemberJoin},
+			</if>
+			<if test="full_gift_specialBatch != null">
+			full_gift_specialBatch = #{full_gift_specialBatch},
+			</if>
+			<if test="full_gift_joinProduct != null">
+			full_gift_joinProduct = #{full_gift_joinProduct},
+			</if>
+		</set>
+		where full_gift_id = #{full_gift_id}
+	</update>
+
+	<!-- 根据gift_id删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  pmn_fulfill_gift
+		where full_gift_id = #{id}
+	</delete>
+	
+	<select id="getFullFillGifts" parameterType="map" resultType="PmnFulfillGift">
+		select *
+		from pmn_fulfill_gift 
+		where full_gift_onlyMemberJoin >= #{bean.full_gift_onlyMemberJoin} 
+		<!-- and full_gift_specialBatch >= #{bean.full_gift_specialBatch} -->
+		and DATEDIFF (second, full_gift_startDate, getDate())  >= 0
+		and DATEDIFF (second,getDate(),full_gift_endDate)  >= 0
+		and full_gift_joinDepartment like #{bean.full_gift_joinDepartment}
+		<if test="list.size()>0">
+		and
+		</if>
+		<foreach collection="list" item="joinPro" index="index" open="(" separator="or" close=")" >
+			full_gift_joinProduct like #{joinPro} 
+		</foreach>
+	</select>
+	
+	
+</mapper> 

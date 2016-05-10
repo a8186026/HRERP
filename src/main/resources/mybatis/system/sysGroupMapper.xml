@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysGroupDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="SysGroup">
+		select *
+		from sys_group
+		where group_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="SysGroup">
+		<if test="rows != null">
+		select top ${rows}*
+		</if>
+		<if test="rows == null">
+		select *
+		</if>
+		from sys_group
+		<where>
+			status = 0
+			<if test="group_name != null">
+				and group_name like #{group_name}
+			</if>
+			<if test="offset != null">
+				and group_id not in(select top ${offset} group_id from sys_group where status=0)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="findCount" parameterType="map" resultType="int">
+		select
+		count(group_id) as count
+		from
+		sys_group
+		<where>
+			status = 0
+			<if test="group_name != null">
+				and group_name like #{group_name}
+			</if>
+		</where>
+	</select>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysGroup" useGeneratedKeys="true"
+		keyProperty="group_id">
+		insert into sys_group(group_name, note, status,
+		create_user, create_time, last_modify_user, last_modify_time)
+		values(#{group_name}, #{note}, #{status}, #{create_user},
+		#{create_time}, #{last_modify_user}, #{last_modify_time});
+	</insert>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysGroup">
+		update sys_group
+		<set>
+			<if test="group_name != null">
+				group_name = #{group_name},
+			</if>
+			<if test="default_group != null">
+				default_group = #{default_group},
+			</if>
+			<if test="note != null">
+				note = #{note},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where group_id = #{group_id}
+	</update>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="clearDefault">
+		update sys_group set default_group = 0 where 1 = 1
+	</update>
+	
+	<!-- 更新user_group表中数据，返回受影响的记录条数 -->
+	<!-- <update id="update_user_group" parameterType="SysUserGroup">
+		update sys_user_group
+		<set>
+			<if test="group_id != null">
+				group_id = #{group_id},
+			</if>
+		</set>
+		where user_id = #{user_id}
+	</update> -->
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		delete from sys_group where
+		group_id =#{group_id}
+	</delete>
+
+	<!-- 取得默认用户组 -->
+	<select id="getDefaultGroup" resultType="SysGroup">
+		select * from sys_group
+		where default_group = 1
+	</select>
+
+	<!-- 查询登录用户的用户组 -->
+	<select id="getUserGroup" parameterType="int" resultType="SysGroup">
+		select
+		sg.*
+		from
+		sys_group sg, sys_user_group sug
+		<where>
+			sg.group_id = sug.group_id
+			and sg.status = 0
+			and sug.user_id = #{user_id}
+		</where>
+	</select>
+
+	<!-- 查询用户组中的用户 -->
+	<select id="getGroupUsers" parameterType="int" resultType="SysUser">
+		select
+		su.*
+		from
+		sys_user su, sys_user_group sug
+		<where>
+			su.user_id = sug.user_id
+			and su.status = 0
+			and sug.group_id = #{id}
+		</where>
+	</select>
+
+	<!-- 查询可以向用户组中添加的用户 -->
+	<select id="getUsersForAdd" parameterType="int" resultType="SysUser">
+		select
+		t.*
+		from
+		sys_user t
+		<where>
+			not exists (
+			select
+			1
+			from
+			sys_user_group t1
+			where
+			t1.user_id = t.user_id
+			<!-- 仅测试用，TO DELETE -->
+			<if test="id != null">
+				and t1.group_id = #{id})
+			</if>
+			and t.status = 0
+		</where>
+	</select>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addUser" parameterType="SysUserGroup"
+		useGeneratedKeys="true" keyProperty="user_group_id">
+		insert into
+		sys_user_group(user_id, group_id)
+		values(#{user_id}, #{group_id});
+	</insert>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="deleteUser" parameterType="SysUserGroup">
+		delete from sys_user_group
+		where user_id = #{user_id}
+	</delete>
+
+</mapper> 

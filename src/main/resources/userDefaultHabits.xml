@@ -1,0 +1,1080 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<habits>
+		<page id="sysUserList">
+			<datagrid id="users">
+				<field id="display_name">
+					<name>登陆名</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="sex">
+					<name>性别</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="tel">
+					<name>电话</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="address">
+					<name>地址</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="email">
+					<name>邮箱</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="user_name">
+					<name>用户名</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="status">
+					<name>状态</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		</page>
+		<page id="basMedicineInfoList">
+			<datagrid id="dg">
+				<field id="medicine_code">
+					<name>药品编码</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="medicine_name">
+					<name>药品名称</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="medicine_proname">
+					<name>学名</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="medicine_engname">
+					<name>药品英文名</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="medicine_chnpy">
+					<name>拼音码</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="medicine_effect">
+					<name>功效</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="medicine_note">
+					<name>注意事项</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="medicine_description">
+					<name>药品简介</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="medicine_update_time">
+					<name>药品更新时间</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		</page>
+		
+		<page id="basFactoryInfoList">
+			<datagrid id="dg">
+				<field id="factory_filenumber">
+					<name>档案号</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_code">
+					<name>编码</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_areacode">
+					<name>区号</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_name">
+					<name>厂家名称</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_shortname">
+					<name>简称</name>
+					<width>100</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_chnpy">
+					<name>拼音码</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_website">
+					<name>网址</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_address">
+					<name>地址</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_zipcode">
+					<name>邮编</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_tel">
+					<name>电话</name>
+					<width>100</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_contactperson">
+					<name>联系人</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_chiefperson">
+					<name>负责人</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_productvariety">
+					<name>生产品种</name>
+					<width>150</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_description">
+					<name>简介</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="factory_license">
+					<name>厂家证照</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		</page>
+		<page id="basDepartmentInfoList">
+			<datagrid id="dg">
+				<field id="department_number">
+					<name>部门编号</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_fullname">
+					<name>全称</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_chnpy">
+					<name>拼音码</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_shortname">
+					<name>简称</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_chiefperson">
+					<name>负责人</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_address">
+					<name>地址</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_zipcode">
+					<name>邮编</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_tel">
+					<name>地址</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_fax">
+					<name>传真</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_email">
+					<name>电子邮箱</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_bank">
+					<name>开户行</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_account">
+					<name>帐号</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_tax">
+					<name>税号</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_distributionhouse">
+					<name>配送库房</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_zerowhole">
+					<name>零整</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_deliverycheck">
+					<name>出库审核</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_storagecheck">
+					<name>入库审核</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_shopprice">
+					<name>按店定价</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_shopcommission">
+					<name>按店提成</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_distributionweight">
+					<name>配货权重</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_pricecontrol">
+					<name>不控制价格</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_hightemperature">
+					<name>高温</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_lowtemperature">
+					<name>低温</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_refrige">
+					<name>是否冷藏</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_storetype">
+					<name>门店类型</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="department_enterprisecode">
+					<name>企业编码</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		</page>
+		<page id="basLicenseInfoList">
+			<datagrid id="dg">
+				<field id="license_name">
+					<name>证照名称</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_no">
+					<name>证照编号</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_starttime">
+					<name>认证时间</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_endtime">
+					<name>有效期至</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_issuer">
+					<name>发证机关</name>
+					<width>100</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_other">
+					<name>证照其他</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_remark">
+					<name>证照备注</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_scope">
+					<name>证照范围</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_property">
+					<name>证照性质</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_fund">
+					<name>证照资金</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="license_person">
+					<name>相关人员</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field> 
+			</datagrid>
+		</page>
+		<page id="basPictureInfoList">
+			<datagrid id="dg">
+				<field id="picture_name">
+					<name>图片名称</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="picture_position">
+					<name>图片位置</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="picture_remark">
+					<name>图片备注</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		</page>
+		<page id="purOrderEdit">
+			<datagrid id="dg_purchase_product">
+				<field id="product_code">
+					<name>产品编号</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_name">
+					<name>产品名称</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_approvalnum">
+					<name>批准文号</name>
+					<width>150</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_productarea">
+					<name>产地</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_unit">
+					<name>单位</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_specification">
+					<name>规格</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_packingamount">
+					<name>包装量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_stocknum">
+					<name>库存数量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lastprice">
+					<name>最后进价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_tradeprice">
+					<name>批发价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lowsalelprice">
+					<name>最低价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_marketprice">
+					<name>市场价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_businesscom">
+					<name>业务提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_invoicecom">
+					<name>开票提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice1">
+					<name>销售价1</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice2">
+					<name>销售价2</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+			<datagrid id="dg_supply_product">
+				<field id="product_code">
+					<name>产品编号</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_commonname">
+					<name>通用名</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="quantity">
+					<name>数量</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="unitprice">
+					<name>单价</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="sum">
+					<name>总价</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="supply_fullname">
+					<name>客户全称</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="arrivalDate">
+					<name>日期</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		
+		
+			<datagrid id="dg_other_product">
+				<field id="product_code">
+					<name>产品编号</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_name">
+					<name>产品名称</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_approvalnum">
+					<name>批准文号</name>
+					<width>150</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_productarea">
+					<name>产地</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_unit">
+					<name>单位</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_specification">
+					<name>规格</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_packingamount">
+					<name>包装量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_stocknum">
+					<name>库存数量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lastprice">
+					<name>最后进价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_tradeprice">
+					<name>批发价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lowsalelprice">
+					<name>最低价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_marketprice">
+					<name>市场价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_businesscom">
+					<name>业务提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_invoicecom">
+					<name>开票提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice1">
+					<name>销售价1</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice2">
+					<name>销售价2</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice3">
+					<name>销售价3</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		</page>
+		<page id="purOrderEdit">
+			<datagrid id="dg_purOrderList">
+				<field id="product_code">
+					<name>产品编号</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_name">
+					<name>产品名称</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_approvalnum">
+					<name>批准文号</name>
+					<width>150</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_productarea">
+					<name>产地</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_unit">
+					<name>单位</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_specification">
+					<name>规格</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_packingamount">
+					<name>包装量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_stocknum">
+					<name>库存数量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lastprice">
+					<name>最后进价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_tradeprice">
+					<name>批发价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lowsalelprice">
+					<name>最低价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_marketprice">
+					<name>市场价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_businesscom">
+					<name>业务提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_invoicecom">
+					<name>开票提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice1">
+					<name>销售价1</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice2">
+					<name>销售价2</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice3">
+					<name>销售价2</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="unitprice">
+					<name>单价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="settlementPrice">
+					<name>结算价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="quantity">
+					<name>订货数量</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="sum">
+					<name>金额</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="prepaidForList">
+					<name>预付款</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		</page>
+
+		<page id="acceptAllList">
+			<datagrid id="dg_purOrderList">
+				<field id="product_code">
+					<name>产品编号</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_name">
+					<name>产品名称</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_approvalnum">
+					<name>批准文号</name>
+					<width>150</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_productarea">
+					<name>产地</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_unit">
+					<name>单位</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_specification">
+					<name>规格</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_packingamount">
+					<name>包装量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_stocknum">
+					<name>库存数量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lastprice">
+					<name>最后进价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_tradeprice">
+					<name>批发价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lowsalelprice">
+					<name>最低价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_marketprice">
+					<name>市场价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_businesscom">
+					<name>业务提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_invoicecom">
+					<name>开票提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice1">
+					<name>销售价1</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice2">
+					<name>销售价2</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice3">
+					<name>销售价2</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="unitprice">
+					<name>单价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="settlementPrice">
+					<name>结算价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="quantity">
+					<name>订货数量</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="sum">
+					<name>金额</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="prepaidForList">
+					<name>预付款</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+		</page>
+
+		<page id="retailOrder">
+			<datagrid id="product_info_dg">
+				<field id="product_code">
+					<name>产品编号</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_name">
+					<name>产品名称</name>
+					<width>120</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_approvalnum">
+					<name>批准文号</name>
+					<width>150</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_productarea">
+					<name>产地</name>
+					<width>200</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_unit">
+					<name>单位</name>
+					<width>50</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_specification">
+					<name>规格</name>
+					<width>80</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_packingamount">
+					<name>包装量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_stocknum">
+					<name>库存数量</name>
+					<width>60</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lastprice">
+					<name>最后进价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_tradeprice">
+					<name>批发价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_lowsalelprice">
+					<name>最低价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_marketprice">
+					<name>市场价</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_businesscom">
+					<name>业务提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_invoicecom">
+					<name>开票提成</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice1">
+					<name>销售价1</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+				<field id="product_saleprice2">
+					<name>销售价2</name>
+					<width>70</width>
+					<sortable>true</sortable>
+					<hidden>false</hidden>
+				</field>
+			</datagrid>
+
+		</page>
+
+</habits>

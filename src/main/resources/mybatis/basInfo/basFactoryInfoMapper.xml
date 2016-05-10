@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.BasFactoryInfoDao">
+	<!-- 获取厂家档案信息 -->
+	<select id="get" parameterType="Integer" resultType="BasFactoryInfo">
+		select *
+		from bas_factoryinfo
+		where factory_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="BasFactoryInfo" resultType="BasFactoryInfo">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from bas_factoryinfo
+		<where>
+			status = 0
+			<if test="factory_code != null">
+				and factory_code like #{factory_code}
+			</if>
+			<if test="factory_shortname != null">
+				and factory_shortname like #{factory_shortname}
+			</if>
+			<if test="factory_chnpy != null">
+				and factory_chnpy like #{factory_chnpy}
+			</if>
+			<if test="offset != null and offset !=0">
+				and factory_id not in(select top ${offset} factory_id from bas_factoryinfo where status = 0
+				<if test="factory_code != null">
+				and factory_code like #{factory_code}
+				</if>
+				<if test="factory_shortname != null">
+					and factory_shortname like #{factory_shortname}
+				</if>
+				<if test="factory_chnpy != null">
+					and factory_chnpy like #{factory_chnpy}
+				</if>
+				)
+			</if>
+
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="BasFactoryInfo" resultType="int">
+		select
+		count(factory_id) as count
+		from
+		bas_factoryinfo
+		<where>
+			status = 0
+			<if test="factory_code != null">
+				and factory_code like #{factory_code}
+			</if>
+			<if test="factory_shortname != null">
+				and factory_shortname like #{factory_shortname}
+			</if>
+			<if test="factory_chnpy != null">
+				and factory_chnpy like #{factory_chnpy}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 返回当前数据库表中最大的厂家编码值 -->
+	<select id="getMaxFactoryCode"  resultType="Integer">
+		select max(cast(factory_code as INT)) 
+		from bas_factoryinfo
+		where status = 0
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="BasFactoryInfo" useGeneratedKeys="true"
+		keyProperty="factory_id">
+		insert into bas_factoryinfo(
+		factory_filenumber, factory_code, factory_areacode, factory_name, factory_shortname, factory_chnpy,
+		factory_website, factory_address, factory_zipcode, factory_tel, factory_contactperson,
+		factory_chiefperson, factory_productvariety, factory_description, factory_license, factory_flag,
+		create_user, create_time, last_modify_user, last_modify_time, status )
+		
+		values
+		(#{factory_filenumber}, #{factory_code}, #{factory_areacode}, #{factory_name}, #{factory_shortname}, #{factory_chnpy},
+		 #{factory_website}, #{factory_address}, #{factory_zipcode}, #{factory_tel}, #{factory_contactperson}, 
+ 		 #{factory_chiefperson}, #{factory_productvariety}, #{factory_description}, #{factory_license}, #{factory_flag},
+     	 #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, #{status});
+
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="BasFactoryInfo">
+		update bas_factoryinfo
+		<set>
+			<if test="factory_filenumber != null">
+				factory_filenumber = #{factory_filenumber},
+			</if>
+			<if test="factory_code != null">
+				factory_code = #{factory_code},
+			</if>
+		 	<if test="factory_areacode != null">
+				factory_areacode = #{factory_areacode},
+			</if>
+			<if test="factory_name != null">
+				factory_name = #{factory_name},
+			</if>
+			<if test="factory_shortname != null">
+				factory_shortname = #{factory_shortname},
+			</if>
+			<if test="factory_chnpy != null">
+				factory_chnpy = #{factory_chnpy},
+			</if>
+ 		 	<if test="factory_website != null">
+				factory_website = #{factory_website},
+			</if>
+			<if test="factory_address != null">
+				factory_address = #{factory_address},
+			</if>
+		 	<if test="factory_zipcode != null">
+				factory_zipcode = #{factory_zipcode},
+			</if>
+			<if test="factory_tel != null">
+				factory_tel = #{factory_tel},
+			</if>
+			<if test="factory_contactperson != null">
+				factory_contactperson = #{factory_contactperson},
+			</if>
+			<if test="factory_chiefperson != null">
+				factory_chiefperson = #{factory_chiefperson},
+			</if>
+			<if test="factory_productvariety != null">
+				factory_productvariety = #{factory_productvariety},
+			</if>
+		 	<if test="factory_description != null">
+				factory_description = #{factory_description},
+			</if>
+			<if test="factory_license != null">
+				factory_license = #{factory_license},
+			</if>
+			<if test="factory_flag != null">
+				factory_flag = #{factory_flag},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			
+		</set>
+		where factory_id = #{factory_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update bas_factoryinfo set
+		status = 9 where factory_id = #{factory_id}
+	</delete>
+	
+	
+	<!-- 查询当前factory_code的数量 -->
+	<select id="checkFactoryCodeNum"  resultType="int">
+		select
+		count(factory_id) as count
+		from
+		bas_factoryinfo
+		<where>
+			status = 0
+			and factory_code like #{factory_code}
+		</where>
+	</select>
+
+</mapper> 

@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.product.persist.ProStockPriceDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="StockPrice">
+		select *
+		from pro_stockPrice
+		where prod_id = #{id}
+	</select>
+	
+	
+	<!-- 查询某个产品的所有库房价格 -->
+	<select id="getDeptsByPro" parameterType="StockPrice" resultType="ProStockPriceVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from bas_departmentinfo as bdi left join 
+		(select psp.*,pim.product_commonname from pro_stockPrice as psp,pro_infoManage as pim
+		<where>
+			psp.product_id = pim.product_id and psp.status=0
+			<if test="product_id != null">
+				and psp.product_id = #{product_id}
+			</if>
+			<if test="department_id != null">
+				and psp.department_id = #{department_id}
+			</if>
+			<if test="pro_group_no != null">
+				and psp.pro_group_no = #{pro_group_no}
+			</if>
+			<if test="pro_location_no != null">
+				and psp.pro_location_no = #{pro_location_no}
+			</if>
+			<if test="pro_storeman != null">
+				and psp.pro_storeman like #{pro_storeman}
+			</if>
+		
+		</where>
+		) as psp_pim on bdi.department_id = psp_pim.department_id
+		<if test="offset != null and offset !=0">
+			and prod_id not in(select top ${offset} prod_id 
+				from bas_departmentinfo as bdi left join 
+				(select psp.*,pim.product_commonname from pro_stockPrice as psp,pro_infoManage as pim
+				<where>
+					psp.product_id = pim.product_id and psp.status=0
+					<if test="product_id != null">
+						and psp.product_id = #{product_id}
+					</if>
+					<if test="department_id != null">
+						and psp.department_id = #{department_id}
+					</if>
+					<if test="pro_group_no != null">
+						and psp.pro_group_no = #{pro_group_no}
+					</if>
+					<if test="pro_location_no != null">
+						and psp.pro_location_no = #{pro_location_no}
+					</if>
+					<if test="pro_storeman != null">
+						and psp.pro_storeman like #{pro_storeman}
+					</if>
+				
+				</where>
+				) as psp_pim on bdi.department_id = psp_pim.department_id
+				)
+		</if>
+	</select>
+	
+	
+	
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="StockPrice" resultType="StockPrice">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from pro_stockPrice
+		<where>
+			<if test="product_id != null">
+				and product_id = #{product_id}
+			</if>
+			<if test="department_id != null">
+				and department_id = #{department_id}
+			</if>
+			<if test="pro_group_no != null">
+				and pro_group_no = #{pro_group_no}
+			</if>
+			<if test="pro_location_no != null">
+				and pro_location_no = #{pro_location_no}
+			</if>
+			<if test="pro_storeman != null">
+				and pro_storeman like #{pro_storeman}
+			</if>
+			<if test="offset != null and offset !=0">
+				and prod_id not in(select top ${offset} prod_id 
+				from pro_stockPrice
+				where
+					<if test="product_id != null">
+					and product_id = #{product_id}
+					</if>
+					<if test="department_id != null">
+						and department_id = #{department_id}
+					</if>
+					<if test="pro_group_no != null">
+						and pro_group_no = #{pro_group_no}
+					</if>
+					<if test="pro_location_no != null">
+						and pro_location_no = #{pro_location_no}
+					</if>
+					<if test="pro_storeman != null">
+						and pro_storeman like #{pro_storeman}
+					</if>
+					)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+	
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="StockPrice" resultType="int">
+		select
+		count(prod_id) as count
+		from pro_stockPrice
+		<where>
+			<if test="product_id != null">
+				and product_id = #{product_id}
+			</if>
+			<if test="department_id != null">
+				and department_id = #{department_id}
+			</if>
+			<if test="pro_group_no != null">
+				and pro_group_no = #{pro_group_no}
+			</if>
+			<if test="pro_location_no != null">
+				and pro_location_no = #{pro_location_no}
+			</if>
+			<if test="pro_storeman != null">
+				and pro_storeman like #{pro_storeman}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 返回调价信息(无分页) -->
+	<select id="getStockPriceList" parameterType="StockPrice" resultType="StockPrice">
+		select *
+		from pro_stockPrice
+		<where>
+			<if test="product_id != null">
+				and product_id = #{product_id}
+			</if>
+			<if test="department_id != null">
+				and department_id = #{department_id}
+			</if>
+			<if test="pro_group_no != null">
+				and pro_group_no = #{pro_group_no}
+			</if>
+			<if test="pro_location_no != null">
+				and pro_location_no = #{pro_location_no}
+			</if>
+			<if test="pro_storeman != null">
+				and pro_storeman like #{pro_storeman}
+			</if>
+		</where>
+	</select>
+	
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="StockPrice" useGeneratedKeys="true"
+		keyProperty="prod_id">
+		insert into pro_stockPrice(product_id,department_id,pro_group_no,pro_location_no,pro_storeman,
+		pro_packing_quantity,pro_max_limit,pro_min_limit,pro_retail_quantity,pro_trade_price,pro_retail_price,
+		pro_min_price,pro_saleprice1,pro_saleprice2,pro_saleprice3,pro_saleprice4,pro_purchase_price,pro_market_price,
+		pro_cost_price,pro_refer_purchase_price,pro_final_price,pro_offer_price,pro_abc_class,pro_member_no_integral,
+		pro_member_price,pro_retail_commission,pro_on_retail_price,pro_min_retail_price,pro_min_trade_price,
+		pro_task_quantity,pro_retail_commission_min_price,status,create_user,create_time,last_modify_user,last_modify_time)
+		
+		values(#{product_id},#{department_id},#{pro_group_no},#{pro_location_no},#{pro_storeman},
+		#{pro_packing_quantity},#{pro_max_limit},#{pro_min_limit},#{pro_retail_quantity},#{pro_trade_price},
+		#{pro_retail_price},#{pro_min_price},#{pro_saleprice1},#{pro_saleprice2},#{pro_saleprice3},#{pro_saleprice4},
+		#{pro_purchase_price},#{pro_market_price},#{pro_cost_price},#{pro_refer_purchase_price},#{pro_final_price}, 
+		#{pro_offer_price},#{pro_abc_class},#{pro_member_no_integral},#{pro_member_price},#{pro_retail_commission}, 
+		#{pro_on_retail_price},#{pro_min_retail_price},#{pro_min_trade_price},#{pro_task_quantity},#{pro_retail_commission_min_price},
+		#{status},#{create_user},#{create_time,jdbcType=TIMESTAMP},#{last_modify_user},#{last_modify_time,jdbcType=TIMESTAMP});
+	</insert>
+	
+	<!-- 更新表中价格，返回受影响的记录条数 -->
+	<update id="update" parameterType="StockPrice">
+		update pro_stockPrice
+		<set>
+			<if test="product_id != null">
+			product_id = #{product_id},
+			</if>
+			<if test="department_id != null">
+			department_id = #{department_id},
+			</if>
+			<if test="pro_group_no != null">
+			pro_group_no = #{pro_group_no},
+			</if>
+			<if test="pro_location_no != null">
+			pro_location_no = #{pro_location_no},
+			</if>
+			<if test="pro_storeman != null">
+			pro_storeman = #{pro_storeman},
+			</if>
+			<if test="pro_packing_quantity != null">
+			pro_packing_quantity = #{pro_packing_quantity},
+			</if>
+			<if test="pro_packing_unit != null">
+			pro_packing_unit = #{pro_packing_unit},
+			</if>
+			<if test="pro_max_limit != null">
+			pro_max_limit = #{pro_max_limit},
+			</if>
+			<if test="pro_min_limit != null">
+			pro_min_limit = #{pro_min_limit},
+			</if>
+			<if test="pro_retail_quantity != null">
+			pro_retail_quantity = #{pro_retail_quantity},
+			</if>
+			<if test="pro_trade_price != null">
+			pro_trade_price = #{pro_trade_price},
+			</if>
+			<if test="pro_retail_price != null">
+			pro_retail_price = #{pro_retail_price},
+			</if>
+			<if test="pro_min_price != null">
+			pro_min_price = #{pro_min_price},
+			</if>
+			<if test="pro_saleprice1 != null">
+			pro_saleprice1 = #{pro_saleprice1},
+			</if>
+			<if test="pro_saleprice2 != null">
+			pro_saleprice2 = #{pro_saleprice2},
+			</if>
+			<if test="pro_saleprice3 != null">
+			pro_saleprice3 = #{pro_saleprice3},
+			</if>
+			<if test="pro_saleprice4 != null">
+			pro_saleprice4 = #{pro_saleprice4},
+			</if>
+			<if test="pro_purchase_price != null">
+			pro_purchase_price = #{pro_purchase_price},
+			</if>
+			<if test="pro_market_price != null">
+			pro_market_price = #{pro_market_price},
+			</if>
+			<if test="pro_cost_price != null">
+			pro_cost_price = #{pro_cost_price},
+			</if>
+			<if test="pro_refer_purchase_price != null">
+			pro_refer_purchase_price = #{pro_refer_purchase_price},
+			</if>
+			<if test="pro_final_price != null">
+			pro_final_price = #{pro_final_price},
+			</if>
+			<if test="pro_offer_price != null">
+			pro_offer_price = #{pro_offer_price},
+			</if>
+			<if test="status != null">
+			status = #{status},
+			</if>
+			<if test="create_user != null">
+			create_user = #{create_user},
+			</if>
+			<if test="create_time != null">
+			create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where prod_id = #{prod_id}
+	</update>
+	
+	<insert id="updateLog" parameterType="StockPrice" useGeneratedKeys="true"
+		keyProperty="prod_log_id">
+		insert into pro_stockPrice_Log(prod_id,product_id,department_id,pro_group_no,pro_location_no,pro_storeman,
+		pro_packing_quantity,pro_max_limit,pro_min_limit,pro_retail_quantity,pro_trade_price,pro_retail_price,
+		pro_min_price,pro_saleprice1,pro_saleprice2,pro_saleprice3,pro_saleprice4,pro_purchase_price,
+		pro_market_price,pro_cost_price,pro_refer_purchase_price,pro_final_price,pro_offer_price,pro_abc_class,
+		pro_member_no_integral,pro_member_price,pro_retail_commission,pro_on_retail_price,pro_min_retail_price,
+		pro_min_trade_price,pro_task_quantity,pro_retail_commission_min_price,status,create_user,create_time,last_modify_user,last_modify_time)
+		
+		values(#{prod_id},#{product_id},#{department_id},#{pro_group_no},#{pro_location_no},#{pro_storeman},
+		#{pro_packing_quantity},#{pro_max_limit},#{pro_min_limit},#{pro_retail_quantity},#{pro_trade_price},
+		#{pro_retail_price},#{pro_min_price},#{pro_saleprice1},#{pro_saleprice2},#{pro_saleprice3},#{pro_saleprice4},
+		#{pro_purchase_price},#{pro_market_price},#{pro_cost_price},#{pro_refer_purchase_price},#{pro_final_price}, 
+		#{pro_offer_price},#{pro_abc_class},#{pro_member_no_integral},#{pro_member_price},#{pro_retail_commission}, 
+		#{pro_on_retail_price},#{pro_min_retail_price},#{pro_min_trade_price},#{pro_task_quantity},#{pro_retail_commission_min_price},
+		#{status},#{create_user},#{create_time,jdbcType=TIMESTAMP},#{last_modify_user},#{last_modify_time,jdbcType=TIMESTAMP});
+	</insert>
+	
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		update pro_stockPrice
+		set status = 9
+		where prod_id = #{id}
+	</delete>
+</mapper> 

@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.retail.persist.RetailOrderDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="RetailOrder">
+		select *
+		from retail_order 
+		where retail_order_id = #{id} 
+	</select>
+
+
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="RetailOrder">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+			from retail_order
+		<where>
+			<if test="retail_order_id!=null">
+			and retail_order_id like #{retail_order_id}
+			</if>
+			<if test="retail_order_orderTime!=null">
+			and retail_order_orderTime like #{retail_order_orderTime}
+			</if>
+			<if test="retail_order_ticketId!=null">
+			and retail_order_ticketId like #{retail_order_ticketId}
+			</if>
+			<if test="retail_order_currentReceivable!=null">
+			and retail_order_currentReceivable like #{retail_order_currentReceivable}
+			</if>
+			<if test="retail_order_discountAmount!=null">
+			and retail_order_discountAmount like #{retail_order_discountAmount}
+			</if>
+			<if test="retail_order_wipeZero!=null">
+			and retail_order_wipeZero like #{retail_order_wipeZero}
+			</if>
+			<if test="retail_order_settlementAmount!=null">
+			and retail_order_settlementAmount like #{retail_order_settlementAmount}
+			</if>
+			<if test="retail_order_receiptNumber!=null">
+			and retail_order_receiptNumber like #{retail_order_receiptNumber}
+			</if>
+			<if test="mem_card_id!=null">
+			and mem_card_id like #{mem_card_id}
+			</if>
+			<if test="retail_order_operator!=null">
+			and retail_order_operator = #{retail_order_operator}
+			</if>
+			<if test="retail_order_checkout!=null">
+			and retail_order_checkout like #{retail_order_checkout}
+			</if>
+			<if test="retail_order_checkoutPerson!=null">
+			and retail_order_checkoutPerson like #{retail_order_checkoutPerson}
+			</if>
+			<if test="retail_order_checkoutTime!=null">
+			and retail_order_checkoutTime like #{retail_order_checkoutTime}
+			</if>
+			<if test="retail_order_grossProfit!=null">
+			and retail_order_grossProfit like #{retail_order_grossProfit}
+			</if>
+			<if test="retail_order_upload!=null">
+			and retail_order_upload like #{retail_order_upload}
+			</if>
+			<if test="retail_order_draft!=null">
+			and retail_order_draft = #{retail_order_draft}
+			</if>
+			<if test="retail_order_printReceipt!=null">
+			and retail_order_printReceipt like #{retail_order_printReceipt}
+			</if>
+			<if test="retail_order_machineName!=null">
+			and retail_order_machineName like #{retail_order_machineName}
+			</if>
+			<if test="retail_order_receive!=null">
+			and retail_order_receive like #{retail_order_receive}
+			</if>
+			<if test="retail_order_doseNumber!=null">
+			and retail_order_doseNumber like #{retail_order_doseNumber}
+			</if>
+			<if test="retail_order_realIncomeAmount!=null">
+			and retail_order_realIncomeAmount like #{retail_order_realIncomeAmount}
+			</if>
+			<if test="retail_order_change!=null">
+			and retail_order_change like #{retail_order_change}
+			</if>
+			<if test="retail_order_giftCard!=null">
+			and retail_order_giftCard like #{retail_order_giftCard}
+			</if>
+			<if test="retail_order_discount!=null">
+			and retail_order_discount like #{retail_order_discount}
+			</if>
+			<if test="retail_order_swingCardStyle!=null">
+			and retail_order_swingCardStyle like #{retail_order_swingCardStyle}
+			</if>
+			<if test="retail_order_swingCardAmount!=null">
+			and retail_order_swingCardAmount like #{retail_order_swingCardAmount}
+			</if>
+			<if test="retail_order_cash!=null">
+			and retail_order_cash like #{retail_order_cash}
+			</if>
+			<if test="retail_order_pointMultiple!=null">
+			and retail_order_pointMultiple like #{retail_order_pointMultiple}
+			</if>
+			<if test="retail_order_swingCardName!=null">
+			and retail_order_swingCardName like #{retail_order_swingCardName}
+			</if>
+			<if test="retail_order_swingCardId!=null">
+			and retail_order_swingCardId like #{retail_order_swingCardId}
+			</if>
+			<if test="retail_order_swingCardRemain!=null">
+			and retail_order_swingCardRemain like #{retail_order_swingCardRemain}
+			</if>
+			<if test="retail_order_point!=null">
+			and retail_order_point like #{retail_order_point}
+			</if>
+			<if test="retail_order_printTimes!=null">
+			and retail_order_printTimes like #{retail_order_printTimes}
+			</if>
+			<if test="retail_order_modifyRemark!=null">
+			and retail_order_modifyRemark like #{retail_order_modifyRemark}
+			</if>
+			<if test="retail_order_swingCardPersonPropery!=null">
+			and retail_order_swingCardPersonPropery like #{retail_order_swingCardPersonPropery}
+			</if>
+			<if test="retail_order_giftCardMax!=null">
+			and retail_order_giftCardMax like #{retail_order_giftCardMax}
+			</if>
+			<if test="retail_order_giftCardInitAmount!=null">
+			and retail_order_giftCardInitAmount like #{retail_order_giftCardInitAmount}
+			</if>
+			<if test="retail_order_purchasePersonName!=null">
+			and retail_order_purchasePersonName like #{retail_order_purchasePersonName}
+			</if>
+			<if test="retail_order_purchasePersonID!=null">
+			and retail_order_purchasePersonID like #{retail_order_purchasePersonID}
+			</if>
+			<if test="retail_order_purchasePersonPhone!=null">
+			and retail_order_purchasePersonPhone like #{retail_order_purchasePersonPhone}
+			</if>
+			<if test="retail_order_pharmacistName!=null">
+			and retail_order_pharmacistName like #{retail_order_pharmacistName}
+			</if>
+			<if test="retail_order_pharmacistElectronicSignature!=null">
+			and retail_order_pharmacistElectronicSignature like #{retail_order_pharmacistElectronicSignature}
+			</if>
+			<if test="retail_order_drugTicketId!=null">
+			and retail_order_drugTicketId like #{retail_order_drugTicketId}
+			</if>
+			<if test="retail_order_saveTime!=null">
+			and retail_order_saveTime like #{retail_order_saveTime}
+			</if>
+			<if test="retail_order_SingleDoseAmount!=null">
+			and retail_order_SingleDoseAmount like #{retail_order_SingleDoseAmount}
+			</if>
+			<if test="retail_order_fullGiftAmount!=null">
+			and retail_order_fullGiftAmount like #{retail_order_fullGiftAmount}
+			</if>
+			<if test="retail_order_fullGiftExchange!=null">
+			and retail_order_fullGiftExchange like #{retail_order_fullGiftExchange}
+			</if>
+			<if test="retail_order_fullGiftRemain!=null">
+			and retail_order_fullGiftRemain like #{retail_order_fullGiftRemain}
+			</if>
+			<if test="retail_order_otherCharge!=null">
+			and retail_order_otherCharge like #{retail_order_otherCharge}
+			</if>
+			<if test="retail_order_receivableAmount!=null">
+			and retail_order_receivableAmount like #{retail_order_receivableAmount}
+			</if>
+			<if test="retail_order_pointPay!=null">
+			and retail_order_pointPay like #{retail_order_pointPay}
+			</if>
+			<if test="offset != null and offset !=0">
+			and retail_order_id not in(select top ${offset} retail_order_id from retail_order where 0 = 0
+				<if test="retail_order_id!=null">
+				and retail_order_id like #{retail_order_id}
+				</if>
+				<if test="retail_order_orderTime!=null">
+				and retail_order_orderTime like #{retail_order_orderTime}
+				</if>
+				<if test="retail_order_ticketId!=null">
+				and retail_order_ticketId like #{retail_order_ticketId}
+				</if>
+				<if test="retail_order_currentReceivable!=null">
+				and retail_order_currentReceivable like #{retail_order_currentReceivable}
+				</if>
+				<if test="retail_order_discountAmount!=null">
+				and retail_order_discountAmount like #{retail_order_discountAmount}
+				</if>
+				<if test="retail_order_wipeZero!=null">
+				and retail_order_wipeZero like #{retail_order_wipeZero}
+				</if>
+				<if test="retail_order_settlementAmount!=null">
+				and retail_order_settlementAmount like #{retail_order_settlementAmount}
+				</if>
+				<if test="retail_order_receiptNumber!=null">
+				and retail_order_receiptNumber like #{retail_order_receiptNumber}
+				</if>
+				<if test="mem_card_id!=null">
+				and mem_card_id like #{mem_card_id}
+				</if>
+				<if test="retail_order_operator!=null">
+				and retail_order_operator like #{retail_order_operator}
+				</if>
+				<if test="retail_order_checkout!=null">
+				and retail_order_checkout like #{retail_order_checkout}
+				</if>
+				<if test="retail_order_checkoutPerson!=null">
+				and retail_order_checkoutPerson like #{retail_order_checkoutPerson}
+				</if>
+				<if test="retail_order_checkoutTime!=null">
+				and retail_order_checkoutTime like #{retail_order_checkoutTime}
+				</if>
+				<if test="retail_order_grossProfit!=null">
+				and retail_order_grossProfit like #{retail_order_grossProfit}
+				</if>
+				<if test="retail_order_upload!=null">
+				and retail_order_upload like #{retail_order_upload}
+				</if>
+				<if test="retail_order_draft!=null">
+				and retail_order_draft like #{retail_order_draft}
+				</if>
+				<if test="retail_order_printReceipt!=null">
+				and retail_order_printReceipt like #{retail_order_printReceipt}
+				</if>
+				<if test="retail_order_machineName!=null">
+				and retail_order_machineName like #{retail_order_machineName}
+				</if>
+				<if test="retail_order_receive!=null">
+				and retail_order_receive like #{retail_order_receive}
+				</if>
+				<if test="retail_order_doseNumber!=null">
+				and retail_order_doseNumber like #{retail_order_doseNumber}
+				</if>
+				<if test="retail_order_realIncomeAmount!=null">
+				and retail_order_realIncomeAmount like #{retail_order_realIncomeAmount}
+				</if>
+				<if test="retail_order_change!=null">
+				and retail_order_change like #{retail_order_change}
+				</if>
+				<if test="retail_order_giftCard!=null">
+				and retail_order_giftCard like #{retail_order_giftCard}
+				</if>
+				<if test="retail_order_discount!=null">
+				and retail_order_discount like #{retail_order_discount}
+				</if>
+				<if test="retail_order_swingCardStyle!=null">
+				and retail_order_swingCardStyle like #{retail_order_swingCardStyle}
+				</if>
+				<if test="retail_order_swingCardAmount!=null">
+				and retail_order_swingCardAmount like #{retail_order_swingCardAmount}
+				</if>
+				<if test="retail_order_cash!=null">
+				and retail_order_cash like #{retail_order_cash}
+				</if>
+				<if test="retail_order_pointMultiple!=null">
+				and retail_order_pointMultiple like #{retail_order_pointMultiple}
+				</if>
+				<if test="retail_order_swingCardName!=null">
+				and retail_order_swingCardName like #{retail_order_swingCardName}
+				</if>
+				<if test="retail_order_swingCardId!=null">
+				and retail_order_swingCardId like #{retail_order_swingCardId}
+				</if>
+				<if test="retail_order_swingCardRemain!=null">
+				and retail_order_swingCardRemain like #{retail_order_swingCardRemain}
+				</if>
+				<if test="retail_order_point!=null">
+				and retail_order_point like #{retail_order_point}
+				</if>
+				<if test="retail_order_printTimes!=null">
+				and retail_order_printTimes like #{retail_order_printTimes}
+				</if>
+				<if test="retail_order_modifyRemark!=null">
+				and retail_order_modifyRemark like #{retail_order_modifyRemark}
+				</if>
+				<if test="retail_order_swingCardPersonPropery!=null">
+				and retail_order_swingCardPersonPropery like #{retail_order_swingCardPersonPropery}
+				</if>
+				<if test="retail_order_giftCardMax!=null">
+				and retail_order_giftCardMax like #{retail_order_giftCardMax}
+				</if>
+				<if test="retail_order_giftCardInitAmount!=null">
+				and retail_order_giftCardInitAmount like #{retail_order_giftCardInitAmount}
+				</if>
+				<if test="retail_order_purchasePersonName!=null">
+				and retail_order_purchasePersonName like #{retail_order_purchasePersonName}
+				</if>
+				<if test="retail_order_purchasePersonID!=null">
+				and retail_order_purchasePersonID like #{retail_order_purchasePersonID}
+				</if>
+				<if test="retail_order_purchasePersonPhone!=null">
+				and retail_order_purchasePersonPhone like #{retail_order_purchasePersonPhone}
+				</if>
+				<if test="retail_order_pharmacistName!=null">
+				and retail_order_pharmacistName like #{retail_order_pharmacistName}
+				</if>
+				<if test="retail_order_pharmacistElectronicSignature!=null">
+				and retail_order_pharmacistElectronicSignature like #{retail_order_pharmacistElectronicSignature}
+				</if>
+				<if test="retail_order_drugTicketId!=null">
+				and retail_order_drugTicketId like #{retail_order_drugTicketId}
+				</if>
+				<if test="retail_order_saveTime!=null">
+				and retail_order_saveTime like #{retail_order_saveTime}
+				</if>
+				<if test="retail_order_SingleDoseAmount!=null">
+				and retail_order_SingleDoseAmount like #{retail_order_SingleDoseAmount}
+				</if>
+				<if test="retail_order_fullGiftAmount!=null">
+				and retail_order_fullGiftAmount like #{retail_order_fullGiftAmount}
+				</if>
+				<if test="retail_order_fullGiftExchange!=null">
+				and retail_order_fullGiftExchange like #{retail_order_fullGiftExchange}
+				</if>
+				<if test="retail_order_fullGiftRemain!=null">
+				and retail_order_fullGiftRemain like #{retail_order_fullGiftRemain}
+				</if>
+				<if test="retail_order_otherCharge!=null">
+				and retail_order_otherCharge like #{retail_order_otherCharge}
+				</if>
+				<if test="retail_order_receivableAmount!=null">
+				and retail_order_receivableAmount like #{retail_order_receivableAmount}
+				</if>
+				<if test="retail_order_pointPay!=null">
+				and retail_order_pointPay like #{retail_order_pointPay}
+				</if>
+			)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="RetailOrder" resultType="int">
+		select count(retail_order_id) as count 
+		from retail_order
+		<where>
+			<if test="retail_order_id!=null">
+			and retail_order_id like #{retail_order_id}
+			</if>
+			<if test="retail_order_orderTime!=null">
+			and retail_order_orderTime like #{retail_order_orderTime}
+			</if>
+			<if test="retail_order_ticketId!=null">
+			and retail_order_ticketId like #{retail_order_ticketId}
+			</if>
+			<if test="retail_order_currentReceivable!=null">
+			and retail_order_currentReceivable like #{retail_order_currentReceivable}
+			</if>
+			<if test="retail_order_discountAmount!=null">
+			and retail_order_discountAmount like #{retail_order_discountAmount}
+			</if>
+			<if test="retail_order_wipeZero!=null">
+			and retail_order_wipeZero like #{retail_order_wipeZero}
+			</if>
+			<if test="retail_order_settlementAmount!=null">
+			and retail_order_settlementAmount like #{retail_order_settlementAmount}
+			</if>
+			<if test="retail_order_receiptNumber!=null">
+			and retail_order_receiptNumber like #{retail_order_receiptNumber}
+			</if>
+			<if test="mem_card_id!=null">
+			and mem_card_id like #{mem_card_id}
+			</if>
+			<if test="retail_order_operator!=null">
+			and retail_order_operator like #{retail_order_operator}
+			</if>
+			<if test="retail_order_checkout!=null">
+			and retail_order_checkout like #{retail_order_checkout}
+			</if>
+			<if test="retail_order_checkoutPerson!=null">
+			and retail_order_checkoutPerson like #{retail_order_checkoutPerson}
+			</if>
+			<if test="retail_order_checkoutTime!=null">
+			and retail_order_checkoutTime like #{retail_order_checkoutTime}
+			</if>
+			<if test="retail_order_grossProfit!=null">
+			and retail_order_grossProfit like #{retail_order_grossProfit}
+			</if>
+			<if test="retail_order_upload!=null">
+			and retail_order_upload like #{retail_order_upload}
+			</if>
+			<if test="retail_order_draft!=null">
+			and retail_order_draft like #{retail_order_draft}
+			</if>
+			<if test="retail_order_printReceipt!=null">
+			and retail_order_printReceipt like #{retail_order_printReceipt}
+			</if>
+			<if test="retail_order_machineName!=null">
+			and retail_order_machineName like #{retail_order_machineName}
+			</if>
+			<if test="retail_order_receive!=null">
+			and retail_order_receive like #{retail_order_receive}
+			</if>
+			<if test="retail_order_doseNumber!=null">
+			and retail_order_doseNumber like #{retail_order_doseNumber}
+			</if>
+			<if test="retail_order_realIncomeAmount!=null">
+			and retail_order_realIncomeAmount like #{retail_order_realIncomeAmount}
+			</if>
+			<if test="retail_order_change!=null">
+			and retail_order_change like #{retail_order_change}
+			</if>
+			<if test="retail_order_giftCard!=null">
+			and retail_order_giftCard like #{retail_order_giftCard}
+			</if>
+			<if test="retail_order_discount!=null">
+			and retail_order_discount like #{retail_order_discount}
+			</if>
+			<if test="retail_order_swingCardStyle!=null">
+			and retail_order_swingCardStyle like #{retail_order_swingCardStyle}
+			</if>
+			<if test="retail_order_swingCardAmount!=null">
+			and retail_order_swingCardAmount like #{retail_order_swingCardAmount}
+			</if>
+			<if test="retail_order_cash!=null">
+			and retail_order_cash like #{retail_order_cash}
+			</if>
+			<if test="retail_order_pointMultiple!=null">
+			and retail_order_pointMultiple like #{retail_order_pointMultiple}
+			</if>
+			<if test="retail_order_swingCardName!=null">
+			and retail_order_swingCardName like #{retail_order_swingCardName}
+			</if>
+			<if test="retail_order_swingCardId!=null">
+			and retail_order_swingCardId like #{retail_order_swingCardId}
+			</if>
+			<if test="retail_order_swingCardRemain!=null">
+			and retail_order_swingCardRemain like #{retail_order_swingCardRemain}
+			</if>
+			<if test="retail_order_point!=null">
+			and retail_order_point like #{retail_order_point}
+			</if>
+			<if test="retail_order_printTimes!=null">
+			and retail_order_printTimes like #{retail_order_printTimes}
+			</if>
+			<if test="retail_order_modifyRemark!=null">
+			and retail_order_modifyRemark like #{retail_order_modifyRemark}
+			</if>
+			<if test="retail_order_swingCardPersonPropery!=null">
+			and retail_order_swingCardPersonPropery like #{retail_order_swingCardPersonPropery}
+			</if>
+			<if test="retail_order_giftCardMax!=null">
+			and retail_order_giftCardMax like #{retail_order_giftCardMax}
+			</if>
+			<if test="retail_order_giftCardInitAmount!=null">
+			and retail_order_giftCardInitAmount like #{retail_order_giftCardInitAmount}
+			</if>
+			<if test="retail_order_purchasePersonName!=null">
+			and retail_order_purchasePersonName like #{retail_order_purchasePersonName}
+			</if>
+			<if test="retail_order_purchasePersonID!=null">
+			and retail_order_purchasePersonID like #{retail_order_purchasePersonID}
+			</if>
+			<if test="retail_order_purchasePersonPhone!=null">
+			and retail_order_purchasePersonPhone like #{retail_order_purchasePersonPhone}
+			</if>
+			<if test="retail_order_pharmacistName!=null">
+			and retail_order_pharmacistName like #{retail_order_pharmacistName}
+			</if>
+			<if test="retail_order_pharmacistElectronicSignature!=null">
+			and retail_order_pharmacistElectronicSignature like #{retail_order_pharmacistElectronicSignature}
+			</if>
+			<if test="retail_order_drugTicketId!=null">
+			and retail_order_drugTicketId like #{retail_order_drugTicketId}
+			</if>
+			<if test="retail_order_saveTime!=null">
+			and retail_order_saveTime like #{retail_order_saveTime}
+			</if>
+			<if test="retail_order_SingleDoseAmount!=null">
+			and retail_order_SingleDoseAmount like #{retail_order_SingleDoseAmount}
+			</if>
+			<if test="retail_order_fullGiftAmount!=null">
+			and retail_order_fullGiftAmount like #{retail_order_fullGiftAmount}
+			</if>
+			<if test="retail_order_fullGiftExchange!=null">
+			and retail_order_fullGiftExchange like #{retail_order_fullGiftExchange}
+			</if>
+			<if test="retail_order_fullGiftRemain!=null">
+			and retail_order_fullGiftRemain like #{retail_order_fullGiftRemain}
+			</if>
+			<if test="retail_order_otherCharge!=null">
+			and retail_order_otherCharge like #{retail_order_otherCharge}
+			</if>
+			<if test="retail_order_receivableAmount!=null">
+			and retail_order_receivableAmount like #{retail_order_receivableAmount}
+			</if>
+			<if test="retail_order_pointPay!=null">
+			and retail_order_pointPay like #{retail_order_pointPay}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="RetailOrder" useGeneratedKeys="true" keyProperty="retail_order_id">
+		 insert into retail_order(
+		retail_order_orderTime, retail_order_ticketId, retail_order_currentReceivable, retail_order_discountAmount, retail_order_wipeZero, 
+		retail_order_settlementAmount, retail_order_receiptNumber, mem_card_id, retail_order_operator, retail_order_checkout, 
+		retail_order_checkoutPerson, retail_order_checkoutTime, retail_order_grossProfit, retail_order_upload, retail_order_draft, 
+		retail_order_printReceipt, retail_order_machineName, retail_order_receive, retail_order_doseNumber, retail_order_realIncomeAmount, 
+		retail_order_change, retail_order_giftCard, retail_order_discount, retail_order_swingCardStyle, retail_order_swingCardAmount, 
+		retail_order_cash, retail_order_pointMultiple, retail_order_swingCardName, retail_order_swingCardId, retail_order_swingCardRemain, 
+		retail_order_point, retail_order_printTimes, retail_order_modifyRemark, retail_order_swingCardPersonPropery, retail_order_giftCardMax, 
+		retail_order_giftCardInitAmount, retail_order_purchasePersonName, retail_order_purchasePersonID, retail_order_purchasePersonPhone, retail_order_pharmacistName, 
+		retail_order_pharmacistElectronicSignature, retail_order_drugTicketId, retail_order_saveTime, retail_order_SingleDoseAmount, retail_order_fullGiftAmount, 
+		retail_order_fullGiftExchange, retail_order_fullGiftRemain, retail_order_otherCharge, retail_order_receivableAmount, retail_order_pointPay)
+		values(
+		#{retail_order_orderTime,jdbcType=DATE}, #{retail_order_ticketId}, #{retail_order_currentReceivable}, #{retail_order_discountAmount}, #{retail_order_wipeZero}, 
+		#{retail_order_settlementAmount}, #{retail_order_receiptNumber}, #{mem_card_id}, #{retail_order_operator}, #{retail_order_checkout}, 
+		#{retail_order_checkoutPerson}, #{retail_order_checkoutTime,jdbcType=DATE}, #{retail_order_grossProfit}, #{retail_order_upload}, #{retail_order_draft}, 
+		#{retail_order_printReceipt}, #{retail_order_machineName}, #{retail_order_receive}, #{retail_order_doseNumber}, #{retail_order_realIncomeAmount}, 
+		#{retail_order_change}, #{retail_order_giftCard}, #{retail_order_discount}, #{retail_order_swingCardStyle}, #{retail_order_swingCardAmount}, 
+		#{retail_order_cash}, #{retail_order_pointMultiple}, #{retail_order_swingCardName}, #{retail_order_swingCardId}, #{retail_order_swingCardRemain}, 
+		#{retail_order_point}, #{retail_order_printTimes}, #{retail_order_modifyRemark}, #{retail_order_swingCardPersonPropery}, #{retail_order_giftCardMax}, 
+		#{retail_order_giftCardInitAmount}, #{retail_order_purchasePersonName}, #{retail_order_purchasePersonID}, #{retail_order_purchasePersonPhone}, #{retail_order_pharmacistName}, 
+		#{retail_order_pharmacistElectronicSignature}, #{retail_order_drugTicketId}, #{retail_order_saveTime,jdbcType=DATE}, #{retail_order_SingleDoseAmount}, #{retail_order_fullGiftAmount}, 
+		#{retail_order_fullGiftExchange}, #{retail_order_fullGiftRemain}, #{retail_order_otherCharge}, #{retail_order_receivableAmount}, #{retail_order_pointPay});
+	</insert>
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="RetailOrder">
+		 update retail_order
+		<set>
+			<if test="retail_order_orderTime != null">
+			retail_order_orderTime = #{retail_order_orderTime},
+			</if>
+			<if test="retail_order_currentReceivable != null">
+			retail_order_currentReceivable = #{retail_order_currentReceivable},
+			</if>
+			<if test="retail_order_discountAmount != null">
+			retail_order_discountAmount = #{retail_order_discountAmount},
+			</if>
+			<if test="retail_order_wipeZero != null">
+			retail_order_wipeZero = #{retail_order_wipeZero},
+			</if>
+			<if test="retail_order_settlementAmount != null">
+			retail_order_settlementAmount = #{retail_order_settlementAmount},
+			</if>
+			<if test="retail_order_receiptNumber != null">
+			retail_order_receiptNumber = #{retail_order_receiptNumber},
+			</if>
+			<if test="mem_card_id != null">
+			mem_card_id = #{mem_card_id},
+			</if>
+			<if test="retail_order_operator != null">
+			retail_order_operator = #{retail_order_operator},
+			</if>
+			<if test="retail_order_checkout != null">
+			retail_order_checkout = #{retail_order_checkout},
+			</if>
+			<if test="retail_order_checkoutPerson != null">
+			retail_order_checkoutPerson = #{retail_order_checkoutPerson},
+			</if>
+			<if test="retail_order_checkoutTime != null">
+			retail_order_checkoutTime = #{retail_order_checkoutTime},
+			</if>
+			<if test="retail_order_grossProfit != null">
+			retail_order_grossProfit = #{retail_order_grossProfit},
+			</if>
+			<if test="retail_order_upload != null">
+			retail_order_upload = #{retail_order_upload},
+			</if>
+			<if test="retail_order_draft != null">
+			retail_order_draft = #{retail_order_draft},
+			</if>
+			<if test="retail_order_printReceipt != null">
+			retail_order_printReceipt = #{retail_order_printReceipt},
+			</if>
+			<if test="retail_order_machineName != null">
+			retail_order_machineName = #{retail_order_machineName},
+			</if>
+			<if test="retail_order_receive != null">
+			retail_order_receive = #{retail_order_receive},
+			</if>
+			<if test="retail_order_doseNumber != null">
+			retail_order_doseNumber = #{retail_order_doseNumber},
+			</if>
+			<if test="retail_order_realIncomeAmount != null">
+			retail_order_realIncomeAmount = #{retail_order_realIncomeAmount},
+			</if>
+			<if test="retail_order_change != null">
+			retail_order_change = #{retail_order_change},
+			</if>
+			<if test="retail_order_giftCard != null">
+			retail_order_giftCard = #{retail_order_giftCard},
+			</if>
+			<if test="retail_order_discount != null">
+			retail_order_discount = #{retail_order_discount},
+			</if>
+			<if test="retail_order_swingCardStyle != null">
+			retail_order_swingCardStyle = #{retail_order_swingCardStyle},
+			</if>
+			<if test="retail_order_swingCardAmount != null">
+			retail_order_swingCardAmount = #{retail_order_swingCardAmount},
+			</if>
+			<if test="retail_order_cash != null">
+			retail_order_cash = #{retail_order_cash},
+			</if>
+			<if test="retail_order_pointMultiple != null">
+			retail_order_pointMultiple = #{retail_order_pointMultiple},
+			</if>
+			<if test="retail_order_swingCardName != null">
+			retail_order_swingCardName = #{retail_order_swingCardName},
+			</if>
+			<if test="retail_order_swingCardId != null">
+			retail_order_swingCardId = #{retail_order_swingCardId},
+			</if>
+			<if test="retail_order_swingCardRemain != null">
+			retail_order_swingCardRemain = #{retail_order_swingCardRemain},
+			</if>
+			<if test="retail_order_point != null">
+			retail_order_point = #{retail_order_point},
+			</if>
+			<if test="retail_order_printTimes != null">
+			retail_order_printTimes = #{retail_order_printTimes},
+			</if>
+			<if test="retail_order_modifyRemark != null">
+			retail_order_modifyRemark = #{retail_order_modifyRemark},
+			</if>
+			<if test="retail_order_swingCardPersonPropery != null">
+			retail_order_swingCardPersonPropery = #{retail_order_swingCardPersonPropery},
+			</if>
+			<if test="retail_order_giftCardMax != null">
+			retail_order_giftCardMax = #{retail_order_giftCardMax},
+			</if>
+			<if test="retail_order_giftCardInitAmount != null">
+			retail_order_giftCardInitAmount = #{retail_order_giftCardInitAmount},
+			</if>
+			<if test="retail_order_purchasePersonName != null">
+			retail_order_purchasePersonName = #{retail_order_purchasePersonName},
+			</if>
+			<if test="retail_order_purchasePersonID != null">
+			retail_order_purchasePersonID = #{retail_order_purchasePersonID},
+			</if>
+			<if test="retail_order_purchasePersonPhone != null">
+			retail_order_purchasePersonPhone = #{retail_order_purchasePersonPhone},
+			</if>
+			<if test="retail_order_pharmacistName != null">
+			retail_order_pharmacistName = #{retail_order_pharmacistName},
+			</if>
+			<if test="retail_order_pharmacistElectronicSignature != null">
+			retail_order_pharmacistElectronicSignature = #{retail_order_pharmacistElectronicSignature},
+			</if>
+			<if test="retail_order_drugTicketId != null">
+			retail_order_drugTicketId = #{retail_order_drugTicketId},
+			</if>
+			<if test="retail_order_saveTime != null">
+			retail_order_saveTime = #{retail_order_saveTime},
+			</if>
+			<if test="retail_order_SingleDoseAmount != null">
+			retail_order_SingleDoseAmount = #{retail_order_SingleDoseAmount},
+			</if>
+			<if test="retail_order_fullGiftAmount != null">
+			retail_order_fullGiftAmount = #{retail_order_fullGiftAmount},
+			</if>
+			<if test="retail_order_fullGiftExchange != null">
+			retail_order_fullGiftExchange = #{retail_order_fullGiftExchange},
+			</if>
+			<if test="retail_order_fullGiftRemain != null">
+			retail_order_fullGiftRemain = #{retail_order_fullGiftRemain},
+			</if>
+			<if test="retail_order_otherCharge != null">
+			retail_order_otherCharge = #{retail_order_otherCharge},
+			</if>
+			<if test="retail_order_receivableAmount != null">
+			retail_order_receivableAmount = #{retail_order_receivableAmount},
+			</if>
+			<if test="retail_order_pointPay != null">
+			retail_order_pointPay = #{retail_order_pointPay},
+			</if>
+	</set>where retail_order_ticketId = #{retail_order_ticketId}
+	</update>
+
+
+
+	<!-- 删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  retail_order
+		where retail_order_id = #{id}
+	</delete>
+	
+	<select id="getMaxRetailOrderCode" parameterType="String" resultType="Integer">
+		select max(cast(SUBSTRING(retail_order_ticketId,len(retail_order_ticketId)-3,4) as INT))
+		from retail_order 
+		where 
+		SUBSTRING(retail_order_ticketId,3,len(retail_order_ticketId)-6) =#{currentDate}
+	</select>
+	
+	<!-- 根据ticketId删除表中数据 -->
+	<delete id="deleteByTicketId" parameterType="String">
+		delete from retail_order_batch
+		where retail_order_ticketId = #{ticketId};
+		delete from retail_order_product
+		where retail_order_ticketId = #{ticketId};
+		delete from retail_order
+		where retail_order_ticketId = #{ticketId}
+	</delete>
+	
+	
+	
+	<!-- 根据productId查询批次库存 -->
+	<select id="getStockByProductId"   resultType="RetailOrderVO">
+		select *,(si.stock_storageNumber-si.stock_occupyNumber) as accept_Number,bd.department_discountModify as discount_modify
+		from bas_departmentinfo as bd,stock_info as si LEFT JOIN pro_infoManage as pim on pim.product_id = si.product_id 
+		<where>
+			si.stock_storage = bd.department_id
+			and si.stock_saleStop = 0 
+			and DATEDIFF(second, si.stock_invalidDate , getdate()) &lt; = 0
+			<if test="bean.stock_info_id != null">
+			and si.stock_info_id = #{bean.stock_info_id}
+			</if>
+			
+			<if test="list.size() > 0">
+			and
+				<foreach collection="list" item="product_id" index="index" open="(" separator="or" close=")" >
+					si.product_id = #{product_id} 
+				</foreach>
+			</if>
+			<if test="bean.stock_storage != null">
+			and si.stock_storage = #{bean.stock_storage}
+			</if>
+			<if test="bean.stock_buyPresentSpecial != null">
+			and si.stock_buyPresentSpecial = #{bean.stock_buyPresentSpecial}
+			</if>
+			<if test="bean.product_code != null">
+			and pim.product_code like #{bean.product_code}
+			</if>
+			<if test="bean.product_chnpy != null">
+			and pim.product_chnpy like #{bean.product_chnpy}
+			</if>
+			<if test="bean.product_name != null">
+			and pim.product_name like #{bean.product_name}
+			</if>
+		</where>
+		order by si.${bean.order} asc
+	</select>
+	
+	
+	
+	<!-- 查询未完成的草稿信息 -->
+	<select id="getDraftInfo" parameterType="String" resultType="RetailOrderVO">
+		select rob.order_batch_quantity as number, (rop.order_product_unitPrice - rop.order_product_discountAmount)as discountedPrice,
+		rob.order_batch_member as mem_card_id,*
+		from  retail_order_product as rop, retail_order_batch as rob LEFT JOIN pro_infoManage as pi on rob.product_id = pi.product_id
+		WHERE rop.order_productId = rob.order_productId 
+		and rop.retail_order_ticketId = rob.retail_order_ticketId  
+		and rop.retail_order_ticketId = #{retail_order_ticketId}
+	</select>
+	
+	<!-- 获得当前销售订单包含的产品数量 -->
+	<select id="countProduct" parameterType="String"  resultType="Integer">
+		select count(retail_order_product_id) as count
+		from retail_order_product
+		where retail_order_ticketId = #{retail_order_ticketId}
+	</select>
+</mapper> 

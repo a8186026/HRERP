@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysPageCtrlDao">
+	
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="SysPageCtrl" resultType="SysPageCtrl">
+		
+		select *
+		
+		from sys_page g
+		<where>
+		g.status = 0
+			<if test="page_name != null and page_name != null">
+				and g.page_name like #{page_name}
+			</if>
+			 
+			<!--  <if test="offset != null and offset !=0">
+				and id not in(select top ${offset} id from sys_page)
+			</if>  -->
+		</where>
+		<!-- <if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if> -->
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="findCount" parameterType="SysPageCtrl" resultType="int">
+		select g.*
+		from sys_page g
+		<where>
+			<if test="page_name != null and page_name != null">
+				g.page_name like #{page_name}
+			</if>
+			and g.status = 0
+		</where>
+	</select>
+
+	<!-- -->
+	<select id="get" parameterType="int" resultType="SysPageCtrl">
+		select g.*
+		from sys_page g
+		<where>
+			g.id = #{id}
+			and g.status = 0
+		</where>
+	</select>
+
+	
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysPageCtrl" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into sys_page(page_name, page_jsp,create_user,create_time,last_modify_user,
+		last_modify_time,status)
+		values(#{page_name}, #{page_jsp}, #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, 
+		#{status});
+	</insert>
+	
+<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysPageCtrl">
+		update sys_page
+		<set>
+			<if test="page_name != null">
+				page_name = #{page_name},
+			</if>
+			<if test="page_jsp != null">
+				page_jsp = #{page_jsp},
+			</if>
+			<if test="create_user != null">
+				create_user= #{create_user},
+			</if>
+			<if test="create_time != null">
+				create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<!-- 根据ID删除表中数据 (此处调用存储过程，删除页面和页面下的所有控件)-->
+	<delete id="delete" parameterType="int">
+		{call deletePageCtrl(#{id,mode=IN,jdbcType=INTEGER})}
+	</delete>
+</mapper> 

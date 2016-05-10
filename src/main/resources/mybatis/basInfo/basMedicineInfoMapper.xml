@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.BasMedicineInfoDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="BasMedicineInfo">
+		select *
+		from bas_medicineinfo
+		where medicine_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="BasMedicineInfo" resultType="BasMedicineInfo">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from bas_medicineinfo
+		<where>
+			status = 0
+			<if test="medicine_code != null">
+				and medicine_code like #{medicine_code}
+			</if>
+
+			<if test="medicine_name != null">
+				and medicine_name like #{medicine_name}
+			</if>					
+			<if test="medicine_chnpy != null">
+				and medicine_chnpy like #{medicine_chnpy}
+			</if>
+
+			<if test="offset != null and offset !=0">
+				and medicine_id not in(select top ${offset} medicine_id from bas_medicineinfo where status = 0
+				<if test="medicine_code != null">
+					and medicine_code like #{medicine_code}
+				</if>
+	
+				<if test="medicine_name != null">
+					and medicine_name like #{medicine_name}
+				</if>					
+				<if test="medicine_chnpy != null">
+					and medicine_chnpy like #{medicine_chnpy}
+				</if>
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+				
+			</if>
+			
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<!-- 返回当前数据库表中最大的药品编码值 -->
+	<select id="getMaxMedicineCode"  resultType="Integer">
+		select max(cast(substring(medicine_code,5,4) as INT)) 
+		from bas_medicineinfo
+		where substring(medicine_code,1,4) = #{ticketNumber}
+		and status = 0
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+		<select id="count" parameterType="BasMedicineInfo" resultType="int">
+		select count(medicine_id) as count 
+		from bas_medicineinfo
+		<where>
+			status = 0
+			<if test="medicine_code != null">
+				and medicine_code like #{medicine_code}
+			</if>
+
+			<if test="medicine_name != null">
+				and medicine_name like #{medicine_name}
+			</if>
+			
+			<if test="medicine_proname != null">
+				and medicine_proname like #{medicine_proname}
+			</if>
+			
+			<if test="medicine_engname != null">
+				and medicine_engname like #{medicine_engname}
+			</if>
+			
+			<if test="medicine_chnpy != null">
+				and medicine_chnpy like #{medicine_chnpy}
+			</if>
+			
+			<if test="medicine_description != null">
+				and medicine_description like #{medicine_description}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="BasMedicineInfo" useGeneratedKeys="true"
+		keyProperty="medicine_id">
+		insert into bas_medicineinfo(medicine_code,
+		medicine_name,medicine_proname,medicine_engname,medicine_chnpy,
+		medicine_effect,medicine_note,medicine_description,medicine_update_time,
+		flag,create_user,create_time,last_modify_user,last_modify_time,status)
+		
+		values(#{medicine_code}, #{medicine_name},
+		#{medicine_proname}, #{medicine_engname}, #{medicine_chnpy},
+		 #{medicine_effect},#{medicine_note},#{medicine_description}, #{medicine_update_time},
+		 #{flag},#{create_user}, #{create_time},#{last_modify_user},#{last_modify_time},#{status});
+	</insert>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="BasMedicineInfo">
+		update bas_medicineinfo
+		<set>
+			<if test="medicine_code != null">
+				medicine_code = #{medicine_code},
+			</if>
+			<if test="medicine_name != null">
+				medicine_name = #{medicine_name},
+			</if>
+			<if test="medicine_proname != null">
+				medicine_proname = #{medicine_proname},
+			</if>
+			<if test="medicine_engname != null">
+				medicine_engname = #{medicine_engname},
+			</if>
+			<if test="medicine_chnpy != null">
+				medicine_chnpy = #{medicine_chnpy},
+			</if>
+			<if test="medicine_effect != null">
+				medicine_effect = #{medicine_effect},
+			</if>
+			<if test="medicine_note != null">
+				medicine_note = #{medicine_note},
+			</if>
+			<if test="medicine_description != null">
+				medicine_description = #{medicine_description},
+			</if>
+			<if test="medicine_update_time != null">
+				medicine_update_time = #{medicine_update_time},
+			</if>
+			<if test="flag != null">
+				flag = #{flag},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where medicine_id = #{medicine_id}
+	</update>
+
+
+	<update id="delete" parameterType="int">
+		update bas_medicineinfo
+		<set>
+				status = 1,
+		</set>
+		where medicine_id = #{medicine_id}
+	</update>
+
+</mapper> 

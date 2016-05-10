@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<!-- /**
+ * 调货计划
+ * 
+ * @author 战晓桐
+ * @version v1.0
+ * @since 2015-10-30
+ */ -->
+<mapper namespace="com.goldcow.emanage.dept.persist.DeptPlanManageDao">
+	<!-- 获取调货计划数据 -->
+	<select id="get" parameterType="Integer" resultType="DeptPlanManage">
+		select *
+		from dept_plan
+		where deptPlan_id = #{deptPlan_id}
+	</select>
+	
+	
+	<!-- 获取调货计划数据 -->
+	<select id="getBeanByProID" parameterType="Integer" resultType="DeptPlanManage">
+		select *
+		from dept_plan
+		where deptPlan_pro_id = #{deptPlan_pro_id}
+	</select>
+	
+	<!-- 返回当前数据库表中最大计划票号  -->
+	<select id="getMaxDeptPlanTicket"  resultType="Integer">
+		select max(cast(substring(deptPlan_ticket_id,15,19) as INT)) 
+		from dept_plan
+		where substring(deptPlan_ticket_id,7,8) = #{date}
+	</select>
+	
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="stockInfoList" parameterType="ProStockInfoVO" resultType="ProStockInfoVO">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+		from pro_infoManage as pim,stock_info as si
+		<where>
+			pim.product_id = si.product_id
+			<if test="stock_storage != null">
+				and si.stock_storage = #{stock_storage}
+			</if>
+			<if test="product_code != null">
+				and pim.product_code like #{product_code}
+			</if>
+			 <if test="shouldDeliveryNum != null">
+				and si.stock_storageNumber &lt; #{shouldDeliveryNum}
+			</if>
+			<if test="product_musthave != null">
+				and pim.product_musthave like #{product_musthave}
+			</if>
+			<if test="offset != null and offset !=0">
+				and stock_info_id not in(select top ${offset} stock_info_id 
+				from pro_infoManage as pim,stock_info as si
+				where 
+					pim.product_id = si.product_id
+					<if test="stock_storage != null">
+						and si.stock_storage = #{stock_storage}
+					</if>
+					<if test="product_code != null">
+						and pim.product_code like #{product_code}
+					</if>
+					 <if test="shouldDeliveryNum != null">
+						and si.stock_storageNumber &lt; #{shouldDeliveryNum}
+					</if>
+					<if test="product_musthave != null">
+					and pim.product_musthave like #{product_musthave}
+					</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+		<!-- 查询数据条数，直接返回int类型条数 -->
+		<select id="countStockInfoList" parameterType="ProStockInfoVO" resultType="int">
+		select count(pim.product_id) as count 
+		from pro_infoManage as pim,stock_info as si
+		<where>
+			pim.product_id = si.product_id
+			<if test="stock_storage != null">
+				and si.stock_storage = #{stock_storage}
+			</if>
+			<if test="product_code != null">
+				and pim.product_code like #{product_code}
+			</if>
+			 <if test="shouldDeliveryNum != null">
+				and si.stock_storageNumber &lt; #{shouldDeliveryNum}
+			</if>
+			<if test="product_musthave != null">
+				and pim.product_musthave like #{product_musthave}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象，他人误用，本人独享 -->
+		<select id="lists" parameterType="DeptPlanManage" resultType="ProDeptPlanManageVO">
+			<if test="rows!=null">
+				 select top ${rows}*
+			</if>
+			<if test="rows == null">
+				select *
+			</if>
+				from dept_plan as dp,pro_infoManage as pim
+			<where>
+				dp.deptPlan_checkStatus = 1 and dp.deptPlan_pro_id = pim.product_id
+				<if test="deptPlan_id!=null">
+				and deptPlan_id like #{deptPlan_id}
+				</if>
+				<if test="deptPlan_ticket_id!=null">
+				and deptPlan_ticket_id like #{deptPlan_ticket_id}
+				</if>
+				<if test="deptPlan_exportDept!=null">
+				and deptPlan_exportDept like #{deptPlan_exportDept}
+				</if>
+				<if test="deptPlan_applyDept!=null">
+				and deptPlan_applyDept like #{deptPlan_applyDept}
+				</if>
+				<if test="deptPlan_applyPerson!=null">
+				and deptPlan_applyPerson like #{deptPlan_applyPerson}
+				</if>
+				<if test="deptPlan_applyTime!=null">
+				and deptPlan_applyTime like #{deptPlan_applyTime}
+				</if>
+				<if test="deptPlan_pro_id!=null">
+				and deptPlan_pro_id like #{deptPlan_pro_id}
+				</if>
+				<if test="deptPlan_applyNum!=null">
+				and deptPlan_applyNum like #{deptPlan_applyNum}
+				</if>
+				<if test="deptPlan_applyPrice!=null">
+				and deptPlan_applyPrice like #{deptPlan_applyPrice}
+				</if>
+				<if test="deptPlan_applyMoney!=null">
+				and deptPlan_applyMoney like #{deptPlan_applyMoney}
+				</if>
+				<if test="deptPlan_summary!=null">
+				and deptPlan_summary like #{deptPlan_summary}
+				</if>
+				<if test="deptPlan_date!=null">
+				and deptPlan_date like #{deptPlan_date}
+				</if>
+				<if test="deptPlan_allocationStatus!=null">
+				and deptPlan_allocationStatus like #{deptPlan_allocationStatus}
+				</if>
+				<if test="deptPlan_allocationMethod!=null">
+				and deptPlan_allocationMethod like #{deptPlan_allocationMethod}
+				</if>
+				<if test="deptPlan_allocation_id!=null">
+				and deptPlan_allocation_id like #{deptPlan_allocation_id}
+				</if>
+				<if test="deptPlan_allocationNum!=null">
+				and deptPlan_allocationNum like #{deptPlan_allocationNum}
+				</if>
+				<if test="deptPlan_allocationDate!=null">
+				and deptPlan_allocationDate like #{deptPlan_allocationDate}
+				</if>
+				<if test="deptPlan_allocationPerson!=null">
+				and deptPlan_allocationPerson like #{deptPlan_allocationPerson}
+				</if>
+				<if test="deptPlan_allocationInstruction!=null">
+				and deptPlan_allocationInstruction like #{deptPlan_allocationInstruction}
+				</if>
+				<if test="deptPlan_supply_id!=null">
+				and deptPlan_supply_id like #{deptPlan_supply_id}
+				</if>
+				<if test="deptPlan_contactPerson!=null">
+				and deptPlan_contactPerson like #{deptPlan_contactPerson}
+				</if>
+				<if test="deptPlan_checkStatus!=null">
+				and deptPlan_checkStatus like #{deptPlan_checkStatus}
+				</if>
+				<if test="deptPlan_checkPerson!=null">
+				and deptPlan_checkPerson like #{deptPlan_checkPerson}
+				</if>
+				<if test="deptPlan_checkTime!=null">
+				and deptPlan_checkTime like #{deptPlan_checkTime}
+				</if>
+				<if test="deptPlan_handleStatus!=null">
+				and deptPlan_handleStatus like #{deptPlan_handleStatus}
+				</if>
+				<if test="deptPlan_handlePerson!=null">
+				and deptPlan_handlePerson like #{deptPlan_handlePerson}
+				</if>
+				<if test="deptPlan_handleTime!=null">
+				and deptPlan_handleTime like #{deptPlan_handleTime}
+				</if>
+				<if test="deptPlan_handleInstruction!=null">
+				and deptPlan_handleInstruction like #{deptPlan_handleInstruction}
+				</if>
+				<if test="offset != null and offset !=0">
+					and deptPlan_id not in(select top ${offset} deptPlan_id from dept_plan as dp,pro_infoManage as pim
+					where dp.deptPlan_checkStatus = 1 and dp.deptPlan_pro_id = pim.product_id
+					<if test="deptPlan_id!=null">
+					and deptPlan_id like #{deptPlan_id}
+					</if>
+					<if test="deptPlan_ticket_id!=null">
+					and deptPlan_ticket_id like #{deptPlan_ticket_id}
+					</if>
+					<if test="deptPlan_exportDept!=null">
+					and deptPlan_exportDept like #{deptPlan_exportDept}
+					</if>
+					<if test="deptPlan_applyDept!=null">
+					and deptPlan_applyDept like #{deptPlan_applyDept}
+					</if>
+					<if test="deptPlan_applyPerson!=null">
+					and deptPlan_applyPerson like #{deptPlan_applyPerson}
+					</if>
+					<if test="deptPlan_applyTime!=null">
+					and deptPlan_applyTime like #{deptPlan_applyTime}
+					</if>
+					<if test="deptPlan_pro_id!=null">
+					and deptPlan_pro_id like #{deptPlan_pro_id}
+					</if>
+					<if test="deptPlan_applyNum!=null">
+					and deptPlan_applyNum like #{deptPlan_applyNum}
+					</if>
+					<if test="deptPlan_applyPrice!=null">
+					and deptPlan_applyPrice like #{deptPlan_applyPrice}
+					</if>
+					<if test="deptPlan_applyMoney!=null">
+					and deptPlan_applyMoney like #{deptPlan_applyMoney}
+					</if>
+					<if test="deptPlan_summary!=null">
+					and deptPlan_summary like #{deptPlan_summary}
+					</if>
+					<if test="deptPlan_date!=null">
+					and deptPlan_date like #{deptPlan_date}
+					</if>
+					<if test="deptPlan_allocationStatus!=null">
+					and deptPlan_allocationStatus like #{deptPlan_allocationStatus}
+					</if>
+					<if test="deptPlan_allocationMethod!=null">
+					and deptPlan_allocationMethod like #{deptPlan_allocationMethod}
+					</if>
+					<if test="deptPlan_allocation_id!=null">
+					and deptPlan_allocation_id like #{deptPlan_allocation_id}
+					</if>
+					<if test="deptPlan_allocationNum!=null">
+					and deptPlan_allocationNum like #{deptPlan_allocationNum}
+					</if>
+					<if test="deptPlan_allocationDate!=null">
+					and deptPlan_allocationDate like #{deptPlan_allocationDate}
+					</if>
+					<if test="deptPlan_allocationPerson!=null">
+					and deptPlan_allocationPerson like #{deptPlan_allocationPerson}
+					</if>
+					<if test="deptPlan_allocationInstruction!=null">
+					and deptPlan_allocationInstruction like #{deptPlan_allocationInstruction}
+					</if>
+					<if test="deptPlan_supply_id!=null">
+					and deptPlan_supply_id like #{deptPlan_supply_id}
+					</if>
+					<if test="deptPlan_contactPerson!=null">
+					and deptPlan_contactPerson like #{deptPlan_contactPerson}
+					</if>
+					<if test="deptPlan_checkStatus!=null">
+					and deptPlan_checkStatus like #{deptPlan_checkStatus}
+					</if>
+					<if test="deptPlan_checkPerson!=null">
+					and deptPlan_checkPerson like #{deptPlan_checkPerson}
+					</if>
+					<if test="deptPlan_checkTime!=null">
+					and deptPlan_checkTime like #{deptPlan_checkTime}
+					</if>
+					<if test="deptPlan_handleStatus!=null">
+					and deptPlan_handleStatus like #{deptPlan_handleStatus}
+					</if>
+					<if test="deptPlan_handlePerson!=null">
+					and deptPlan_handlePerson like #{deptPlan_handlePerson}
+					</if>
+					<if test="deptPlan_handleTime!=null">
+					and deptPlan_handleTime like #{deptPlan_handleTime}
+					</if>
+					<if test="deptPlan_handleInstruction!=null">
+					and deptPlan_handleInstruction like #{deptPlan_handleInstruction}
+					</if>
+					<if test="sort != null and order != null">
+						order by ${sort} ${order}
+					</if>
+					)
+				</if>
+			</where>
+			<if test="sort != null and order != null">
+				order by ${sort} ${order}
+			</if>
+		</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+		<select id="count" parameterType="DeptPlanManage" resultType="int">
+				select count(deptPlan_id) as count 
+				from dept_plan as dp,pro_infoManage as pim
+			<where>
+				dp.deptPlan_checkStatus = 1 and dp.deptPlan_pro_id = pim.product_id
+			<if test="deptPlan_id!=null">
+				deptPlan_id like #{deptPlan_id}
+				</if>
+				<if test="deptPlan_ticket_id!=null">
+				and deptPlan_ticket_id like #{deptPlan_ticket_id}
+				</if>
+				<if test="deptPlan_exportDept!=null">
+				and deptPlan_exportDept like #{deptPlan_exportDept}
+				</if>
+				<if test="deptPlan_applyDept!=null">
+				and deptPlan_applyDept like #{deptPlan_applyDept}
+				</if>
+				<if test="deptPlan_applyPerson!=null">
+				and deptPlan_applyPerson like #{deptPlan_applyPerson}
+				</if>
+				<if test="deptPlan_applyTime!=null">
+				and deptPlan_applyTime like #{deptPlan_applyTime}
+				</if>
+				<if test="deptPlan_pro_id!=null">
+				and deptPlan_pro_id like #{deptPlan_pro_id}
+				</if>
+				<if test="deptPlan_applyNum!=null">
+				and deptPlan_applyNum like #{deptPlan_applyNum}
+				</if>
+				<if test="deptPlan_applyPrice!=null">
+				and deptPlan_applyPrice like #{deptPlan_applyPrice}
+				</if>
+				<if test="deptPlan_applyMoney!=null">
+				and deptPlan_applyMoney like #{deptPlan_applyMoney}
+				</if>
+				<if test="deptPlan_summary!=null">
+				and deptPlan_summary like #{deptPlan_summary}
+				</if>
+				<if test="deptPlan_date!=null">
+				and deptPlan_date like #{deptPlan_date}
+				</if>
+				<if test="deptPlan_allocationStatus!=null">
+				and deptPlan_allocationStatus like #{deptPlan_allocationStatus}
+				</if>
+				<if test="deptPlan_allocationMethod!=null">
+				and deptPlan_allocationMethod like #{deptPlan_allocationMethod}
+				</if>
+				<if test="deptPlan_allocation_id!=null">
+				and deptPlan_allocation_id like #{deptPlan_allocation_id}
+				</if>
+				<if test="deptPlan_allocationNum!=null">
+				and deptPlan_allocationNum like #{deptPlan_allocationNum}
+				</if>
+				<if test="deptPlan_allocationDate!=null">
+				and deptPlan_allocationDate like #{deptPlan_allocationDate}
+				</if>
+				<if test="deptPlan_allocationPerson!=null">
+				and deptPlan_allocationPerson like #{deptPlan_allocationPerson}
+				</if>
+				<if test="deptPlan_allocationInstruction!=null">
+				and deptPlan_allocationInstruction like #{deptPlan_allocationInstruction}
+				</if>
+				<if test="deptPlan_supply_id!=null">
+				and deptPlan_supply_id like #{deptPlan_supply_id}
+				</if>
+				<if test="deptPlan_contactPerson!=null">
+				and deptPlan_contactPerson like #{deptPlan_contactPerson}
+				</if>
+				<if test="deptPlan_checkStatus!=null">
+				and deptPlan_checkStatus like #{deptPlan_checkStatus}
+				</if>
+				<if test="deptPlan_checkPerson!=null">
+				and deptPlan_checkPerson like #{deptPlan_checkPerson}
+				</if>
+				<if test="deptPlan_checkTime!=null">
+				and deptPlan_checkTime like #{deptPlan_checkTime}
+				</if>
+				<if test="deptPlan_handleStatus!=null">
+				and deptPlan_handleStatus like #{deptPlan_handleStatus}
+				</if>
+				<if test="deptPlan_handlePerson!=null">
+				and deptPlan_handlePerson like #{deptPlan_handlePerson}
+				</if>
+				<if test="deptPlan_handleTime!=null">
+				and deptPlan_handleTime like #{deptPlan_handleTime}
+				</if>
+				<if test="deptPlan_handleInstruction!=null">
+				and deptPlan_handleInstruction like #{deptPlan_handleInstruction}
+				</if>
+		
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="DeptPlanManage" useGeneratedKeys="true" keyProperty="deptPlan_id">
+		 insert into dept_plan(
+		deptPlan_ticket_id,  deptPlan_exportDept, deptPlan_applyDept, deptPlan_applyPerson, 
+		deptPlan_applyTime, deptPlan_pro_id, deptPlan_applyNum, deptPlan_applyPrice, 
+		deptPlan_applyMoney, deptPlan_summary, deptPlan_date, deptPlan_allocationStatus, deptPlan_allocationMethod, 
+		deptPlan_allocation_id, deptPlan_allocationNum, deptPlan_allocationDate, deptPlan_allocationPerson, deptPlan_allocationInstruction, 
+		deptPlan_supply_id, deptPlan_contactPerson, deptPlan_checkStatus, deptPlan_checkPerson, deptPlan_checkTime, 
+		deptPlan_handleStatus, deptPlan_handlePerson, deptPlan_handleTime, deptPlan_handleInstruction,deptPlan_storageNumber)
+		values(
+		#{deptPlan_ticket_id}, #{deptPlan_exportDept}, #{deptPlan_applyDept}, #{deptPlan_applyPerson}, 
+		#{deptPlan_applyTime}, #{deptPlan_pro_id}, #{deptPlan_applyNum}, #{deptPlan_applyPrice}, 
+		#{deptPlan_applyMoney}, #{deptPlan_summary}, #{deptPlan_date}, #{deptPlan_allocationStatus}, #{deptPlan_allocationMethod}, 
+		#{deptPlan_allocation_id}, #{deptPlan_allocationNum}, #{deptPlan_allocationDate}, #{deptPlan_allocationPerson}, #{deptPlan_allocationInstruction}, 
+		#{deptPlan_supply_id}, #{deptPlan_contactPerson}, #{deptPlan_checkStatus}, #{deptPlan_checkPerson}, #{deptPlan_checkTime}, 
+		#{deptPlan_handleStatus}, #{deptPlan_handlePerson}, #{deptPlan_handleTime}, #{deptPlan_handleInstruction}, #{deptPlan_storageNumber});
+	</insert>	
+	
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="DeptPlanManage">
+		 update dept_plan
+		<set>
+			<if test="deptPlan_ticket_id != null">
+			deptPlan_ticket_id = #{deptPlan_ticket_id},
+			</if>
+			<if test="deptPlan_exportDept != null">
+			deptPlan_exportDept = #{deptPlan_exportDept},
+			</if>
+			<if test="deptPlan_applyDept != null">
+			deptPlan_applyDept = #{deptPlan_applyDept},
+			</if>
+			<if test="deptPlan_applyPerson != null">
+			deptPlan_applyPerson = #{deptPlan_applyPerson},
+			</if>
+			<if test="deptPlan_applyTime != null">
+			deptPlan_applyTime = #{deptPlan_applyTime},
+			</if>
+			<if test="deptPlan_pro_id != null">
+			deptPlan_pro_id = #{deptPlan_pro_id},
+			</if>
+			<if test="deptPlan_applyNum != null">
+			deptPlan_applyNum = #{deptPlan_applyNum},
+			</if>
+			<if test="deptPlan_applyPrice != null">
+			deptPlan_applyPrice = #{deptPlan_applyPrice},
+			</if>
+			<if test="deptPlan_applyMoney != null">
+			deptPlan_applyMoney = #{deptPlan_applyMoney},
+			</if>
+			<if test="deptPlan_summary != null">
+			deptPlan_summary = #{deptPlan_summary},
+			</if>
+			<if test="deptPlan_date != null">
+			deptPlan_date = #{deptPlan_date},
+			</if>
+			<if test="deptPlan_allocationStatus != null">
+			deptPlan_allocationStatus = #{deptPlan_allocationStatus},
+			</if>
+			<if test="deptPlan_allocationMethod != null">
+			deptPlan_allocationMethod = #{deptPlan_allocationMethod},
+			</if>
+			<if test="deptPlan_allocation_id != null">
+			deptPlan_allocation_id = #{deptPlan_allocation_id},
+			</if>
+			<if test="deptPlan_allocationNum != null">
+			deptPlan_allocationNum = #{deptPlan_allocationNum},
+			</if>
+			<if test="deptPlan_allocationDate != null">
+			deptPlan_allocationDate = #{deptPlan_allocationDate},
+			</if>
+			<if test="deptPlan_allocationPerson != null">
+			deptPlan_allocationPerson = #{deptPlan_allocationPerson},
+			</if>
+			<if test="deptPlan_allocationInstruction != null">
+			deptPlan_allocationInstruction = #{deptPlan_allocationInstruction},
+			</if>
+			<if test="deptPlan_supply_id != null">
+			deptPlan_supply_id = #{deptPlan_supply_id},
+			</if>
+			<if test="deptPlan_contactPerson != null">
+			deptPlan_contactPerson = #{deptPlan_contactPerson},
+			</if>
+			<if test="deptPlan_checkStatus != null">
+			deptPlan_checkStatus = #{deptPlan_checkStatus},
+			</if>
+			<if test="deptPlan_checkPerson != null">
+			deptPlan_checkPerson = #{deptPlan_checkPerson},
+			</if>
+			<if test="deptPlan_checkTime != null">
+			deptPlan_checkTime = #{deptPlan_checkTime},
+			</if>
+			<if test="deptPlan_handleStatus != null">
+			deptPlan_handleStatus = #{deptPlan_handleStatus},
+			</if>
+			<if test="deptPlan_handlePerson != null">
+			deptPlan_handlePerson = #{deptPlan_handlePerson},
+			</if>
+			<if test="deptPlan_handleTime != null">
+			deptPlan_handleTime = #{deptPlan_handleTime},
+			</if>
+			<if test="deptPlan_handleInstruction != null">
+			deptPlan_handleInstruction = #{deptPlan_handleInstruction},
+			</if>
+	</set>where deptPlan_id = #{deptPlan_id}
+	</update>
+
+
+
+
+	<update id="delete" parameterType="Integer">
+		delete from dept_plan
+		where deptPlan_id = #{id}
+	</update>
+	
+</mapper> 

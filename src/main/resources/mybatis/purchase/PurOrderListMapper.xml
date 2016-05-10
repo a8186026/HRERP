@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.purchase.persist.PurOrderListDao">
+	<!-- 获取 -->
+	<select id="get" parameterType="Integer" resultType="PurOrderList">
+		select *
+		from pur_order_list
+		where id = #{id}
+		and status = 0
+	</select>
+	
+	<select id="listRecent" parameterType="PurOrderList" resultType="PurOrderListVO">
+		select top 3*
+		from pur_order_list as pol,pro_infoManage as pim,sup_infoManage as sim,pur_order as po
+		where po.ticket_id = pol.ticket_id and pol.product_id = pim.product_id and po.supply_id = sim.sup_id
+		and pol.status = 0 and pol.product_id = #{product_id}
+	</select>
+	<select id="getlist" parameterType="String" resultType="PurOrderList">
+		select *
+		from pur_order_list
+		where ticket_id = #{id}
+		and status = 0
+	</select>
+	
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="PurOrderList">
+			select *
+			from pur_order_list
+		<where>
+			 status = 0
+			<if test="ticket_id!=null">
+			and ticket_id like #{ticket_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id = #{product_id}
+			</if>
+			<if test="quantity!=null">
+			and quantity = #{quantity}
+			</if>
+			<if test="unitprice!=null">
+			and unitprice = #{unitprice}
+			</if>
+			<if test="sum!=null">
+			and sum = #{sum}
+			</if>
+			<if test="settlementPrice!=null">
+			and settlementPrice = #{settlementPrice}
+			</if>
+			<if test="referencePrice!=null">
+			and referencePrice = #{referencePrice}
+			</if>
+			<if test="orderSettlementPrice!=null">
+			and orderSettlementPrice = #{orderSettlementPrice}
+			</if>
+			<if test="create_user!=null">
+			and create_user = #{create_user}
+			</if>
+			<if test="create_time!=null">
+			and create_time = #{create_time}
+			</if>
+			<if test="last_modify_user!=null">
+			and last_modify_user = #{last_modify_user}
+			</if>
+			<if test="last_modify_time!=null">
+			and last_modify_time = #{last_modify_time}
+			</if>
+			<if test="arrivalDate!=null">
+			and arrivalDate = #{arrivalDate}
+			</if>
+			<if test="isArrival!=null">
+			and isArrival = #{isArrival}
+			</if>
+			<if test="arrivalNumber!=null">
+			and arrivalNumber = #{arrivalNumber}
+			</if>
+			
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="MemCardManage" resultType="int">
+		select count(id) as count 
+		from pur_order_list
+		<where>
+			 status = 0
+			<if test="ticket_id!=null">
+			and ticket_id = #{ticket_id}
+			</if>
+			<if test="product_id!=null">
+			and product_id = #{product_id}
+			</if>
+			<if test="quantity!=null">
+			and quantity = #{quantity}
+			</if>
+			<if test="unitprice!=null">
+			and unitprice = #{unitprice}
+			</if>
+			<if test="sum!=null">
+			and sum = #{sum}
+			</if>
+			<if test="settlementPrice!=null">
+			and settlementPrice = #{settlementPrice}
+			</if>
+			<if test="referencePrice!=null">
+			and referencePrice = #{referencePrice}
+			</if>
+			<if test="orderSettlementPrice!=null">
+			and orderSettlementPrice = #{orderSettlementPrice}
+			</if>
+			<if test="create_user!=null">
+			and create_user = #{create_user}
+			</if>
+			<if test="create_time!=null">
+			and create_time = #{create_time}
+			</if>
+			<if test="last_modify_user!=null">
+			and last_modify_user = #{last_modify_user}
+			</if>
+			<if test="last_modify_time!=null">
+			and last_modify_time = #{last_modify_time}
+			</if>
+			<if test="arrivalDate!=null">
+			and arrivalDate = #{arrivalDate}
+			</if>
+			<if test="isArrival!=null">
+			and isArrival = #{isArrival}
+			</if>
+			<if test="arrivalNumber!=null">
+			and arrivalNumber = #{arrivalNumber}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="PurOrderList" useGeneratedKeys="true" keyProperty="id">
+	 	insert into pur_order_list(
+			ticket_id, product_id, quantity, unitprice, 
+			sum, settlementPrice, referencePrice, orderSettlementPrice, arrivalDate, 
+			isArrival, status, create_user, create_time, 
+			last_modify_user, last_modify_time, prepaidForList,arrivalNumber)
+			values(
+			#{ticket_id}, #{product_id},#{quantity}, #{unitprice}, 
+			#{sum}, #{settlementPrice},#{referencePrice},#{orderSettlementPrice}, #{arrivalDate},
+			#{isArrival}, #{status}, #{create_user}, #{create_time}, 
+			#{last_modify_user}, #{last_modify_time}, #{prepaidForList},#{arrivalNumber});
+	</insert>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addlog" parameterType="PurOrderList" useGeneratedKeys="true" keyProperty="pol_log_id">
+	 	insert into pur_order_list_log(
+			id, ticket_id, product_id, quantity, unitprice, 
+			sum, settlementPrice, referencePrice, orderSettlementPrice, arrivalDate, 
+			isArrival, status, create_user, create_time, 
+			last_modify_user, last_modify_time, prepaidForList,arrivalNumber)
+			values(
+			#{id}, #{ticket_id}, #{product_id},#{quantity}, #{unitprice}, 
+			#{sum}, #{settlementPrice},#{referencePrice},#{orderSettlementPrice}, #{arrivalDate},
+			#{isArrival}, #{status}, #{create_user}, #{create_time}, 
+			#{last_modify_user}, #{last_modify_time}, #{prepaidForList},#{arrivalNumber});
+	</insert>
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="PurOrderList">
+		 update pur_order_list
+		<set>
+			<if test="ticket_id != null">
+			ticket_id = #{ticket_id},
+			</if>
+			<if test="product_id != null">
+			product_id = #{product_id},
+			</if>
+			<if test="quantity != null">
+			quantity = #{quantity},
+			</if>
+			<if test="unitprice != null">
+			unitprice = #{unitprice},
+			</if>
+			<if test="sum != null">
+			sum = #{sum},
+			</if>
+			<if test="settlementPrice != null">
+			settlementPrice = #{settlementPrice},
+			</if>
+			<if test="referencePrice != null">
+			referencePrice = #{referencePrice},
+			</if>
+			<if test="orderSettlementPrice != null">
+			orderSettlementPrice = #{orderSettlementPrice},
+			</if>
+			<if test="arrivalDate != null">
+			arrivalDate = #{arrivalDate},
+			</if>
+			<if test="isArrival != null">
+			isArrival = #{isArrival},
+			</if>
+			<if test="status != null">
+			status = #{status},
+			</if>
+			<if test="create_user != null">
+			create_user = #{create_user},
+			</if>
+			<if test="create_time != null">
+			create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+			</if>
+			<if test="prepaidForList != null">
+			prepaidForList = #{prepaidForList},
+			</if>
+			<if test="arrivalNumber != null">
+			arrivalNumber = #{arrivalNumber},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+
+
+	<update id="delete" parameterType="int">
+		update pur_order_list
+		<set>
+			status = 9,
+		</set>
+		where id = #{id}
+	</update>
+	
+	<update id="deletePurderListByBean" parameterType="int">
+		update pur_order_list
+		<set>
+			status = 9,
+		</set>
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="ticket_id != null">
+			and ticket_id = #{ticket_id}
+		</if>
+	</update>
+	
+	<select id="listCheckOrderList" parameterType="map" resultType="PurOrderListAndProInfo">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if>
+		from pur_order_list as pol,pro_infoManage as pim
+	<where>
+		 pol.status = 0  and  pol.product_id = pim.product_id
+		 
+		 <if test="ticket_id!=null">
+			and ticket_id = #{ticket_id}
+		</if>
+		<if test="offset != null">
+				and id not in(select top ${offset} id from pur_order_list as pol,pro_infoManage as pim
+				where pol.status = 0  and  pol.product_id = pim.product_id
+				<if test="ticket_id!=null">
+					and ticket_id = #{ticket_id}
+				</if> 
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+	</select>
+	
+	<select id="listRecepitOrderList" parameterType="map" resultType="PurOrderListAndProInfo">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if>
+		from pur_order_list as pol,pro_infoManage as pim
+	<where>
+		 pol.status = 0  and pol.isArrival != 0 and pol.product_id = pim.product_id
+		 
+		 <if test="ticket_id!=null">
+			and ticket_id = #{ticket_id}
+		</if>
+		<if test="offset != null">
+				and id not in(select top ${offset} id from pur_order_list as pol,pro_infoManage as pim
+				where pol.status = 0  and pol.isArrival != 0 and pol.product_id = pim.product_id
+				<if test="ticket_id!=null">
+					and ticket_id = #{ticket_id}
+				</if> 
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+	</select>
+	
+	<!-- 返回该小单中产品是否为特殊品种 -->
+	<select id="getSpecialvariety"  resultType="Integer">
+		select product_specialvariety 
+		from pur_order_list left join pro_infoManage
+		on pur_order_list.product_id = pro_infoManage.product_id
+      	where pur_order_list.id= #{id}
+      	and pro_infoManage.status = 0
+		and pur_order_list.status = 0
+	</select>
+</mapper> 

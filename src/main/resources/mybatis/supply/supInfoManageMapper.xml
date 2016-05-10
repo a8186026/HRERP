@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.supply.persist.SupInfoManageDao">
+	<!-- 获取供方档案信息 -->
+	<select id="get" parameterType="Integer" resultType="SupInfoManage">
+		select *
+		from sup_infoManage
+		where sup_id = #{id}
+		and status = 0
+	</select>
+	
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="SupInfoManage" resultType="SupInfoManage">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from sup_infoManage
+		<where>
+			status = 0			
+			<if test="sup_code != null">
+				and sup_code like #{sup_code}
+			</if>
+			<if test="sup_name != null">
+				and sup_name like #{sup_name}
+			</if>
+			<if test="sup_shortname != null">
+				and sup_shortname like #{sup_shortname}
+			</if>
+			<if test="sup_chnpy != null">
+				and sup_chnpy like #{sup_chnpy}
+			</if>
+			<if test="sup_check != null">
+				and sup_check = #{sup_check}
+			</if>
+			<if test="sup_drugid != null">
+				<if test="sup_drugid == -1">
+				and sup_drugid is null
+				</if>
+				<if test="sup_drugid == -2">
+				and sup_drugid >0
+				</if>
+			</if>
+			<if test="offset != null and offset !=0">
+				and sup_id not in(select top ${offset} sup_id from sup_infoManage where status = 0
+				<if test="sup_code != null">
+				and sup_code like #{sup_code}
+				</if>
+				<if test="sup_name != null">
+					and sup_name like #{sup_name}
+				</if>
+				<if test="sup_shortname != null">
+					and sup_shortname like #{sup_shortname}
+				</if>
+				<if test="sup_chnpy != null">
+					and sup_chnpy like #{sup_chnpy}
+				</if>
+				<if test="sup_check != null">
+					and sup_check = #{sup_check}
+				</if>
+				<if test="sup_drugid != null">
+					<if test="sup_drugid == -1">
+					and sup_drugid is null
+					</if>
+					<if test="sup_drugid == -2">
+					and sup_drugid >0
+					</if>
+				</if>
+				<if test="sort != null and order != null">
+					order by ${sort} ${order}
+				</if>
+				)
+			</if>
+		</where>
+		
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="SupInfoManage" resultType="int">
+		select
+		count(sup_id) as count
+		from
+		sup_infoManage
+		<where>
+			status = 0
+			<if test="sup_code != null">
+				and sup_code like #{sup_code}
+			</if>
+				<if test="sup_name != null">
+				and sup_name like #{sup_name}
+			</if>
+				<if test="sup_shortname != null">
+				and sup_shortname like #{sup_shortname}
+			</if>
+				<if test="sup_chnpy != null">
+				and sup_chnpy like #{sup_chnpy}
+			</if>
+			<if test="sup_check != null">
+				and sup_check = #{sup_check}
+			</if>
+			<if test="sup_drugid != null">
+				and sup_drugid = #{sup_drugid}
+			</if>
+		</where>
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" parameterType="SupInfoManage" useGeneratedKeys="true"
+		keyProperty="sup_id">
+		insert into sup_infoManage(
+		sup_category1, sup_category2, sup_category3, sup_areano, sup_code, sup_shortname,
+		sup_name, sup_property, sup_chnpy, sup_address, sup_zipcode,
+		sup_procedure, sup_ctactperson, sup_tel, sup_mobile, sup_fax,
+		sup_ctractno, sup_email, sup_msncode, sup_qqcode, sup_buyname,
+		sup_brief, sup_fillingdate, sup_accname, sup_accno,
+		sup_bankname, sup_tax, sup_registaddr, sup_rmtway, sup_payway,
+		sup_paydate, sup_bond, sup_fnlnote, sup_pmtno, sup_pmtname,
+		sup_pmtchief, sup_pmtcueday, sup_pmtscope, sup_pmtissauthority, sup_pmtvaliddate,
+		sup_bnlslegalperson, sup_bnlsregistno, sup_bnlsregistmoney, sup_bnlsproperty, sup_bnlsscope,
+		sup_bnlsway, sup_bnlsissauthority, sup_bnlsvaliddate, sup_bnlsanndeaddate, sup_bnlsanndeadnote,
+		sup_bnlscueday, sup_qltycatename, sup_qltycateno, sup_qltycatescope, sup_qltycatevaliddate,
+		sup_qltycatecueday, sup_qltycateissauthority, sup_lsnote, sup_clkname, sup_clkidcard,
+		sup_clktel, sup_letvaliddate, sup_letcueday, sup_printway, 
+		sup_clkvaliddate, sup_clkcueday, sup_relatedseal, sup_fileno, sup_filelocation,
+		sup_check, sup_checkname, sup_checkdate,
+		sup_localdrug, sup_drugid, sup_drugcode, sup_annoutput, sup_majorhonor,
+		sup_technician, sup_intendedspecie, sup_majorproduct, sup_qltystatus,
+		sup_qltyinstitution, sup_qltyauthen, sup_qltymanage, sup_qltychief, sup_qltychiefsex,
+		sup_qltychiefedu, sup_qltychiefposition, sup_qltychieftitle, sup_qltychiefworkyear, sup_qltynote,
+		sup_goodticketphoto, sup_sealmoldphoto,
+		create_user, create_time, last_modify_user, last_modify_time, status,
+		sup_paydays,sup_istaxpayer,sup_shouldpay ,sup_receive,sup_lastpurchasedate,
+		sup_sourcecode,sup_advancepay,sup_other1,sup_other2,sup_other3,sup_other4,sup_finddrugid)
+		
+		values(#{sup_category1},#{sup_category2},#{sup_category3},#{sup_areano},#{sup_code},#{sup_shortname},
+		#{sup_name},#{sup_property},#{sup_chnpy},#{sup_address},#{sup_zipcode},
+		#{sup_procedure},#{sup_ctactperson},#{sup_tel},#{sup_mobile},#{sup_fax},
+		#{sup_ctractno},#{sup_email},#{sup_msncode},#{sup_qqcode},#{sup_buyname},
+		#{sup_brief},#{sup_fillingdate},#{sup_accname},#{sup_accno},
+		#{sup_bankname},#{sup_tax},#{sup_registaddr},#{sup_rmtway},#{sup_payway},
+		#{sup_paydate},#{sup_bond},#{sup_fnlnote},#{sup_pmtno},#{sup_pmtname},
+		#{sup_pmtchief},#{sup_pmtcueday},#{sup_pmtscope},#{sup_pmtissauthority},#{sup_pmtvaliddate},
+		#{sup_bnlslegalperson},#{sup_bnlsregistno},#{sup_bnlsregistmoney},#{sup_bnlsproperty},#{sup_bnlsscope},
+		#{sup_bnlsway},#{sup_bnlsissauthority},#{sup_bnlsvaliddate},#{sup_bnlsanndeaddate},#{sup_bnlsanndeadnote},
+		#{sup_bnlscueday},#{sup_qltycatename},#{sup_qltycateno},#{sup_qltycatescope},#{sup_qltycatevaliddate},
+		#{sup_qltycatecueday},#{sup_qltycateissauthority},#{sup_lsnote},#{sup_clkname},#{sup_clkidcard},
+		#{sup_clktel},#{sup_letvaliddate},#{sup_letcueday},#{sup_printway},
+		#{sup_clkvaliddate},#{sup_clkcueday},#{sup_relatedseal},#{sup_fileno},#{sup_filelocation},
+		#{sup_check},#{sup_checkname},#{sup_checkdate},
+		#{sup_localdrug},#{sup_drugid},#{sup_drugcode},#{sup_annoutput},#{sup_majorhonor},
+		#{sup_technician},#{sup_intendedspecie},#{sup_majorproduct},#{sup_qltystatus},
+		#{sup_qltyinstitution},#{sup_qltyauthen},#{sup_qltymanage},#{sup_qltychief},#{sup_qltychiefsex},
+		#{sup_qltychiefedu},#{sup_qltychiefposition},#{sup_qltychieftitle},#{sup_qltychiefworkyear},#{sup_qltynote},
+		#{sup_goodticketphoto},#{sup_sealmoldphoto},
+		#{create_user},#{create_time},#{last_modify_user},#{last_modify_time},#{status},
+		#{sup_paydays},#{sup_istaxpayer},#{sup_shouldpay} ,#{sup_receive},#{sup_lastpurchasedate},
+		#{sup_sourcecode},#{sup_advancepay},#{sup_other1},#{sup_other2},#{sup_other3},#{sup_other4},#{sup_finddrugid});
+	</insert>
+
+	<!-- 添加 log-->
+	<insert id="addlog" parameterType="SupInfoManage" useGeneratedKeys="true"
+		keyProperty="sup_log_id">
+		insert into sup_infoManage_log(sup_id,
+		sup_category1, sup_category2, sup_category3, sup_areano, sup_code, sup_shortname,
+		sup_name, sup_property, sup_chnpy, sup_address, sup_zipcode,
+		sup_procedure, sup_ctactperson, sup_tel, sup_mobile, sup_fax,
+		sup_ctractno, sup_email, sup_msncode, sup_qqcode, sup_buyname,
+		sup_brief, sup_fillingdate, sup_accname, sup_accno,
+		sup_bankname, sup_tax, sup_registaddr, sup_rmtway, sup_payway,
+		sup_paydate, sup_bond, sup_fnlnote, sup_pmtno, sup_pmtname,
+		sup_pmtchief, sup_pmtcueday, sup_pmtscope, sup_pmtissauthority, sup_pmtvaliddate,
+		sup_bnlslegalperson, sup_bnlsregistno, sup_bnlsregistmoney, sup_bnlsproperty, sup_bnlsscope,
+		sup_bnlsway, sup_bnlsissauthority, sup_bnlsvaliddate, sup_bnlsanndeaddate, sup_bnlsanndeadnote,
+		sup_bnlscueday, sup_qltycatename, sup_qltycateno, sup_qltycatescope, sup_qltycatevaliddate,
+		sup_qltycatecueday, sup_qltycateissauthority, sup_lsnote, sup_clkname, sup_clkidcard,
+		sup_clktel, sup_letvaliddate, sup_letcueday, sup_printway,
+		sup_clkvaliddate, sup_clkcueday, sup_relatedseal, sup_fileno, sup_filelocation,
+		sup_check, sup_checkname, sup_checkdate,
+		sup_localdrug, sup_drugid, sup_drugcode, sup_annoutput, sup_majorhonor,
+		sup_technician, sup_intendedspecie, sup_majorproduct, sup_qltystatus,
+		sup_qltyinstitution, sup_qltyauthen, sup_qltymanage, sup_qltychief, sup_qltychiefsex,
+		sup_qltychiefedu, sup_qltychiefposition, sup_qltychieftitle, sup_qltychiefworkyear, sup_qltynote,
+		sup_goodticketphoto, sup_sealmoldphoto,
+		create_user, create_time, last_modify_user, last_modify_time, status,
+		sup_paydays,sup_istaxpayer,sup_shouldpay ,sup_receive,sup_lastpurchasedate,
+		sup_sourcecode,sup_advancepay,sup_other1,sup_other2,sup_other3,sup_other4,sup_finddrugid)
+		
+		values(#{sup_id},
+		#{sup_category1},#{sup_category2},#{sup_category3},#{sup_areano},#{sup_code},#{sup_shortname},
+		#{sup_name},#{sup_property},#{sup_chnpy},#{sup_address},#{sup_zipcode},
+		#{sup_procedure},#{sup_ctactperson},#{sup_tel},#{sup_mobile},#{sup_fax},
+		#{sup_ctractno},#{sup_email},#{sup_msncode},#{sup_qqcode},#{sup_buyname},
+		#{sup_brief},#{sup_fillingdate},#{sup_accname},#{sup_accno},
+		#{sup_bankname},#{sup_tax},#{sup_registaddr},#{sup_rmtway},#{sup_payway},
+		#{sup_paydate},#{sup_bond},#{sup_fnlnote},#{sup_pmtno},#{sup_pmtname},
+		#{sup_pmtchief},#{sup_pmtcueday},#{sup_pmtscope},#{sup_pmtissauthority},#{sup_pmtvaliddate},
+		#{sup_bnlslegalperson},#{sup_bnlsregistno},#{sup_bnlsregistmoney},#{sup_bnlsproperty},#{sup_bnlsscope},
+		#{sup_bnlsway},#{sup_bnlsissauthority},#{sup_bnlsvaliddate},#{sup_bnlsanndeaddate},#{sup_bnlsanndeadnote},
+		#{sup_bnlscueday},#{sup_qltycatename},#{sup_qltycateno},#{sup_qltycatescope},#{sup_qltycatevaliddate},
+		#{sup_qltycatecueday},#{sup_qltycateissauthority},#{sup_lsnote},#{sup_clkname},#{sup_clkidcard},
+		#{sup_clktel},#{sup_letvaliddate},#{sup_letcueday},#{sup_printway},
+		#{sup_clkvaliddate},#{sup_clkcueday},#{sup_relatedseal},#{sup_fileno},#{sup_filelocation},
+		#{sup_check},#{sup_checkname},#{sup_checkdate},
+		#{sup_localdrug},#{sup_drugid},#{sup_drugcode},#{sup_annoutput},#{sup_majorhonor},
+		#{sup_technician},#{sup_intendedspecie},#{sup_majorproduct},#{sup_qltystatus},
+		#{sup_qltyinstitution},#{sup_qltyauthen},#{sup_qltymanage},#{sup_qltychief},#{sup_qltychiefsex},
+		#{sup_qltychiefedu},#{sup_qltychiefposition},#{sup_qltychieftitle},#{sup_qltychiefworkyear},#{sup_qltynote},
+		#{sup_goodticketphoto},#{sup_sealmoldphoto},
+		#{create_user},#{create_time},#{last_modify_user},#{last_modify_time},#{status},
+		#{sup_paydays},#{sup_istaxpayer},#{sup_shouldpay} ,#{sup_receive},#{sup_lastpurchasedate},
+		#{sup_sourcecode},#{sup_advancepay},#{sup_other1},#{sup_other2},#{sup_other3},#{sup_other4},#{sup_finddrugid});
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="SupInfoManage">
+		update sup_infoManage
+		<set>
+			<if test="sup_category1 != null">
+			sup_category1 = #{sup_category1},
+			</if>
+			<if test="sup_category2 != null">
+			sup_category2 = #{sup_category2},
+			</if>
+			<if test="sup_category3 != null">
+			sup_category3 = #{sup_category3},
+			</if>
+			<if test="sup_areano != null">
+			sup_areano = #{sup_areano},
+			</if>
+			<if test="sup_code != null">
+			sup_code = #{sup_code},
+			</if>
+			<if test="sup_shortname != null">
+			sup_shortname = #{sup_shortname},
+			</if>
+			<if test="sup_name != null">
+			sup_name = #{sup_name},
+			</if>
+			<if test="sup_property != null">
+			sup_property = #{sup_property},
+			</if>
+			<if test="sup_chnpy != null">
+			sup_chnpy = #{sup_chnpy},
+			</if>
+			<if test="sup_address != null">
+			sup_address = #{sup_address},
+			</if>
+			<if test="sup_zipcode != null">
+			sup_zipcode = #{sup_zipcode},
+			</if>
+			<if test="sup_procedure != null">
+			sup_procedure = #{sup_procedure},
+			</if>
+			<if test="sup_ctactperson != null">
+			sup_ctactperson = #{sup_ctactperson},
+			</if>
+			<if test="sup_tel != null">
+			sup_tel = #{sup_tel},
+			</if>
+			<if test="sup_mobile != null">
+			sup_mobile = #{sup_mobile},
+			</if>
+			<if test="sup_fax != null">
+			sup_fax = #{sup_fax},
+			</if>
+			<if test="sup_ctractno != null">
+			sup_ctractno = #{sup_ctractno},
+			</if>
+			<if test="sup_email != null">
+			sup_email = #{sup_email},
+			</if>
+			<if test="sup_msncode != null">
+			sup_msncode = #{sup_msncode},
+			</if>
+			<if test="sup_qqcode != null">
+			sup_qqcode = #{sup_qqcode},
+			</if>
+			<if test="sup_buyname != null">
+			sup_buyname = #{sup_buyname},
+			</if>
+			<if test="sup_brief != null">
+			sup_brief = #{sup_brief},
+			</if>
+			<if test="sup_fillingdate != null">
+			sup_fillingdate = #{sup_fillingdate},
+			</if>
+			<if test="sup_accname != null">
+			sup_accname = #{sup_accname},
+			</if>
+			<if test="sup_accno != null">
+			sup_accno = #{sup_accno},
+			</if>
+			<if test="sup_bankname != null">
+			sup_bankname = #{sup_bankname},
+			</if>
+			<if test="sup_tax != null">
+			sup_tax = #{sup_tax},
+			</if>
+			<if test="sup_registaddr != null">
+			sup_registaddr = #{sup_registaddr},
+			</if>
+			<if test="sup_rmtway != null">
+			sup_rmtway = #{sup_rmtway},
+			</if>
+			<if test="sup_payway != null">
+			sup_payway = #{sup_payway},
+			</if>
+			<if test="sup_paydate != null">
+			sup_paydate = #{sup_paydate},
+			</if>
+			<if test="sup_bond != null">
+			sup_bond = #{sup_bond},
+			</if>
+			<if test="sup_fnlnote != null">
+			sup_fnlnote = #{sup_fnlnote},
+			</if>
+			<if test="sup_pmtno != null">
+			sup_pmtno = #{sup_pmtno},
+			</if>
+			<if test="sup_pmtname != null">
+			sup_pmtname = #{sup_pmtname},
+			</if>
+			<if test="sup_pmtchief != null">
+			sup_pmtchief = #{sup_pmtchief},
+			</if>
+			<if test="sup_pmtcueday != null">
+			sup_pmtcueday = #{sup_pmtcueday},
+			</if>
+			<if test="sup_pmtscope != null">
+			sup_pmtscope = #{sup_pmtscope},
+			</if>
+			<if test="sup_pmtissauthority != null">
+			sup_pmtissauthority = #{sup_pmtissauthority},
+			</if>
+			<if test="sup_pmtvaliddate != null">
+			sup_pmtvaliddate = #{sup_pmtvaliddate},
+			</if>
+			<if test="sup_bnlslegalperson != null">
+			sup_bnlslegalperson = #{sup_bnlslegalperson},
+			</if>
+			<if test="sup_bnlsregistno != null">
+			sup_bnlsregistno = #{sup_bnlsregistno},
+			</if>
+			<if test="sup_bnlsregistmoney != null">
+			sup_bnlsregistmoney = #{sup_bnlsregistmoney},
+			</if>
+			<if test="sup_bnlsproperty != null">
+			sup_bnlsproperty = #{sup_bnlsproperty},
+			</if>
+			<if test="sup_bnlsscope != null">
+			sup_bnlsscope = #{sup_bnlsscope},
+			</if>
+			<if test="sup_bnlsway != null">
+			sup_bnlsway = #{sup_bnlsway},
+			</if>
+			<if test="sup_bnlsissauthority != null">
+			sup_bnlsissauthority = #{sup_bnlsissauthority},
+			</if>
+			<if test="sup_bnlsvaliddate != null">
+			sup_bnlsvaliddate = #{sup_bnlsvaliddate},
+			</if>
+			<if test="sup_bnlsanndeaddate != null">
+			sup_bnlsanndeaddate = #{sup_bnlsanndeaddate},
+			</if>
+			<if test="sup_bnlsanndeadnote != null">
+			sup_bnlsanndeadnote = #{sup_bnlsanndeadnote},
+			</if>
+			<if test="sup_bnlscueday != null">
+			sup_bnlscueday = #{sup_bnlscueday},
+			</if>
+			<if test="sup_qltycatename != null">
+			sup_qltycatename = #{sup_qltycatename},
+			</if>
+			<if test="sup_qltycateno != null">
+			sup_qltycateno = #{sup_qltycateno},
+			</if>
+			<if test="sup_qltycatescope != null">
+			sup_qltycatescope = #{sup_qltycatescope},
+			</if>
+			<if test="sup_qltycatevaliddate != null">
+			sup_qltycatevaliddate = #{sup_qltycatevaliddate},
+			</if>
+			<if test="sup_qltycatecueday != null">
+			sup_qltycatecueday = #{sup_qltycatecueday},
+			</if>
+			<if test="sup_qltycateissauthority != null">
+			sup_qltycateissauthority = #{sup_qltycateissauthority},
+			</if>
+			<if test="sup_lsnote != null">
+			sup_lsnote = #{sup_lsnote},
+			</if>
+			<if test="sup_clkname != null">
+			sup_clkname = #{sup_clkname},
+			</if>
+			<if test="sup_clkidcard != null">
+			sup_clkidcard = #{sup_clkidcard},
+			</if>
+			<if test="sup_clktel != null">
+			sup_clktel = #{sup_clktel},
+			</if>
+			<if test="sup_letvaliddate != null">
+			sup_letvaliddate = #{sup_letvaliddate},
+			</if>
+			<if test="sup_letcueday != null">
+			sup_letcueday = #{sup_letcueday},
+			</if>
+			<if test="sup_printway != null">
+			sup_printway = #{sup_printway},
+			</if>
+			<if test="sup_clkvaliddate != null">
+			sup_clkvaliddate = #{sup_clkvaliddate},
+			</if>
+			<if test="sup_clkcueday != null">
+			sup_clkcueday = #{sup_clkcueday},
+			</if>
+			<if test="sup_relatedseal != null">
+			sup_relatedseal = #{sup_relatedseal},
+			</if>
+			<if test="sup_fileno != null">
+			sup_fileno = #{sup_fileno},
+			</if>
+			<if test="sup_filelocation != null">
+			sup_filelocation = #{sup_filelocation},
+			</if>
+			<if test="sup_check != null">
+			sup_check = #{sup_check},
+			</if>
+			<if test="sup_checkname != null">
+			sup_checkname = #{sup_checkname},
+			</if>
+			<if test="sup_checkdate != null">
+			sup_checkdate = #{sup_checkdate},
+			</if>
+			<if test="sup_localdrug != null">
+			sup_localdrug = #{sup_localdrug},
+			</if>
+			<if test="sup_drugid != null">
+			sup_drugid = #{sup_drugid},
+			</if>
+			<if test="sup_drugcode != null">
+			sup_drugcode = #{sup_drugcode},
+			</if>
+			<if test="sup_annoutput != null">
+			sup_annoutput = #{sup_annoutput},
+			</if>
+			<if test="sup_majorhonor != null">
+			sup_majorhonor = #{sup_majorhonor},
+			</if>
+			<if test="sup_technician != null">
+			sup_technician = #{sup_technician},
+			</if>
+			<if test="sup_intendedspecie != null">
+			sup_intendedspecie = #{sup_intendedspecie},
+			</if>
+			<if test="sup_majorproduct != null">
+			sup_majorproduct = #{sup_majorproduct},
+			</if>
+			<if test="sup_qltystatus != null">
+			sup_qltystatus = #{sup_qltystatus},
+			</if>
+			<if test="sup_qltyinstitution != null">
+			sup_qltyinstitution = #{sup_qltyinstitution},
+			</if>
+			<if test="sup_qltyauthen != null">
+			sup_qltyauthen = #{sup_qltyauthen},
+			</if>
+			<if test="sup_qltymanage != null">
+			sup_qltymanage = #{sup_qltymanage},
+			</if>
+			<if test="sup_qltychief != null">
+			sup_qltychief = #{sup_qltychief},
+			</if>
+			<if test="sup_qltychiefsex != null">
+			sup_qltychiefsex = #{sup_qltychiefsex},
+			</if>
+			<if test="sup_qltychiefedu != null">
+			sup_qltychiefedu = #{sup_qltychiefedu},
+			</if>
+			<if test="sup_qltychiefposition != null">
+			sup_qltychiefposition = #{sup_qltychiefposition},
+			</if>
+			<if test="sup_qltychieftitle != null">
+			sup_qltychieftitle = #{sup_qltychieftitle},
+			</if>
+			<if test="sup_qltychiefworkyear != null">
+			sup_qltychiefworkyear = #{sup_qltychiefworkyear},
+			</if>
+			<if test="sup_qltynote != null">
+			sup_qltynote = #{sup_qltynote},
+			</if>
+			<if test="sup_goodticketphoto != null">
+			sup_goodticketphoto = #{sup_goodticketphoto},
+			</if>
+			<if test="sup_sealmoldphoto != null">
+			sup_sealmoldphoto = #{sup_sealmoldphoto},
+			</if>
+			<if test="create_user != null">
+			create_user = #{create_user},
+			</if>
+			<if test="create_time != null">
+			create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+			status = #{status},
+			</if>
+			<if test="sup_paydays != null">
+			sup_paydays = #{sup_paydays},
+			</if>
+			<if test="sup_istaxpayer != null">
+			sup_istaxpayer = #{sup_istaxpayer},
+			</if>
+			<if test="sup_shouldpay != null">
+			sup_shouldpay = #{sup_shouldpay},
+			</if>
+			<if test="sup_receive != null">
+			sup_receive = #{sup_receive},
+			</if>
+			<if test="sup_lastpurchasedate != null">
+			sup_lastpurchasedate = #{sup_lastpurchasedate},
+			</if>
+			<if test="sup_sourcecode != null">
+			sup_sourcecode = #{sup_sourcecode},
+			</if>
+			<if test="sup_advancepay != null">
+			sup_advancepay = #{sup_advancepay},
+			</if>
+			<if test="sup_other1 != null">
+			sup_other1 = #{sup_other1},
+			</if>
+			<if test="sup_other2 != null">
+			sup_other2 = #{sup_other2},
+			</if>
+			<if test="sup_other3 != null">
+			sup_other3 = #{sup_other3},
+			</if>
+			<if test="sup_other4 != null">
+			sup_other4 = #{sup_other4},
+			</if>
+			<if test="sup_finddrugid != null">
+			sup_finddrugid = #{sup_finddrugid}
+			</if>
+		</set>
+		where sup_id = #{sup_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update sup_infoManage set
+		status = 9 where sup_id = #{sup_id}
+	</delete>
+
+</mapper> 

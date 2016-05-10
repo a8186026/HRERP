@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysMenuDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="SysMenu">
+		select *
+		from sys_menu
+		where menu_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="SysMenu">
+		select *
+		from sys_menu
+		<where>
+			status = 0 or status =1
+			<if test="menu_name != null">
+				and menu_name like #{menu_name}
+			</if>
+			<if test="menu_code != null">
+				and menu_code like #{menu_code}
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="findCount" parameterType="map" resultType="int">
+		select
+		count(menu_id) as count
+		from
+		sys_menu
+		<where>
+			status = 0
+			<if test="menu_name != null">
+				and menu_name like #{menu_name}
+			</if>
+			<if test="menu_code != null">
+				and menu_code like #{menu_code}
+			</if>
+		</where>
+	</select>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysMenu" useGeneratedKeys="true"
+		keyProperty="menu_id">
+		insert into sys_menu(menu_name, menu_url, menu_code,
+		parent_menu, orders, note, status, create_user, create_time,
+		last_modify_user, last_modify_time)
+		values(#{menu_name}, #{menu_url}, #{menu_code}, #{parent_menu}, #{orders}, #{note},
+		#{status}, #{create_user}, #{create_time}, #{last_modify_user},
+		#{last_modify_time});
+	</insert>
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysMenu">
+		update sys_menu
+		<set>
+			<if test="menu_name != null">
+				menu_name = #{menu_name},
+			</if>
+			<if test="menu_url != null">
+				menu_url = #{menu_url},
+			</if>
+			<if test="menu_code != null">
+				menu_code = #{menu_code},
+			</if>
+			<if test="orders != null">
+				orders = #{orders},
+			</if>
+			<if test="note != null">
+				note = #{note},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where menu_id = #{menu_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		delete from sys_menu where
+		menu_id =#{menu_id}
+	</delete>
+
+	<!-- 查询sys_group_menu中的数据 -->
+	<select id="getGroupMenu" parameterType="Integer" resultType="SysMenu">
+		select sm.* 
+		from sys_menu sm,sys_group_menu sgm 
+		where status = 0 
+		and sm.menu_id=sgm.menu_id
+		and sgm.group_id=#{group_id}
+		and (sgm.sgm_status = 0 or sgm.sgm_status=2)
+		order by orders asc
+	</select>
+	<!-- 查询没有界面的页面级别功能 -->
+	<select id="getNoPageGroupMenu" parameterType="Integer" resultType="SysMenu">
+		select sm.* 
+		from sys_menu sm,sys_group_menu sgm 
+		where (status = 0 or status = 1) 
+		and sm.menu_id=sgm.menu_id
+		and sgm.group_id=#{group_id}
+		and (sgm.sgm_status = 0 or sgm.sgm_status=2)
+		order by orders asc
+	</select>
+</mapper> 

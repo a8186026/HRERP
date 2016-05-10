@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysCheckSettingDao">
+	<!-- 获取审核次数 -->
+	<select id="get" parameterType="Integer" resultType="SysCheckSetting">
+		select *
+		from sys_checkSetting
+		where check_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 获取审核标题 -->
+	<select id="getTitlesById" parameterType="Integer" resultType="SysCheckTitle">
+		select *
+		from sys_checkTitle
+		where check_id = #{id}
+		and status = 0 order by check_order
+	</select>
+
+	<!-- 获取正在审核的产品或者供方的数量 -->
+	<select id="getCheckNumber" parameterType="String" resultType="Integer">
+		select count(*) as count from
+		<if test="code=='product_check'">
+		 	pro_infoManage
+		</if>
+		<if test="code=='supply_check'">
+		 	sup_infoManage
+		</if>
+		<if test="code=='sale_check'">
+		 	sal_infoManage
+		</if>
+		where  
+			status = 0
+		<if test="code=='product_check'">
+		 	and product_check = 1
+		</if>
+		<if test="code=='supply_check'">
+		 	and sup_check = 1
+		</if>
+		<if test="code=='sale_check'">
+		 	and sal_check = 1
+		</if>
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="SysCheckSetting">
+		<if test="rows != null">
+		select top ${rows}*
+		</if>
+		<if test="rows == null">
+		select *
+		</if>
+		from sys_checkSetting
+		<where>
+			status = 0
+			<if test="check_name != null">
+				and check_name like #{check_name}
+			</if>
+			<if test="check_code != null">
+				and check_code like #{check_code}
+			</if>
+			<if test="offset != null">
+				and check_id not in(select top ${offset} check_id from sys_checkSetting where status=0
+					<if test="check_name != null">
+						and check_name like #{check_name}
+					</if>
+					<if test="check_code != null">
+						and check_code like #{check_code}
+					</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="SysCheckSetting" resultType="int">
+		select
+		count(check_id) as count
+		from
+		sys_checkSetting
+		<where>
+			status = 0
+			<if test="check_name != null">
+				and check_name like #{check_name}
+			</if>
+			<if test="check_code != null">
+				and check_code like #{check_code}
+			</if>
+		</where>
+	</select>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysCheckSetting" useGeneratedKeys="true"
+		keyProperty="check_id">
+		insert into sys_checkSetting(check_name, check_code, check_times,status, create_user, create_time, last_modify_user, last_modify_time)
+		values(#{check_name}, #{check_code}, #{check_times}, #{status}, #{create_user},#{create_time}, #{last_modify_user}, #{last_modify_time});
+	</insert>
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addCheckTitle" parameterType="SysCheckTitle" useGeneratedKeys="true"
+		keyProperty="check_title_id">
+		insert into sys_checkTitle(check_id, check_title, check_group,check_order,check_type,status, create_user, create_time, last_modify_user, last_modify_time)
+		values(#{check_id}, #{check_title}, #{check_group}, #{check_order},#{check_type}, #{status}, #{create_user},#{create_time}, #{last_modify_user}, #{last_modify_time});
+	</insert>
+	
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysCheckSetting">
+		update sys_checkSetting
+		<set>
+			<if test="check_name != null">
+				check_name = #{check_name},
+			</if>
+			<if test="check_code != null">
+				check_code = #{check_code},
+			</if>
+			<if test="check_times != null">
+				check_times = #{check_times},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where check_id = #{check_id}
+	</update>
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="updateTitle" parameterType="SysCheckTitle">
+		update sys_checkTitle
+		<set>
+			<if test="check_id != null">
+				check_id = #{check_id},
+			</if>
+			<if test="check_title != null">
+				check_title = #{check_title},
+			</if>
+			<if test="check_group != null">
+				check_group = #{check_group},
+			</if>
+			<if test="check_order != null">
+				check_order = #{check_order},
+			</if>
+			<if test="check_type != null">
+				check_type = #{check_type},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where check_title_id = #{check_title_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		delete from sys_checkSetting where
+		check_id =#{check_id}
+	</delete>
+	
+	<!-- 根据ID删除表sys_checkTitle中数据 -->
+	<delete id="deleteCheckTitle" parameterType="int">
+		delete from sys_checkTitle where
+		check_title_id =#{id}
+	</delete>
+	
+
+</mapper> 

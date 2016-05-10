@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysComboboxDao">
+	<!-- 获取下拉框-->
+	<select id="get" parameterType="Integer" resultType="SysCombobox">
+		select *
+		from sys_comboBoxSetting
+		where cbs_id = #{id}
+		and status = 0
+	</select>
+	
+	<!-- 获取下拉框 -->
+	<select id="getComboTreeByCode" parameterType="SysCombobox" resultType="SysCombobox">
+		select *
+		from sys_comboBoxSetting
+		where cbs_pid = #{cbs_pid} and cbs_code = #{cbs_code} and cbs_type=#{cbs_type}
+		and status = 0
+	</select>
+	
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="SysCombobox" resultType="SysCombobox">
+		select *
+		from sys_comboBoxSetting
+		<where>
+			status = 0  
+			<if test="cbs_pid != null">
+				and cbs_pid = #{cbs_pid}
+			</if>
+			<if test="cbs_code != null">
+				and cbs_code = #{cbs_code}
+			</if>
+			<if test="cbs_chn != null">
+				and cbs_chn like #{cbs_chn}
+			</if>
+			<if test="cbs_dec != null">
+				and cbs_dec like #{cbs_dec}
+			</if>
+			<if test="cbs_type != null">
+				and cbs_type = #{cbs_type}
+			</if>
+		</where>
+			order by cbs_id asc
+	</select>
+	
+	<select id="listTree" parameterType="SysCombobox" resultType="SysCombobox">
+		select *
+		from sys_comboBoxSetting
+		<where>
+			status = 0  
+			<if test="cbs_code != null">
+				and cbs_code = #{cbs_code}
+			</if>
+			<if test="cbs_chn != null">
+				and cbs_chn like #{cbs_chn}
+			</if>
+			<if test="cbs_dec != null">
+				and cbs_dec like #{cbs_dec}
+			</if>
+			<if test="cbs_type != null">
+				and cbs_type = #{cbs_type}
+			</if>
+		</where>
+	</select>
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="SysCombobox" resultType="int">
+		select
+		count(cbs_id) as count
+		from
+		sys_comboBoxSetting
+		<where>
+			status = 0 and cbs_pid = #{cbs_pid}
+			<if test="cbs_code != null">
+				and cbs_code = #{cbs_code}
+			</if>
+			<if test="cbs_chn != null">
+				and cbs_chn like #{cbs_chn}
+			</if>
+			<if test="cbs_dec != null">
+				and cbs_dec like #{cbs_dec}
+			</if>
+			<if test="cbs_type != null">
+				and cbs_type like #{cbs_type}
+			</if>
+		</where>
+	</select>
+
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysCombobox" useGeneratedKeys="true"
+		keyProperty="cbs_id">
+		insert into sys_comboBoxSetting(cbs_pid, cbs_code, cbs_chn,
+		cbs_dec, cbs_type, status, create_user, create_time,last_modify_user, last_modify_time)
+		values(#{cbs_pid}, #{cbs_code}, #{cbs_chn}, #{cbs_dec}, #{cbs_type}, #{status}, #{create_user}, #{create_time},
+		#{last_modify_user}, #{last_modify_time});
+	</insert>
+	
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysCombobox">
+		update sys_comboBoxSetting
+		<set>
+			<if test="cbs_pid != null">
+				cbs_pid = #{cbs_pid},
+			</if>
+			<if test="cbs_code != null">
+				cbs_code = #{cbs_code},
+			</if>
+			<if test="cbs_chn != null">
+				cbs_chn = #{cbs_chn},
+			</if>
+			<if test="cbs_dec != null">
+				cbs_dec = #{cbs_dec},
+			</if>
+			<if test="cbs_type != null">
+				cbs_type = #{cbs_type},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+		</set>
+		where
+			1=1
+			<if test="cbs_id != null">
+				 and cbs_id = #{cbs_id}
+			</if>
+			<if test="cbs_pid != null">
+				 and cbs_pid = #{cbs_pid}
+			</if>
+			
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		delete from sys_comboBoxSetting where
+		cbs_id =#{cbs_id}
+	</delete>
+	
+
+</mapper> 

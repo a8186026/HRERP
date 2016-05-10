@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.BasDepartmentInfoDao">
+	<!-- 获取厂家档案信息 -->
+	<select id="get" parameterType="Integer" resultType="BasDepartmentInfo">
+		select *
+		from bas_departmentinfo
+		where department_id = #{id}
+		and status = 0
+	</select>
+	
+	<!-- 获取未参加某活动的部门信息 -->
+	<select id="getListByDepts" parameterType="java.util.List" resultType="BasDepartmentInfo">
+		select *
+		from bas_departmentinfo
+		where status = 0 
+		<if test="depts.size()>0">
+			and department_id not in
+			<foreach collection="depts" item="item" index="index" open="(" separator="," close=")" > 
+				#{item}
+			</foreach>
+		</if>
+	</select>
+	
+	<!-- 获取参加某活动的部门信息 -->
+	<select id="getListByPromotion" parameterType="java.util.List" resultType="BasDepartmentInfo">
+		select *
+		from bas_departmentinfo
+		where status = 0 
+		<if test="depts.size()>0">
+			and department_id in
+			<foreach collection="depts" item="item" index="index" open="(" separator="," close=")" > 
+				#{item}
+			</foreach>
+		</if>
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="BasDepartmentInfo" resultType="BasDepartmentInfo">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from bas_departmentinfo
+		<where>
+			status = 0
+			<if test="department_number != null">
+				and department_number like #{department_number}
+			</if>
+			<if test="department_id != null">
+				and department_id like #{department_id}
+			</if>
+			<if test="offset != null and offset !=0">
+				and department_id not in(select top ${offset} department_id from bas_departmentinfo where status = 0
+					<if test="department_number != null">
+						and department_number like #{department_number}
+					</if>
+					<if test="department_id != null">
+						and department_id like #{department_id}
+					</if>
+				)
+			</if>
+		</where>
+		
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="BasDepartmentInfo" resultType="int">
+		select
+		count(department_id) as count
+		from
+		bas_departmentinfo
+		<where>
+			status = 0
+			<if test="department_number != null">
+				and department_number like #{department_number}
+			</if>
+		</where>
+	</select>
+
+	<!-- 添加 -->
+	<insert id="add" parameterType="BasDepartmentInfo" useGeneratedKeys="true"
+		keyProperty="department_id">
+		insert into bas_departmentinfo(department_number, department_fullname, department_chnpy, department_shortname, department_chiefperson, department_address,
+		department_zipcode, department_tel, department_fax, department_email, department_bank,
+		department_account, department_tax, department_distributionhouse, department_receivable, department_payable,
+		department_zerowhole, department_deliverycheck, department_storagecheck, department_create_time, department_update_time,
+		department_memberday_mode, department_memberday, department_memberday_integral, department_memberprice_time, department_shopprice,
+		department_shopcommission, department_distributionweight, department_balancedate, department_memberdaytype, department_pricecontrol,
+		department_lowtemperature, department_hightemperature, department_refrige, department_storetype, department_enterprisecode,
+		create_user, create_time, last_modify_user, last_modify_time, status,department_discountModify,deparment_acceptAmountDiscount )
+		
+		values(#{department_number}, #{department_fullname}, #{department_chnpy}, #{department_shortname}, #{department_chiefperson}, #{department_address},
+		 #{department_zipcode}, #{department_tel}, #{department_fax}, #{department_email}, #{department_bank}, 
+ 		 #{department_account}, #{department_tax}, #{department_distributionhouse}, #{department_receivable}, #{department_payable},
+     	 #{department_zerowhole}, #{department_deliverycheck}, #{department_storagecheck}, #{department_create_time}, #{department_update_time},
+     	 #{department_memberday_mode}, #{department_memberday}, #{department_memberday_integral}, #{department_memberprice_time}, #{department_shopprice},
+     	 #{department_shopcommission}, #{department_distributionweight}, #{department_balancedate}, #{department_memberdaytype}, #{department_pricecontrol},
+     	 #{department_lowtemperature}, #{department_hightemperature}, #{department_refrige}, #{department_storetype}, #{department_enterprisecode}, 
+     	 #{create_user}, #{create_time}, #{last_modify_user}, #{last_modify_time}, #{status}, #{department_discountModify}, #{deparment_acceptAmountDiscount});
+
+	</insert>
+
+	<!-- 根据ID更新表中数据    (缺属性  wubin) -->
+	<update id="update" parameterType="BasDepartmentInfo">
+		update bas_departmentinfo
+		<set>
+			<if test="department_number != null">
+				department_number = #{department_number},
+			</if>
+			<if test="department_fullname != null">
+				department_fullname = #{department_fullname},
+			</if>
+		 	<if test="department_chnpy != null">
+				department_chnpy = #{department_chnpy},
+			</if>
+			<if test="department_shortname != null">
+				department_shortname = #{department_shortname},
+			</if>
+			<if test="department_chiefperson != null">
+				department_chiefperson = #{department_chiefperson},
+			</if>
+ 		 	<if test="department_address != null">
+				department_address = #{department_address},
+			</if>
+			<if test="department_zipcode != null">
+				department_zipcode = #{department_zipcode},
+			</if>
+		 	<if test="department_tel != null">
+				department_tel = #{department_tel},
+			</if>
+			<if test="department_fax != null">
+				department_fax = #{department_fax},
+			</if>
+			<if test="department_email != null">
+				department_email = #{department_email},
+			</if>
+			<if test="department_bank != null">
+				department_bank = #{department_bank},
+			</if>
+			<if test="department_account != null">
+				department_account = #{department_account},
+			</if>
+			<if test="department_tax != null">
+				department_tax = #{department_tax},
+			</if>
+			<if test="department_distributionhouse != null">
+				department_distributionhouse = #{department_distributionhouse},
+			</if>
+ 		 	<if test="department_zerowhole != null">
+				department_zerowhole = #{department_zerowhole},
+			</if>
+			<if test="department_deliverycheck != null">
+				department_deliverycheck = #{department_deliverycheck},
+			</if>
+		 	<if test="department_storagecheck != null">
+				department_storagecheck = #{department_storagecheck},
+			</if>
+			<if test="department_shopprice != null">
+				department_shopprice = #{department_shopprice},
+			</if>
+			<if test="department_shopcommission != null">
+				department_shopcommission = #{department_shopcommission},
+			</if>
+			<if test="department_distributionweight != null">
+				department_distributionweight = #{department_distributionweight},
+			</if>
+			<if test="department_pricecontrol != null">
+				department_pricecontrol = #{department_pricecontrol},
+			</if>
+		 	<if test="department_lowtemperature != null">
+				department_lowtemperature = #{department_lowtemperature},
+			</if>
+			<if test="department_hightemperature != null">
+				department_hightemperature = #{department_hightemperature},
+			</if>
+			<if test="department_refrige != null">
+				department_refrige = #{department_refrige},
+			</if>	
+			<if test="department_storetype != null">
+				department_storetype = #{department_storetype},
+			</if>
+			<if test="department_enterprisecode != null">
+				department_enterprisecode = #{department_enterprisecode},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>	
+			<if test="department_memberday != null">
+				department_memberday = #{department_memberday},
+			</if>
+			<if test="department_discountModify != null">
+				department_discountModify = #{department_discountModify},
+			</if>
+			<if test="deparment_acceptAmountDiscount != null">
+				deparment_acceptAmountDiscount = #{deparment_acceptAmountDiscount},
+			</if>
+		</set>
+		where department_id = #{department_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update bas_departmentinfo set
+		status = 9 where department_id = #{department_id}
+	</delete>
+	
+	<!-- 验证部门编码，直接返回int类型条数 -->
+	<select id="checkDepartmentNumber"  resultType="int">
+		select
+		count(department_id) as count
+		from
+		bas_departmentinfo
+		<where>
+			status = 0
+			and department_number = #{department_number}
+		</where>
+	</select>
+
+</mapper> 

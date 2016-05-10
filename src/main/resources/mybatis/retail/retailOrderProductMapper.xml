@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.retail.persist.RetailOrderProductDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="RetailOrderProduct">
+		select *
+		from retail_order_product
+		where sale_order_ticketId = #{id} 
+	</select>
+
+
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="RetailOrderProduct">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+			from retail_order_product
+		<where>
+			<if test="retail_order_product_id!=null">
+			and retail_order_product_id like #{retail_order_product_id}
+			</if>
+			<if test="retail_order_ticketId!=null">
+			and retail_order_ticketId like #{retail_order_ticketId}
+			</if>
+			<if test="order_productId!=null">
+			and order_productId like #{order_productId}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="product_code!=null">
+			and product_code like #{product_code}
+			</if>
+			<if test="product_name!=null">
+			and product_name like #{product_name}
+			</if>
+			<if test="product_specification!=null">
+			and product_specification like #{product_specification}
+			</if>
+			<if test="product_productarea!=null">
+			and product_productarea like #{product_productarea}
+			</if>
+			<if test="product_unit!=null">
+			and product_unit like #{product_unit}
+			</if>
+			<if test="product_packingamount!=null">
+			and product_packingamount like #{product_packingamount}
+			</if>
+			<if test="product_dosagetype!=null">
+			and product_dosagetype like #{product_dosagetype}
+			</if>
+			<if test="product_category!=null">
+			and product_category like #{product_category}
+			</if>
+			<if test="product_stocknum!=null">
+			and product_stocknum like #{product_stocknum}
+			</if>
+			<if test="product_tradeprice!=null">
+			and product_tradeprice like #{product_tradeprice}
+			</if>
+			<if test="product_retailprice!=null">
+			and product_retailprice like #{product_retailprice}
+			</if>
+			<if test="product_marketprice!=null">
+			and product_marketprice like #{product_marketprice}
+			</if>
+			<if test="product_lowprice!=null">
+			and product_lowprice like #{product_lowprice}
+			</if>
+			<if test="product_saleprice1!=null">
+			and product_saleprice1 like #{product_saleprice1}
+			</if>
+			<if test="product_saleprice2!=null">
+			and product_saleprice2 like #{product_saleprice2}
+			</if>
+			<if test="product_saleprice3!=null">
+			and product_saleprice3 like #{product_saleprice3}
+			</if>
+			<if test="product_saleprice4!=null">
+			and product_saleprice4 like #{product_saleprice4}
+			</if>
+			<if test="product_lastprice!=null">
+			and product_lastprice like #{product_lastprice}
+			</if>
+			<if test="order_product_quantity!=null">
+			and order_product_quantity like #{order_product_quantity}
+			</if>
+			<if test="order_product_unitPrice!=null">
+			and order_product_unitPrice like #{order_product_unitPrice}
+			</if>
+			<if test="order_product_cutDifference!=null">
+			and order_product_cutDifference like #{order_product_cutDifference}
+			</if>
+			<if test="order_product_amount!=null">
+			and order_product_amount like #{order_product_amount}
+			</if>
+			<if test="order_product_grossProfit!=null">
+			and order_product_grossProfit like #{order_product_grossProfit}
+			</if>
+			<if test="order_product_storage!=null">
+			and order_product_storage like #{order_product_storage}
+			</if>
+			<if test="order_product_discountAmount!=null">
+			and order_product_discountAmount like #{order_product_discountAmount}
+			</if>
+			<if test="order_product_saleId!=null">
+			and order_product_saleId like #{order_product_saleId}
+			</if>
+			<if test="order_product_saleType!=null">
+			and order_product_saleType like #{order_product_saleType}
+			</if>
+			<if test="order_product_singlePayQuantity!=null">
+			and order_product_singlePayQuantity like #{order_product_singlePayQuantity}
+			</if>
+			<if test="order_product_receive!=null">
+			and order_product_receive like #{order_product_receive}
+			</if>
+			<if test="offset != null and offset !=0">
+			and retail_order_product_id not in(select top ${offset} retail_order_product_id from retail_order_product where 0 = 0
+				<if test="retail_order_product_id!=null">
+				and retail_order_product_id like #{retail_order_product_id}
+				</if>
+				<if test="retail_order_ticketId!=null">
+				and retail_order_ticketId like #{retail_order_ticketId}
+				</if>
+				<if test="order_productId!=null">
+				and order_productId like #{order_productId}
+				</if>
+				<if test="product_id!=null">
+				and product_id like #{product_id}
+				</if>
+				<if test="product_code!=null">
+				and product_code like #{product_code}
+				</if>
+				<if test="product_name!=null">
+				and product_name like #{product_name}
+				</if>
+				<if test="product_specification!=null">
+				and product_specification like #{product_specification}
+				</if>
+				<if test="product_productarea!=null">
+				and product_productarea like #{product_productarea}
+				</if>
+				<if test="product_unit!=null">
+				and product_unit like #{product_unit}
+				</if>
+				<if test="product_packingamount!=null">
+				and product_packingamount like #{product_packingamount}
+				</if>
+				<if test="product_dosagetype!=null">
+				and product_dosagetype like #{product_dosagetype}
+				</if>
+				<if test="product_category!=null">
+				and product_category like #{product_category}
+				</if>
+				<if test="product_stocknum!=null">
+				and product_stocknum like #{product_stocknum}
+				</if>
+				<if test="product_tradeprice!=null">
+				and product_tradeprice like #{product_tradeprice}
+				</if>
+				<if test="product_retailprice!=null">
+				and product_retailprice like #{product_retailprice}
+				</if>
+				<if test="product_marketprice!=null">
+				and product_marketprice like #{product_marketprice}
+				</if>
+				<if test="product_lowprice!=null">
+				and product_lowprice like #{product_lowprice}
+				</if>
+				<if test="product_saleprice1!=null">
+				and product_saleprice1 like #{product_saleprice1}
+				</if>
+				<if test="product_saleprice2!=null">
+				and product_saleprice2 like #{product_saleprice2}
+				</if>
+				<if test="product_saleprice3!=null">
+				and product_saleprice3 like #{product_saleprice3}
+				</if>
+				<if test="product_saleprice4!=null">
+				and product_saleprice4 like #{product_saleprice4}
+				</if>
+				<if test="product_lastprice!=null">
+				and product_lastprice like #{product_lastprice}
+				</if>
+				<if test="order_product_quantity!=null">
+				and order_product_quantity like #{order_product_quantity}
+				</if>
+				<if test="order_product_unitPrice!=null">
+				and order_product_unitPrice like #{order_product_unitPrice}
+				</if>
+				<if test="order_product_cutDifference!=null">
+				and order_product_cutDifference like #{order_product_cutDifference}
+				</if>
+				<if test="order_product_amount!=null">
+				and order_product_amount like #{order_product_amount}
+				</if>
+				<if test="order_product_grossProfit!=null">
+				and order_product_grossProfit like #{order_product_grossProfit}
+				</if>
+				<if test="order_product_storage!=null">
+				and order_product_storage like #{order_product_storage}
+				</if>
+				<if test="order_product_discountAmount!=null">
+				and order_product_discountAmount like #{order_product_discountAmount}
+				</if>
+				<if test="order_product_saleId!=null">
+				and order_product_saleId like #{order_product_saleId}
+				</if>
+				<if test="order_product_saleType!=null">
+				and order_product_saleType like #{order_product_saleType}
+				</if>
+				<if test="order_product_singlePayQuantity!=null">
+				and order_product_singlePayQuantity like #{order_product_singlePayQuantity}
+				</if>
+				<if test="order_product_receive!=null">
+				and order_product_receive like #{order_product_receive}
+				</if>
+			)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="RetailOrderProduct" resultType="int">
+		select count(retail_order_id) as count 
+		from retail_order_product
+		<where>
+			<if test="retail_order_product_id!=null">
+			and retail_order_product_id like #{retail_order_product_id}
+			</if>
+			<if test="retail_order_ticketId!=null">
+			and retail_order_ticketId like #{retail_order_ticketId}
+			</if>
+			<if test="order_productId!=null">
+			and order_productId like #{order_productId}
+			</if>
+			<if test="product_id!=null">
+			and product_id like #{product_id}
+			</if>
+			<if test="product_code!=null">
+			and product_code like #{product_code}
+			</if>
+			<if test="product_name!=null">
+			and product_name like #{product_name}
+			</if>
+			<if test="product_specification!=null">
+			and product_specification like #{product_specification}
+			</if>
+			<if test="product_productarea!=null">
+			and product_productarea like #{product_productarea}
+			</if>
+			<if test="product_unit!=null">
+			and product_unit like #{product_unit}
+			</if>
+			<if test="product_packingamount!=null">
+			and product_packingamount like #{product_packingamount}
+			</if>
+			<if test="product_dosagetype!=null">
+			and product_dosagetype like #{product_dosagetype}
+			</if>
+			<if test="product_category!=null">
+			and product_category like #{product_category}
+			</if>
+			<if test="product_stocknum!=null">
+			and product_stocknum like #{product_stocknum}
+			</if>
+			<if test="product_tradeprice!=null">
+			and product_tradeprice like #{product_tradeprice}
+			</if>
+			<if test="product_retailprice!=null">
+			and product_retailprice like #{product_retailprice}
+			</if>
+			<if test="product_marketprice!=null">
+			and product_marketprice like #{product_marketprice}
+			</if>
+			<if test="product_lowprice!=null">
+			and product_lowprice like #{product_lowprice}
+			</if>
+			<if test="product_saleprice1!=null">
+			and product_saleprice1 like #{product_saleprice1}
+			</if>
+			<if test="product_saleprice2!=null">
+			and product_saleprice2 like #{product_saleprice2}
+			</if>
+			<if test="product_saleprice3!=null">
+			and product_saleprice3 like #{product_saleprice3}
+			</if>
+			<if test="product_saleprice4!=null">
+			and product_saleprice4 like #{product_saleprice4}
+			</if>
+			<if test="product_lastprice!=null">
+			and product_lastprice like #{product_lastprice}
+			</if>
+			<if test="order_product_quantity!=null">
+			and order_product_quantity like #{order_product_quantity}
+			</if>
+			<if test="order_product_unitPrice!=null">
+			and order_product_unitPrice like #{order_product_unitPrice}
+			</if>
+			<if test="order_product_cutDifference!=null">
+			and order_product_cutDifference like #{order_product_cutDifference}
+			</if>
+			<if test="order_product_amount!=null">
+			and order_product_amount like #{order_product_amount}
+			</if>
+			<if test="order_product_grossProfit!=null">
+			and order_product_grossProfit like #{order_product_grossProfit}
+			</if>
+			<if test="order_product_storage!=null">
+			and order_product_storage like #{order_product_storage}
+			</if>
+			<if test="order_product_discountAmount!=null">
+			and order_product_discountAmount like #{order_product_discountAmount}
+			</if>
+			<if test="order_product_saleId!=null">
+			and order_product_saleId like #{order_product_saleId}
+			</if>
+			<if test="order_product_saleType!=null">
+			and order_product_saleType like #{order_product_saleType}
+			</if>
+			<if test="order_product_singlePayQuantity!=null">
+			and order_product_singlePayQuantity like #{order_product_singlePayQuantity}
+			</if>
+			<if test="order_product_receive!=null">
+			and order_product_receive like #{order_product_receive}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="RetailOrderProduct" useGeneratedKeys="true" keyProperty="retail_order_product_id">
+		 insert into retail_order_product(
+		retail_order_ticketId, order_productId, product_id, product_code, product_name, 
+		product_specification, product_productarea, product_unit, product_packingamount, product_dosagetype, 
+		product_category, product_stocknum, product_tradeprice, product_retailprice, product_marketprice, 
+		product_lowprice, product_saleprice1, product_saleprice2, product_saleprice3, product_saleprice4, 
+		product_lastprice, order_product_quantity, order_product_unitPrice, order_product_cutDifference, order_product_amount, 
+		order_product_grossProfit, order_product_storage, order_product_discountAmount, order_product_saleId, order_product_saleType, 
+		order_product_singlePayQuantity, order_product_receive)
+		values(
+		#{retail_order_ticketId}, #{order_productId}, #{product_id}, #{product_code}, #{product_name}, 
+		#{product_specification}, #{product_productarea}, #{product_unit}, #{product_packingamount}, #{product_dosagetype}, 
+		#{product_category}, #{product_stocknum}, #{product_tradeprice}, #{product_retailprice}, #{product_marketprice}, 
+		#{product_lowprice}, #{product_saleprice1}, #{product_saleprice2}, #{product_saleprice3}, #{product_saleprice4}, 
+		#{product_lastprice}, #{order_product_quantity}, #{order_product_unitPrice}, #{order_product_cutDifference}, #{order_product_amount}, 
+		#{order_product_grossProfit}, #{order_product_storage}, #{order_product_discountAmount}, #{order_product_saleId}, #{order_product_saleType}, 
+		#{order_product_singlePayQuantity}, #{order_product_receive});
+	</insert>
+
+
+
+
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="RetailOrderProduct">
+		 update retail_order_product
+		<set>
+			<if test="retail_order_ticketId != null">
+			retail_order_ticketId = #{retail_order_ticketId},
+			</if>
+			<if test="order_productId != null">
+			order_productId = #{order_productId},
+			</if>
+			<if test="product_id != null">
+			product_id = #{product_id},
+			</if>
+			<if test="product_code != null">
+			product_code = #{product_code},
+			</if>
+			<if test="product_name != null">
+			product_name = #{product_name},
+			</if>
+			<if test="product_specification != null">
+			product_specification = #{product_specification},
+			</if>
+			<if test="product_productarea != null">
+			product_productarea = #{product_productarea},
+			</if>
+			<if test="product_unit != null">
+			product_unit = #{product_unit},
+			</if>
+			<if test="product_packingamount != null">
+			product_packingamount = #{product_packingamount},
+			</if>
+			<if test="product_dosagetype != null">
+			product_dosagetype = #{product_dosagetype},
+			</if>
+			<if test="product_category != null">
+			product_category = #{product_category},
+			</if>
+			<if test="product_stocknum != null">
+			product_stocknum = #{product_stocknum},
+			</if>
+			<if test="product_tradeprice != null">
+			product_tradeprice = #{product_tradeprice},
+			</if>
+			<if test="product_retailprice != null">
+			product_retailprice = #{product_retailprice},
+			</if>
+			<if test="product_marketprice != null">
+			product_marketprice = #{product_marketprice},
+			</if>
+			<if test="product_lowprice != null">
+			product_lowprice = #{product_lowprice},
+			</if>
+			<if test="product_saleprice1 != null">
+			product_saleprice1 = #{product_saleprice1},
+			</if>
+			<if test="product_saleprice2 != null">
+			product_saleprice2 = #{product_saleprice2},
+			</if>
+			<if test="product_saleprice3 != null">
+			product_saleprice3 = #{product_saleprice3},
+			</if>
+			<if test="product_saleprice4 != null">
+			product_saleprice4 = #{product_saleprice4},
+			</if>
+			<if test="product_lastprice != null">
+			product_lastprice = #{product_lastprice},
+			</if>
+			<if test="order_product_quantity != null">
+			order_product_quantity = #{order_product_quantity},
+			</if>
+			<if test="order_product_unitPrice != null">
+			order_product_unitPrice = #{order_product_unitPrice},
+			</if>
+			<if test="order_product_cutDifference != null">
+			order_product_cutDifference = #{order_product_cutDifference},
+			</if>
+			<if test="order_product_amount != null">
+			order_product_amount = #{order_product_amount},
+			</if>
+			<if test="order_product_grossProfit != null">
+			order_product_grossProfit = #{order_product_grossProfit},
+			</if>
+			<if test="order_product_storage != null">
+			order_product_storage = #{order_product_storage},
+			</if>
+			<if test="order_product_discountAmount != null">
+			order_product_discountAmount = #{order_product_discountAmount},
+			</if>
+			<if test="order_product_saleId != null">
+			order_product_saleId = #{order_product_saleId},
+			</if>
+			<if test="order_product_saleType != null">
+			order_product_saleType = #{order_product_saleType},
+			</if>
+			<if test="order_product_singlePayQuantity != null">
+			order_product_singlePayQuantity = #{order_product_singlePayQuantity},
+			</if>
+			<if test="order_product_receive != null">
+			order_product_receive = #{order_product_receive},
+			</if>
+	</set>where retail_order_product_id = #{retail_order_product_id}
+	</update>
+
+	<!-- 根据id删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  retail_order_product
+		where retail_order_product_id = #{id}
+	</delete>
+	
+	
+	<!-- 根据票号查询最大的订单产品序号 -->
+	<select id="getMaxOrderProductId" parameterType="String"  resultType="Integer">
+		select max(order_productId)
+		from retail_order_product
+		where retail_order_ticketId = #{ticketId}
+	</select>
+	
+	<!-- 获得当前销售订单产品包含的批次数量 -->
+	<select id="countBatch" parameterType="map"  resultType="Integer">
+		select count(order_batch_id) as count
+		from retail_order_batch
+		where retail_order_ticketId = #{retail_order_ticketId} and order_productId = #{order_productId}
+	</select>
+	
+		<!-- 根据票号和序号删除表中数据 -->
+	<delete id="deleteByTicketProduct" parameterType="map">
+		delete from  retail_order_product
+		where retail_order_ticketId = #{retail_order_ticketId} and order_productId = #{order_productId}
+	</delete>
+
+
+	<!-- 通过票号批量更新订单产品信息 -->
+	<update id="updateByTicketId" parameterType="map" >
+		update retail_order_product
+		set order_product_quantity *= #{retail_order_doseNumber},order_product_amount *= #{retail_order_doseNumber}
+		where retail_order_ticketId = #{retail_order_ticketId}
+	</update>
+</mapper> 

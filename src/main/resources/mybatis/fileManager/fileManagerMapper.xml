@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.fileUpload.persist.FileManangerDao">
+
+	<select id="getMapById" parameterType="Integer" resultType="java.util.HashMap">
+		select id,file,oldFileName,currentfilepathName,createTime from
+		fileUpload
+		where id = #{id}
+	</select>
+	<select id="getAppMapById" parameterType="Integer" resultType="java.util.HashMap">
+		select
+		appId,appVersion,appPath,appShowName,appSaveName,createTime,createUserId,createUserName,detail
+		from t_app_manager
+		<where>
+			1=1
+			<if test="id != null">
+				appId = #{id}
+			</if>
+		</where>
+		order by createTime desc
+		LIMIT 0,1
+	</select>
+	<insert id="saveAppFile" parameterType="Map" useGeneratedKeys="true"
+		keyProperty="appId">
+		insert into t_app_manager(
+		appVersion,
+		appPath,
+		appShowName,
+		appSaveName,
+		createTime,
+		createUserId,
+		detail,
+		createUserName
+		) values(
+		#{appVersion},
+		#{appPath},
+		#{appShowName},
+		#{appSaveName},
+		#{createTime},
+		#{createUserId},
+		#{detail},
+		#{createUserName}
+		)
+	</insert>
+	<select id="fileQueryByIds" parameterType="list" resultType="java.util.HashMap">
+		select id,file,oldFileName,currentfilepathName,createTime from
+		fileUpload
+		where id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="insertFile" parameterType="map">
+		<selectKey resultType="int" keyProperty="id">
+			SELECT LAST_INSERT_ID() as id
+		</selectKey>
+		insert into fileUpload(
+		<if test="file!=null">
+			file,
+		</if>
+		oldFileName,currentfilepathName,createTime)
+		values(
+		<if test="file!=null">
+			#{file,jdbcType=BLOB},
+		</if>
+		#{oldFileName},#{currentfilepathName},#{createTime});
+	</insert>
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from fileUpload where
+		id =#{id}
+	</delete>
+</mapper> 

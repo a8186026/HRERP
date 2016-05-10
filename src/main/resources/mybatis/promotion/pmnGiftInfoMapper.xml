@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.promotion.persist.PmnGiftInfoDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="PmnGiftInfo">
+		select *
+		from pmn_gift_info 
+		where gift_id = #{id} 
+	</select>
+
+
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="PmnGiftInfo">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+			from pmn_gift_info
+		<where>
+			 1 = 1
+			<if test="gift_id!=null">
+			and gift_id like #{gift_id}
+			</if>
+			<if test="gift_varietyId!=null">
+			and gift_varietyId like #{gift_varietyId}
+			</if>
+			<if test="gift_productId!=null">
+			and gift_productId like #{gift_productId}
+			</if>
+			<if test="gift_amount!=null">
+			and gift_amount like #{gift_amount}
+			</if>
+			<if test="gift_retailPrice!=null">
+			and gift_retailPrice like #{gift_retailPrice}
+			</if>
+			<if test="gift_memberPrice!=null">
+			and gift_memberPrice like #{gift_memberPrice}
+			</if>
+			<if test="gift_commission!=null">
+			and gift_commission like #{gift_commission}
+			</if>
+			<if test="gift_specialBatch!=null">
+			and gift_specialBatch like #{gift_specialBatch}
+			</if>
+			<if test="gift_sal_id!=null">
+			and gift_sal_id like #{gift_sal_id}
+			</if>
+			<if test="offset != null and offset !=0">
+			and gift_id not in(select top ${offset} gift_id from pmn_gift_info where 0 = 0
+				<if test="gift_id!=null">
+				and gift_id like #{gift_id}
+				</if>
+				<if test="gift_varietyId!=null">
+				and gift_varietyId like #{gift_varietyId}
+				</if>
+				<if test="gift_productId!=null">
+				and gift_productId like #{gift_productId}
+				</if>
+				<if test="gift_amount!=null">
+				and gift_amount like #{gift_amount}
+				</if>
+				<if test="gift_retailPrice!=null">
+				and gift_retailPrice like #{gift_retailPrice}
+				</if>
+				<if test="gift_memberPrice!=null">
+				and gift_memberPrice like #{gift_memberPrice}
+				</if>
+				<if test="gift_commission!=null">
+				and gift_commission like #{gift_commission}
+				</if>
+				<if test="gift_specialBatch!=null">
+				and gift_specialBatch like #{gift_specialBatch}
+				</if>
+				<if test="gift_sal_id!=null">
+				and gift_sal_id like #{gift_sal_id}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="listVO" parameterType="map" resultType="GiftInfoVO">
+		select * 
+		from pmn_gift_info as gi,pro_infoManage as pi
+		where gi.gift_sal_id = #{gift_sal_id}  and gi.gift_productId = pi.product_id
+	</select>
+
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="PmnGiftInfo" resultType="int">
+		select count(gift_id) as count 
+		from pmn_gift_info
+		<where>
+			<if test="gift_varietyId!=null">
+			and gift_varietyId like #{gift_varietyId}
+			</if>
+			<if test="gift_productId!=null">
+			and gift_productId like #{gift_productId}
+			</if>
+			<if test="gift_amount!=null">
+			and gift_amount like #{gift_amount}
+			</if>
+			<if test="gift_retailPrice!=null">
+			and gift_retailPrice like #{gift_retailPrice}
+			</if>
+			<if test="gift_memberPrice!=null">
+			and gift_memberPrice like #{gift_memberPrice}
+			</if>
+			<if test="gift_commission!=null">
+			and gift_commission like #{gift_commission}
+			</if>
+			<if test="gift_specialBatch!=null">
+			and gift_specialBatch like #{gift_specialBatch}
+			</if>
+			<if test="gift_sal_id!=null">
+			and gift_sal_id like #{gift_sal_id}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="PmnGiftInfo" useGeneratedKeys="true" keyProperty="gift_id">
+		 insert into pmn_gift_info(
+		gift_varietyId, gift_productId, gift_amount, gift_retailPrice, 
+		gift_memberPrice, gift_commission, gift_specialBatch,gift_sal_id)
+		values(
+		#{gift_varietyId}, #{gift_productId}, #{gift_amount}, #{gift_retailPrice}, 
+		#{gift_memberPrice}, #{gift_commission}, #{gift_specialBatch}, #{gift_sal_id});
+	</insert>
+
+
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="PmnGiftInfo">
+		 update pmn_gift_info
+		<set>
+			<if test="gift_varietyId != null">
+			gift_varietyId = #{gift_varietyId},
+			</if>
+			<if test="gift_productId != null">
+			gift_productId = #{gift_productId},
+			</if>
+			<if test="gift_amount != null">
+			gift_amount = #{gift_amount},
+			</if>
+			<if test="gift_retailPrice != null">
+			gift_retailPrice = #{gift_retailPrice},
+			</if>
+			<if test="gift_memberPrice != null">
+			gift_memberPrice = #{gift_memberPrice},
+			</if>
+			<if test="gift_commission != null">
+			gift_commission = #{gift_commission},
+			</if>
+			<if test="gift_specialBatch != null">
+			gift_specialBatch = #{gift_specialBatch},
+			</if>
+			<if test="gift_sal_id != null">
+			gift_sal_id = #{gift_sal_id},
+			</if>
+		</set>where gift_id = #{gift_id}
+	</update>
+
+	<!-- 根据gift_id删除表中数据 -->
+	<delete id="delete" parameterType="Integer">
+		delete from  pmn_gift_info
+		where gift_id = #{id}
+	</delete>
+	
+	<!-- 根据gift_sal_id删除表中数据 -->
+	<delete id="deleteBySaleId" parameterType="Integer">
+		delete from  pmn_gift_info
+		where gift_sal_id = #{id}
+	</delete>
+	
+	
+
+</mapper> 

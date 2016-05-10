@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.promotion.persist.PmnRuleInfoDao">
+	<!-- 获取折扣规则信息 -->
+	<select id="get" parameterType="Integer" resultType="PmnRuleInfo">
+		select *
+		from pmn_rule_info
+		where rule_id = #{id} 
+		and status = 0 
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="PmnRuleInfo">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+			select *
+		</if>	
+			from pmn_rule_info
+		<where>
+			 status = 0
+			<if test="rule_name!=null">
+				and rule_name like #{rule_name}
+			</if>
+			<if test="rule_type!=null">
+				and rule_type like #{rule_type}
+			</if>
+			<if test="offset != null and offset !=0">
+				and rule_id not in(select top ${offset} rule_id from pmn_rule_info where status = 0
+				 <if test="rule_name!=null">
+					and rule_name like #{rule_name}
+				 </if>
+				 <if test="rule_type!=null">
+					and rule_type like #{rule_type}
+				 </if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="PmnRuleInfo" resultType="int">
+		select
+		count(rule_id) as count
+		from
+		pmn_rule_info
+		<where>
+			status = 0
+			<if test="rule_name!=null">
+				and rule_name like #{rule_name}
+			</if>
+			<if test="rule_type!=null">
+				and rule_type like #{rule_type}
+			</if>
+		</where>
+	</select>
+	
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="PmnRuleInfo" useGeneratedKeys="true" keyProperty="rule_id">
+	 insert into pmn_rule_info(
+		rule_name, rule_type, rule_set, rule_startdate, rule_enddate, rule_starttime, rule_endtime, rule_number,
+		rule_discount, rule_priority, rule_addperson, rule_addtime, status, rule_remark)
+	values(
+		#{rule_name}, #{rule_type}, #{rule_set}, #{rule_startdate}, #{rule_enddate}, #{rule_starttime}, #{rule_endtime}, #{rule_number}, 
+		#{rule_discount}, #{rule_priority}, #{rule_addperson}, #{rule_addtime}, #{status}, #{rule_remark});
+</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="PmnRuleInfo">
+	 update pmn_rule_info
+	<set>
+		<if test="rule_name != null">
+			rule_name = #{rule_name},
+		</if>
+		<if test="rule_type != null">
+			rule_type = #{rule_type},
+		</if>
+		<if test="rule_set != null">
+			rule_set = #{rule_set},
+		</if>
+		<if test="rule_startdate != null">
+			rule_startdate = #{rule_startdate},
+		</if>
+		<if test="rule_enddate != null">
+			rule_enddate = #{rule_enddate},
+		</if>
+		<if test="rule_starttime != null">
+			rule_starttime = #{rule_starttime},
+		</if>
+		<if test="rule_endtime != null">
+			rule_endtime = #{rule_endtime},
+		</if>
+		<if test="rule_number != null">
+			rule_number = #{rule_number},
+		</if>
+		<if test="rule_discount != null">
+			rule_discount = #{rule_discount},
+		</if>
+		<if test="rule_priority != null">
+			rule_priority = #{rule_priority},
+		</if>
+		<if test="rule_addperson != null">
+			rule_addperson = #{rule_addperson},
+		</if>
+		<if test="rule_addtime != null">
+			rule_addtime = #{rule_addtime},
+		</if>
+		<if test="rule_remark != null">
+			rule_remark = #{rule_remark},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+	</set>where rule_id = #{rule_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update pmn_rule_info set
+		status = 9 where rule_id = #{rule_id}
+	</delete>
+
+	<insert id="addRuleProduct" parameterType="PmnRuleProduct" useGeneratedKeys="true" keyProperty="rule_product_id">
+	 insert into pmn_rule_product(
+		rule_id, product_id, create_user, create_time, status)
+		values(#{rule_id}, #{product_id}, #{create_user}, #{create_time}, #{status});
+	</insert>
+	
+	<update id="deleteRuleProduct" parameterType="PmnRuleProduct">
+		update pmn_rule_product set
+		status = 9 where rule_id = #{rule_id} and product_id = #{product_id} 
+	</update>
+	
+	<!-- 返回当前数据库表中最大优先级  -->
+	<select id="getMaxPriority"  resultType="Integer">
+		select max(pmn_rule_info.rule_priority)+1
+		from pmn_rule_info 
+		WHERE pmn_rule_info.status=0
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="addRuleProducts" parameterType="java.util.List" useGeneratedKeys="true">
+		<selectKey resultType="long" keyProperty="rule_product_id" order="AFTER">  
+	        SELECT  
+	        SCOPE_IDENTITY() 
+    	</selectKey>
+		insert into pmn_rule_product(
+			rule_id, product_id, create_user, create_time, status)
+		values
+		<foreach collection="list" item="pmnRuleProduct" index="index" open="" separator="," close="" > 
+			(#{pmnRuleProduct.rule_id}, #{pmnRuleProduct.product_id}, #{pmnRuleProduct.create_user}, #{pmnRuleProduct.create_time}, #{pmnRuleProduct.status})
+		</foreach>
+	</insert>
+	
+	<update id="savePriority" parameterType="java.util.List">
+		<foreach collection="list" item="pmnRuleInfo" index="index" open="" separator=";" close="" > 
+			update pmn_rule_info  set rule_priority = #{pmnRuleInfo.rule_priority} 
+			where rule_id = #{pmnRuleInfo.rule_id}
+		</foreach>
+	</update>
+	
+    <select id="isRuleProduct" parameterType="map" resultType="PmnRuleInfo">
+		select top 1*
+		from pmn_rule_info as pri, pmn_rule_product as prp
+		where DATEDIFF (second, pri.rule_startdate, #{today}) > 0
+		and DATEDIFF (second, #{today},pri.rule_enddate) > 0
+
+		and DATEDIFF (second,pri.rule_starttime,(select convert(varchar(10),getdate(),108)))  > 0
+		and DATEDIFF (second,(select convert(varchar(10),getdate(),108)),pri.rule_endtime)  > 0
+		and (pri.rule_set like #{week} or pri.rule_set like #{day})
+		and pri.status = 0 and prp.status = 0
+    	and prp.product_id = #{product_id} and pri.rule_id = prp.rule_id ORDER BY pri.rule_priority
+	</select> 
+</mapper> 

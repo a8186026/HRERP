@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.system.persist.SysUserDao">
+	<!-- 获取用户 -->
+	<!-- <select id="get" parameterType="Integer" resultType="SysUser">
+		select *
+		from sys_user
+		where user_id = #{id}
+		and status &lt;= 1
+	</select> -->
+	
+	<select id="get" statementType="CALLABLE" resultType="SysUser">
+	<![CDATA[
+    {call prouser (#{id,mode=IN,jdbcType=VARCHAR})}
+    ]]>
+	</select>
+
+	<select id="getByUserId" statementType="CALLABLE" resultType="SysUser">
+		select *
+		from sys_user
+		where USER_ID = #{USER_ID}
+	</select>
+
+	<!--  ，返回List<HashMap>对象， -->
+	<select id="getSysUserContainGroupID" parameterType="SysUserVO" resultType="SysUserVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}su.*
+		</if>
+		<if test="rows == null or rows ==0">
+		select su.*
+		</if>
+		from
+		sys_user su, sys_user_group sug
+		<where>
+			su.user_id = sug.user_id
+			and sug.group_id = #{group_id}
+			and status &lt;= 1
+			<if test="display_name != null">
+				and display_name like #{display_name}
+			</if>
+			<if test="sex != null">
+				and sex = #{sex}
+			</if>
+			<if test="user_name != null">
+				and user_name like #{user_name}
+			</if>
+			<if test="depart_id != null">
+				and depart_id like #{depart_id}
+			</if>
+			<if test="offset != null and offset !=0">
+				and user_id not in(select top ${offset} user_id from sys_user where status &lt;= 1
+					<if test="display_name != null">
+						and display_name like #{display_name}
+					</if>
+					<if test="sex != null">
+						and sex = #{sex}
+					</if>
+					<if test="user_name != null">
+						and user_name like #{user_name}
+					</if>
+					<if test="depart_id != null">
+						and depart_id like #{depart_id}
+					</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if> 
+	</select>
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="SysUser" resultType="SysUser">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from sys_user
+		<where>
+			status &lt;= 1
+			<if test="display_name != null">
+				and display_name like #{display_name}
+			</if>
+			<if test="sex != null">
+				and sex = #{sex}
+			</if>
+			<if test="tel != null">
+				and tel like #{tel}
+			</if>
+			<if test="user_name != null">
+				and user_name like #{user_name}
+			</if>
+			<if test="depart_id != null">
+				and depart_id like #{depart_id}
+			</if>
+			<if test="offset != null and offset !=0">
+				and user_id not in(select top ${offset} user_id from sys_user where status &lt;= 1)
+			</if>
+			
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if> 
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="SysUser" resultType="int">
+		select
+		count(user_id) as count
+		from
+		sys_user
+		<where>
+			status &lt;= 1
+			<if test="display_name != null">
+				and display_name like #{display_name}
+			</if>
+			<if test="sex != null">
+				and sex = #{sex}
+			</if>
+			<if test="tel != null">
+				and tel like #{tel}
+			</if>
+			<if test="user_name != null">
+				and user_name like #{user_name}
+			</if>
+			<if test="depart_id != null">
+				and depart_id like #{depart_id}
+			</if>
+		</where>
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="getByUserName" parameterType="String" resultType="SysUser">
+		select *
+		from sys_user
+		<where>
+			status = 0
+			and user_name = #{user_name}
+		</where>
+	</select>
+	
+	
+	<!-- 获取用户习惯， -->
+	<select id="getHabits" parameterType="UserHabitsVO" resultType="SysUserHabit">
+		select *
+		from sys_user_habit
+		<where>
+			status = 0 
+			and user_id = #{user_id}
+			and page_id = #{page_id}
+			and ctrl_id = #{ctrl_id}
+		</where>
+			order by habit_order asc
+	</select>
+	
+	<!-- 保存用户习惯， -->
+	<update id="saveHabits" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open="" separator=";" close="" >
+			update sys_user_habit
+			<set>
+				<if test="item.fieldName != null">
+					habit_field_name = #{item.fieldName},
+				</if>
+				<if test="item.width != null">
+					habit_width = #{item.width},
+				</if>
+				<if test="item.habit_sortable != null">
+					habit_sortable = #{item.habit_sortable},
+				</if>
+				<if test="item.habit_hidden != null">
+					habit_hidden = #{item.habit_hidden},
+				</if>
+				<if test="item.order != null">
+					habit_order = #{item.order},
+				</if>
+				<if test="item.last_modify_user != null">
+					last_modify_user = #{item.last_modify_user},
+				</if>
+				<if test="item.last_modify_time != null">
+					last_modify_time = #{item.last_modify_time},
+				</if>
+			</set>
+			where user_id = #{item.user_id} and page_id = #{item.page_id} and ctrl_id = #{item.ctrl_id}
+			and habit_field = #{item.field}
+		</foreach>
+	</update>
+
+
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="SysUser" useGeneratedKeys="true"
+		keyProperty="user_id">
+		insert into sys_user(display_name, sex, tel,
+		address, email, user_name, password, status, create_user, create_time,
+		last_modify_user, last_modify_time, depart_id)
+		values(#{display_name}, #{sex}, #{tel}, #{address}, #{email}, #{user_name},
+		#{password}, #{status}, #{create_user}, #{create_time},
+		#{last_modify_user}, #{last_modify_time}, #{depart_id});
+	</insert>
+	
+<!-- 	<insert id="add" parameterType="SysUser" statementType="CALLABLE" >
+		<![CDATA[
+    {call test (#{display_name,mode=IN,jdbcType=VARCHAR},#{sex,mode=IN,jdbcType=INTEGER},#{tel,mode=IN,jdbcType=VARCHAR},#{address,mode=IN,jdbcType=VARCHAR},
+    	#{email,mode=IN,jdbcType=VARCHAR},#{user_name,mode=IN,jdbcType=VARCHAR},#{password,mode=IN,jdbcType=VARCHAR},#{create_user,mode=IN,jdbcType=INTEGER},
+    	#{create_time,mode=IN,jdbcType=DATE},#{last_modify_user,mode=IN,jdbcType=INTEGER},#{last_modify_time,mode=IN,jdbcType=DATE},#{status,mode=IN,jdbcType=INTEGER})}
+    ]]>
+	</insert>	
+	 -->
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="SysUser">
+		update sys_user
+		<set>
+			<if test="display_name != null">
+				display_name = #{display_name},
+			</if>
+			<if test="sex != null">
+				sex = #{sex},
+			</if>
+			<if test="tel != null">
+				tel = #{tel},
+			</if>
+			<if test="address != null">
+				address = #{address},
+			</if>
+			<if test="email != null">
+				email = #{email},
+			</if>
+			<if test="user_name != null">
+				user_name = #{user_name},
+			</if>
+			<if test="password != null">
+				password = #{password},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="depart_id != null">
+				depart_id = #{depart_id},
+			</if>
+		</set>
+		where user_id = #{user_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		delete from sys_user where
+		user_id =#{user_id}
+	</delete>
+	
+	
+	
+	<!-- 根据ID删除表中数据 -->
+	<delete id="deleteHabits" parameterType="UserHabitsVO">
+		delete from sys_user_habit where
+		user_id =#{user_id}
+		and page_id = #{page_id} and ctrl_id = #{ctrl_id}
+	</delete>
+	
+	<!-- 保存用户配置 页面显示属性 -->
+	<insert id="addUserHabits" parameterType="SysUserHabit" useGeneratedKeys="true"
+		keyProperty="HABIT_ID">
+		insert into sys_user_habit(user_id, page_id, habit_field, ctrl_id,
+		 habit_order, habit_width, habit_field_name,habit_sortable,habit_hidden,status, create_user, create_time,
+		last_modify_user, last_modify_time)
+ 
+		values(#{user_id}, #{page_id}, #{habit_field}, #{ctrl_id},
+		#{habit_order}, #{habit_width}, #{habit_field_name},#{habit_sortable},
+		#{habit_hidden}, #{status}, #{create_user}, #{create_time},
+		#{last_modify_user}, #{last_modify_time});
+		
+	</insert>
+</mapper> 

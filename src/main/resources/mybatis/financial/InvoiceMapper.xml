@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.financial.persist.WarehousingInvoiceDao">
+	<!-- 获取用户 -->
+	<select id="get" parameterType="Integer" resultType="FinancialInvoice">
+		select *
+		from financial_invoiceA
+		where rkfp_id = #{id}
+		and rkfp_cancellation = 1
+	</select>
+	
+	<!-- 返回当前数据库表中最大拒收票号  -->
+	<select id="getMaxInvoiceTicket"  resultType="Integer">
+		select max(cast(substring(rkfp_ticket,15,19) as INT)) 
+		from financial_invoiceB
+		where substring(rkfp_ticket,7,8) = #{date}
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="sumInvoiceList" parameterType="WarehousingInvoiceVO" resultType="WarehousingInvoiceVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from financial_invoiceA as fia,sup_infoManage as sim
+		<where>
+				fia.sup_id = sim.sup_id
+			<if test="sup_id != null">
+				and sim.sup_id = #{sup_id}
+			</if>
+			<if test="rkfp_ticket != null">
+				and fia.rkfp_ticket  like '%'+#{rkfp_ticket}+'%'
+			</if>
+			<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+				and DATEDIFF (second, fia.rkfp_createTime, #{begin_time})  &lt;= 0
+			</if>
+			<if   test="end_time != null">
+				and DATEDIFF (second, fia.rkfp_createTime, #{end_time}+1)  &gt; = 0
+			</if>
+			<if test="offset != null and offset !=0">
+				and rkfp_id not in(select top ${offset} rkfp_id 
+				from financial_invoiceA as fia,sup_infoManage as sim
+				where
+						fia.sup_id = sim.sup_id
+					<if test="sup_id != null">
+						and si.sup_id = #{sup_id}
+					</if>
+					<if test="rkfp_ticket != null">
+						and fia.rkfp_ticket  like '%'+#{rkfp_ticket}+'%'
+					</if>
+					<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+						and DATEDIFF (second, fia.rkfp_createTime, #{begin_time})  &lt;= 0
+					</if>
+					<if   test="end_time != null">
+						and DATEDIFF (second, fia.rkfp_createTime, #{end_time}+1)  &gt; = 0
+					</if>
+					)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="invoiceList" parameterType="WarehousingInvoiceVO" resultType="WarehousingInvoiceVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from financial_invoiceB as fib,stock_info as si,pro_infoManage as pim,sup_infoManage as sim
+		<where>
+			<if test="stock_storage != null">
+				si.stock_storage = #{stock_storage}
+			</if>
+			<if test="sup_id != null">
+				and si.sup_id = #{sup_id}
+			</if>
+			<if test="stock_intakeTicket != null">
+				and si.stock_intakeTicket like '%'+#{stock_intakeTicket}+'%'
+			</if>
+			<if test="rkfp_ticket != null">
+				and fib.rkfp_ticket  like '%'+#{rkfp_ticket}+'%'
+			</if>
+			<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+				and DATEDIFF (second, fia.rkfp_createTime, #{begin_time})  &lt;= 0
+			</if>
+			<if   test="end_time != null">
+				and DATEDIFF (second, fia.rkfp_createTime, #{end_time}+1)  &gt; = 0
+			</if>
+			and fib.stock_info_id = si.stock_info_id
+			and si.sup_id = sim.sup_id
+			and si.product_id = pim.product_id
+			<if test="offset != null and offset !=0">
+				and rkfpb_id not in(select top ${offset} rkfpb_id 
+					from financial_invoiceB as fib,stock_info as si,pro_infoManage as pim,sup_infoManage as sim
+				where
+					<if test="stock_storage != null">
+						si.stock_storage = #{stock_storage}
+					</if>
+					<if test="sup_id != null">
+						and si.sup_id = #{sup_id}
+					</if>
+					<if test="stock_intakeTicket != null">
+						and si.stock_intakeTicket like '%'+#{stock_intakeTicket}+'%'
+					</if>
+					<if test="rkfp_ticket != null">
+						and fib.rkfp_ticket  like '%'+#{rkfp_ticket}+'%'
+					</if>
+					<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+						and DATEDIFF (second, fia.rkfp_createTime, #{begin_time})  &lt;= 0
+					</if>
+					<if   test="end_time != null">
+						and DATEDIFF (second, fia.rkfp_createTime, #{end_time}+1)  &gt; = 0
+					</if>
+					and fib.stock_info_id = si.stock_info_id
+					and si.sup_id = sim.sup_id
+					and si.product_id = pim.product_id
+					)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="addRkfa" parameterType="FinancialInvoice" useGeneratedKeys="true"
+		keyProperty="rkfp_id">
+		insert into financial_invoiceA(
+		rkfp_ticket, rkfp_code, rkfp_taxrate, rkfp_accepter, rkfp_supplier,
+		rkfp_registerTime, rkfp_invoiceDate, rkfp_sumMoney, rkfp_sumNum, rkfp_abstract,
+		rkfp_category,rkfp_discount, rkfp_cancellation, rkfp_remark, rkfp_creater, 
+		rkfp_createTime,rkfp_last_modify_user,rkfp_last_modify_time,sup_id)
+		
+		values(#{rkfp_ticket},#{rkfp_code},#{rkfp_taxrate},#{rkfp_accepter},#{rkfp_supplier},#{rkfp_registerTime,jdbcType=TIMESTAMP},
+		#{rkfp_invoiceDate,jdbcType=TIMESTAMP},#{rkfp_sumMoney},#{rkfp_sumNum},#{rkfp_abstract},#{rkfp_category},#{rkfp_discount},
+		#{rkfp_cancellation},#{rkfp_remark},#{rkfp_creater},#{rkfp_createTime,jdbcType=TIMESTAMP},#{rkfp_last_modify_user},#{rkfp_last_modify_time,jdbcType=TIMESTAMP},#{sup_id});
+	</insert>
+	
+	<!-- 添加 -->
+	<insert id="addinrefund" parameterType="FinancialInvoiceB" useGeneratedKeys="true"
+		keyProperty="rkfpb_id">
+		insert into financial_invoiceB(
+		rkfp_ticket, rkfpb_invoicedMoney, rkfpb_invoicedNum, rkfpb_cancellation, accept_check_id,stock_info_id)
+		
+		values(#{rkfp_ticket},#{rkfpb_invoicedMoney},#{rkfpb_invoicedNum},#{rkfpb_cancellation},#{accept_check_id},#{stock_info_id});
+	</insert>
+	
+	<!-- 根据ID更新表中数据 -->
+	<update id="invalid" parameterType="int">
+		update financial_invoiceB
+		<set>
+			 rkfpb_cancellation = 0
+		</set>
+		where stock_info_id = #{accept_id}
+	</update>
+	 
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="stockCheckedlists" parameterType="WarehousingInvoiceVO" resultType="WarehousingInvoiceVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from pur_accept_check as pac,stock_info as si,pro_infoManage as pim,sup_infoManage as sim
+		<where>
+			<if test="department_id != null">
+				pac.department_id = #{department_id}
+			</if>
+			<if test="sup_id != null">
+				and si.sup_id = #{sup_id}
+			</if>
+			<if test="stock_intakeTicket != null">
+				and si.stock_intakeTicket like '%'+#{stock_intakeTicket}+'%'
+			</if>
+			<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+				and DATEDIFF (second, si.stock_intakeCheckTime, #{begin_time})  &lt;= 0
+			</if>
+			<if   test="end_time != null">
+				and DATEDIFF (second, si.stock_intakeCheckTime, #{end_time}+1)  &gt; = 0
+			</if>
+				and pac.accept_check_id = si.stock_intakeSmallNumber
+				and si.sup_id = sim.sup_id
+				and si.product_id = pim.product_id
+				and si.stock_info_id not in (select stock_info_id from refund_info)
+				and si.stock_info_id not in (select stock_info_id from financial_invoiceB)
+			<if test="offset != null and offset !=0">
+				and stock_info_id not in(select top ${offset} stock_info_id 
+				from pur_accept_check as pac,stock_info as si,pro_infoManage as pim,sup_infoManage as sim
+				where
+					<if test="department_id != null">
+						pac.department_id = #{department_id}
+					</if>
+					<if test="sup_id != null">
+						and si.sup_id = #{sup_id}
+					</if>
+					<if test="stock_intakeTicket != null">
+						and si.stock_intakeTicket like '%'+#{stock_intakeTicket}+'%'
+					</if>
+					<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+						and DATEDIFF (second, si.stock_intakeCheckTime, #{begin_time})  &lt;= 0
+					</if>
+					<if   test="end_time != null">
+						and DATEDIFF (second, si.stock_intakeCheckTime, #{end_time}+1)  &gt; = 0
+					</if>
+						and pac.accept_check_id = si.stock_intakeSmallNumber
+						and si.sup_id = sim.sup_id
+						and si.product_id = pim.product_id
+						and si.stock_info_id not in (select stock_info_id from refund_info)
+						and si.stock_info_id not in (select stock_info_id from financial_invoiceB)
+					)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="stockCheckedlistsCount" parameterType="WarehousingInvoiceVO" resultType="int">
+		select
+		count(stock_info_id) as count
+		from pur_accept_check as pac,stock_info as si,pro_infoManage as pim,sup_infoManage as sim
+		<where>
+			<if test="department_id != null">
+				pac.department_id = #{department_id}
+			</if>
+			<if test="sup_id != null">
+				and si.sup_id = #{sup_id}
+			</if>
+			<if test="stock_intakeTicket != null">
+				and si.stock_intakeTicket like '%'+#{stock_intakeTicket}+'%'
+			</if>
+			<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+				and DATEDIFF (second, si.stock_intakeCheckTime, #{begin_time})  &lt;= 0
+			</if>
+			<if   test="end_time != null">
+				and DATEDIFF (second, si.stock_intakeCheckTime, #{end_time}+1)  &gt; = 0
+			</if>
+				and pac.accept_check_id = si.stock_intakeSmallNumber
+				and si.sup_id = sim.sup_id
+				and si.product_id = pim.product_id
+				and si.stock_info_id not in (select stock_info_id from refund_info)
+				and si.stock_info_id not in (select stock_info_id from financial_invoiceB)
+		</where>
+	</select>
+	 
+	  	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="RefundInfoList" parameterType="WarehousingInvoiceVO" resultType="WarehousingInvoiceVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from 	pur_accept_check as pac,
+				stock_info as si,
+				pro_infoManage as pim,
+				sup_infoManage as sim,
+				refund_info as ri left join financial_invoiceB as fib on fib.stock_info_id = ri.stock_info_id
+		<where>
+			<if test="department_id != null">
+				pac.department_id = #{department_id}
+			</if>
+			<if test="sup_id != null">
+				and si.sup_id = #{sup_id}
+			</if>
+			<if test="stock_intakeTicket != null">
+				and si.stock_intakeTicket like '%'+#{stock_intakeTicket}+'%'
+			</if>
+			<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+				and DATEDIFF (second, si.stock_intakeCheckTime, #{begin_time})  &lt;= 0
+			</if>
+			<if   test="end_time != null">
+				and DATEDIFF (second, si.stock_intakeCheckTime, #{end_time}+1)  &gt; = 0
+			</if>
+				and (si.stock_info_id = ri.stock_info_id or si.stock_info_id = fib.stock_info_id)
+				and pac.accept_check_id = si.stock_intakeSmallNumber
+				and si.sup_id = sim.sup_id
+				and si.product_id = pim.product_id
+				and (fib.rkfpb_cancellation = 1 or fib.rkfpb_cancellation is null)
+			<if test="offset != null and offset !=0">
+				and refund_id not in(select top ${offset} refund_id 
+				from pur_accept_check as pac,stock_info as si,pro_infoManage as pim,sup_infoManage as sim,
+				refund_info as ri left join financial_invoiceB as fib on fib.stock_info_id = ri.stock_info_id
+				where
+					<if test="department_id != null">
+						pac.department_id = #{department_id}
+					</if>
+					<if test="sup_id != null">
+						and si.sup_id = #{sup_id}
+					</if>
+					<if test="stock_intakeTicket != null">
+						and si.stock_intakeTicket like '%'+#{stock_intakeTicket}+'%'
+					</if>
+					<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+						and DATEDIFF (second, si.stock_intakeCheckTime, #{begin_time})  &lt;= 0
+					</if>
+					<if   test="end_time != null">
+						and DATEDIFF (second, si.stock_intakeCheckTime, #{end_time}+1)  &gt; = 0
+					</if>
+						and (si.stock_info_id = ri.stock_info_id or si.stock_info_id = fib.stock_info_id)
+						and pac.accept_check_id = si.stock_intakeSmallNumber
+						and si.sup_id = sim.sup_id
+						and si.product_id = pim.product_id
+						and (fib.rkfpb_cancellation = 1 or fib.rkfpb_cancellation is null)
+					)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="RefundInfoListCount" parameterType="WarehousingInvoiceVO" resultType="int">
+		select
+		count(refund_id) as count
+		from pur_accept_check as pac,stock_info as si,pro_infoManage as pim,sup_infoManage as sim,
+			 refund_info as ri left join financial_invoiceB as fib on fib.stock_info_id = ri.stock_info_id
+		<where>
+			<if test="department_id != null">
+				pac.department_id = #{department_id}
+			</if>
+			<if test="sup_id != null">
+				and si.sup_id = #{sup_id}
+			</if>
+			<if test="stock_intakeTicket != null">
+				and si.stock_intakeTicket like '%'+#{stock_intakeTicket}+'%'
+			</if>
+			<if test="begin_time != null"> <!-- 查询大于起始时间 -->
+				and DATEDIFF (second, si.stock_intakeCheckTime, #{begin_time})  &lt;= 0
+			</if>
+			<if   test="end_time != null">
+				and DATEDIFF (second, si.stock_intakeCheckTime, #{end_time}+1)  &gt; = 0
+			</if>
+				and (si.stock_info_id = ri.stock_info_id or si.stock_info_id = fib.stock_info_id)
+				and pac.accept_check_id = si.stock_intakeSmallNumber
+				and si.sup_id = sim.sup_id
+				and si.product_id = pim.product_id
+				and (fib.rkfpb_cancellation = 1 or fib.rkfpb_cancellation is null)
+		</where>
+	</select>
+	
+	<select id="confirmList" parameterType="Integer" resultType="WarehousingInvoiceVO">
+	<!-- 	<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if> -->
+		select *
+		from 	pur_accept_check as pac,
+				stock_info as si
+				inner join pro_infoManage as pim on si.product_id = pim.product_id
+				inner join sup_infoManage as sim on si.sup_id = sim.sup_id
+				left join refund_info as ri on ri.stock_info_id = si.stock_info_id
+				left join financial_invoiceB as fib on fib.stock_info_id = ri.stock_info_id
+		where 
+			<foreach collection="list" item="item" index="index" open="" separator="or" close="" >
+					pac.accept_check_id = #{item} and pac.accept_check_id = si.stock_intakeSmallNumber
+			</foreach>
+	</select>
+</mapper> 

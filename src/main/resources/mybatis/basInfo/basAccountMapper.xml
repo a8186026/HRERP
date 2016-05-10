@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.basInfo.persist.BasAccountDao">
+
+	<!-- 获取财务档案信息 -->
+	<select id="get" parameterType="Integer" resultType="BasAccount">
+		select *
+		from bas_account
+		where acc_id = #{id}
+		and status = 0
+	</select>
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="lists" parameterType="BasAccount" resultType="BasAccount">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from bas_account
+		<where>
+			status = 0
+			<if test="acc_name != null">
+				and acc_name like #{acc_name}
+			</if>
+			<if test="acc_bank != null">
+				and acc_bank like #{acc_bank}
+			</if>
+			<if test="acc_no != null">
+				and acc_no = #{acc_no}
+			</if>
+			<if test="acc_type != null">
+				and acc_type = #{acc_type}
+			</if>
+			<if test="acc_type_id != null">
+				and acc_type_id = #{acc_type_id}
+			</if>
+			<if test="offset != null and offset !=0">
+				and acc_id not in(select top ${offset} acc_id from bas_account where status = 0)
+			</if>
+
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+   
+	</select>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="BasAccount" resultType="int">
+		select
+		count(acc_id) as count
+		from
+		bas_account
+		<where>
+			status = 0
+			<if test="acc_name != null">
+				and acc_name like #{acc_name}
+			</if>
+			<if test="acc_bank != null">
+				and acc_bank like #{acc_bank}
+			</if>
+			<if test="acc_no != null">
+				and acc_no like #{acc_no}
+			</if>
+			<if test="acc_type != null">
+				and acc_type = #{acc_type}
+			</if>
+			<if test="acc_type_id != null">
+				and acc_type_id = #{acc_type_id}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="add" parameterType="BasAccount" useGeneratedKeys="true"
+		keyProperty="acc_id">
+		insert into bas_account(
+		acc_name, acc_no, acc_bank, acc_addr, acc_type_id, acc_payway,
+		acc_rmtway, acc_paydate, acc_bond, acc_istaxpayer, acc_tax,acc_fnlnote,acc_type,
+		create_user, create_time, last_modify_user, last_modify_time, status)
+		
+		values(#{acc_name},#{acc_no},#{acc_bank},#{acc_addr},#{acc_type_id},#{acc_payway},
+		#{acc_rmtway},#{acc_paydate},#{acc_bond},#{acc_istaxpayer},#{acc_tax},#{acc_fnlnote},#{acc_type},
+		#{create_user},#{create_time},#{last_modify_user},#{last_modify_time},#{status});
+	</insert>
+
+	<!-- 根据ID更新表中数据 -->
+	<update id="update" parameterType="BasAccount">
+		update bas_account
+		<set>
+			<if test="acc_name != null">
+				acc_name = #{acc_name},
+			</if>
+			<if test="acc_no != null">
+				acc_no = #{acc_no},
+			</if>
+		 	<if test="acc_bank != null">
+				acc_bank = #{acc_bank},
+			</if>
+			<if test="acc_addr != null">
+				acc_addr = #{acc_addr},
+			</if>
+			<if test="acc_type_id != null">
+				acc_type_id = #{acc_type_id},
+			</if>
+			<if test="acc_payway != null">
+				acc_payway = #{acc_payway},
+			</if>
+ 		 	<if test="acc_rmtway != null">
+				acc_rmtway = #{acc_rmtway},
+			</if>
+			<if test="acc_paydate != null">
+				acc_paydate = #{acc_paydate},
+			</if>
+		 	<if test="acc_bond != null">
+				acc_bond = #{acc_bond},
+			</if>
+			<if test="acc_istaxpayer != null">
+				acc_istaxpayer = #{acc_istaxpayer},
+			</if>
+			<if test="acc_tax != null">
+				acc_tax = #{acc_tax},
+			</if>
+			<if test="acc_fnlnote != null">
+				acc_fnlnote = #{acc_fnlnote},
+			</if>			 
+			<if test="last_modify_user != null">
+				last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+				last_modify_time = #{last_modify_time},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="acc_type != null">
+				acc_type = #{acc_type},
+			</if>
+		</set>
+		where acc_id = #{acc_id}
+	</update>
+
+	<!-- 根据ID删除表中数据 -->
+	<delete id="delete" parameterType="int">
+		update bas_account set
+		status = 9 where acc_id = #{acc_id}
+	</delete>
+	 
+</mapper> 

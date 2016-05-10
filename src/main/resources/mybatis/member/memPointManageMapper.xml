@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.member.persist.MemPointManageDao">
+	
+
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="MemPointManage" useGeneratedKeys="true" keyProperty="mem_point_id">
+	 insert into mem_pointManage(
+	mem_card_number, mem_cost, sal_id, mem_exchangeMoney, mem_exchangeProduct, 
+	mem_increasePoint, mem_reducePoint, product_id, department_id, 
+	create_user, create_time, status)
+	values(
+	#{mem_card_number}, #{mem_cost}, #{sal_id}, #{mem_exchangeMoney}, #{mem_exchangeProduct}, 
+	#{mem_increasePoint}, #{mem_reducePoint}, #{product_id}, #{department_id}, 
+	#{create_user}, #{create_time}, #{status});
+    </insert>
+
+</mapper> 

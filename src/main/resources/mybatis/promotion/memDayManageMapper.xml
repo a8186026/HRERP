@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.promotion.persist.MemDayManageDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="MemDayManage">
+		select *
+		from mem_dayManage
+		where mem_day_id = #{id}
+		and status &lt;= 1
+	</select>
+
+	<select id="isMemDay" parameterType="map" resultType="MemDayManage">
+		select TOP 1*
+		from mem_dayManage
+		where DATEDIFF (second, mem_day_startDate, #{today})  >= 0
+		and DATEDIFF (second,#{today},mem_day_endDate)  >= 0
+		and  (mem_day_date like #{week} or mem_day_date like #{day} or mem_day_date =',,')
+		and department_ids like #{dept_id} and status &lt;= 1 
+		ORDER BY mem_day_priority
+	</select>
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="MemDayManage">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+			from mem_dayManage
+		<where>
+			 status = 0
+			<if test="mem_day_id!=null">
+			and mem_day_id = #{mem_day_id}
+			</if>
+			<if test="mem_day_timeMethod!=null">
+			and mem_day_timeMethod = #{mem_day_timeMethod}
+			</if>
+			<if test="mem_day_date!=null">
+			and mem_day_date = #{mem_day_date}
+			</if>
+			<if test="mem_day_pointMultiple!=null">
+			and mem_day_pointMultiple = #{mem_day_pointMultiple}
+			</if>
+			<if test="mem_day_executePrice!=null">
+			and mem_day_executePrice = #{mem_day_executePrice}
+			</if>
+			<if test="mem_day_noExecutePrice!=null">
+			and mem_day_noExecutePrice = #{mem_day_noExecutePrice}
+			</if>
+			<if test="mem_day_discountMethod!=null">
+			and mem_day_discountMethod = #{mem_day_discountMethod}
+			</if>
+			<if test="mem_day_discount!=null">
+			and mem_day_discount = #{mem_day_discount}
+			</if>
+			<if test="mem_day_startDate!=null"><!-- 查询大于起始时间 -->
+			and DATEDIFF (second, mem_day_startDate, #{mem_day_startDate})  &lt;= 0
+			</if>
+			<if test="mem_day_endDate!=null">
+			and DATEDIFF (second, #{mem_day_endDate},mem_day_endDate)  &lt;= 0
+			</if>
+			<if test="mem_day_type!=null">
+			and mem_day_type like #{mem_day_type}
+			</if>
+			<if test="mem_day_noDiscountMethod!=null">
+			and mem_day_noDiscountMethod = #{mem_day_noDiscountMethod}
+			</if>
+			<if test="mem_day_noDiscount!=null">
+			and mem_day_noDiscount = #{mem_day_noDiscount}
+			</if>
+			<if test="status!=null">
+			and status = #{status}
+			</if>
+			<if test="create_user!=null">
+			and create_user = #{create_user}
+			</if>
+			<if test="create_time!=null">
+			and create_time = #{create_time}
+			</if>
+			<if test="last_modify_user!=null">
+			and last_modify_user = #{last_modify_user}
+			</if>
+			<if test="last_modify_time!=null">
+			and last_modify_time = #{last_modify_time}
+			</if>
+			<if test="department_ids!=null">
+			and department_ids like #{department_ids}
+			</if>
+			<if test="offset != null and offset !=0">
+				and mem_day_id not in(select top ${offset} mem_day_id from mem_dayManage where status = 0
+				<if test="mem_day_id!=null">
+				and mem_day_id = #{mem_day_id}
+				</if>
+				<if test="mem_day_timeMethod!=null">
+				and mem_day_timeMethod = #{mem_day_timeMethod}
+				</if>
+				<if test="mem_day_date!=null">
+				and mem_day_date = #{mem_day_date}
+				</if>
+				<if test="mem_day_pointMultiple!=null">
+				and mem_day_pointMultiple = #{mem_day_pointMultiple}
+				</if>
+				<if test="mem_day_executePrice!=null">
+				and mem_day_executePrice = #{mem_day_executePrice}
+				</if>
+				<if test="mem_day_noExecutePrice!=null">
+				and mem_day_noExecutePrice = #{mem_day_noExecutePrice}
+				</if>
+				<if test="mem_day_discountMethod!=null">
+				and mem_day_discountMethod = #{mem_day_discountMethod}
+				</if>
+				<if test="mem_day_discount!=null">
+				and mem_day_discount = #{mem_day_discount}
+				</if>
+				<if test="mem_day_startDate!=null">
+				and mem_day_startDate = #{mem_day_startDate}
+				</if>
+				<if test="mem_day_endDate!=null">
+				and mem_day_endDate = #{mem_day_endDate}
+				</if>
+				<if test="mem_day_type!=null">
+				and mem_day_type = #{mem_day_type}
+				</if>
+				<if test="mem_day_noDiscountMethod!=null">
+				and mem_day_noDiscountMethod = #{mem_day_noDiscountMethod}
+				</if>
+				<if test="mem_day_noDiscount!=null">
+				and mem_day_noDiscount = #{mem_day_noDiscount}
+				</if>
+				<if test="status!=null">
+				and status = #{status}
+				</if>
+				<if test="create_user!=null">
+				and create_user = #{create_user}
+				</if>
+				<if test="create_time!=null">
+				and create_time = #{create_time}
+				</if>
+				<if test="last_modify_user!=null">
+				and last_modify_user = #{last_modify_user}
+				</if>
+				<if test="last_modify_time!=null">
+				and last_modify_time = #{last_modify_time}
+				</if>
+				<if test="department_ids!=null">
+				and department_ids like #{department_ids}
+				</if>
+				)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+		<select id="count" parameterType="MemCardManage" resultType="int">
+		select count(mem_day_id) as count 
+		from mem_dayManage
+		<where>
+		 status &lt;= 1
+		<if test="mem_day_id!=null">
+			and mem_day_id = #{mem_day_id}
+			</if>
+			<if test="mem_day_timeMethod!=null">
+			and mem_day_timeMethod = #{mem_day_timeMethod}
+			</if>
+			<if test="mem_day_date!=null">
+			and mem_day_date = #{mem_day_date}
+			</if>
+			<if test="mem_day_pointMultiple!=null">
+			and mem_day_pointMultiple = #{mem_day_pointMultiple}
+			</if>
+			<if test="mem_day_executePrice!=null">
+			and mem_day_executePrice = #{mem_day_executePrice}
+			</if>
+			<if test="mem_day_noExecutePrice!=null">
+			and mem_day_noExecutePrice = #{mem_day_noExecutePrice}
+			</if>
+			<if test="mem_day_discountMethod!=null">
+			and mem_day_discountMethod = #{mem_day_discountMethod}
+			</if>
+			<if test="mem_day_discount!=null">
+			and mem_day_discount = #{mem_day_discount}
+			</if>
+			<if test="mem_day_startDate!=null">
+			and mem_day_startDate = #{mem_day_startDate}
+			</if>
+			<if test="mem_day_endDate!=null">
+			and mem_day_endDate = #{mem_day_endDate}
+			</if>
+			<if test="mem_day_type!=null">
+			and mem_day_type = #{mem_day_type}
+			</if>
+			<if test="mem_day_noDiscountMethod!=null">
+			and mem_day_noDiscountMethod = #{mem_day_noDiscountMethod}
+			</if>
+			<if test="mem_day_noDiscount!=null">
+			and mem_day_noDiscount = #{mem_day_noDiscount}
+			</if>
+			<if test="status!=null">
+			and status = #{status}
+			</if>
+			<if test="create_user!=null">
+			and create_user = #{create_user}
+			</if>
+			<if test="create_time!=null">
+			and create_time = #{create_time}
+			</if>
+			<if test="last_modify_user!=null">
+			and last_modify_user = #{last_modify_user}
+			</if>
+			<if test="last_modify_time!=null">
+			and last_modify_time = #{last_modify_time}
+			</if>
+			<if test="department_ids!=null">
+			and department_ids like #{department_ids}
+			</if>
+	</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="MemDayManage" useGeneratedKeys="true" keyProperty="mem_day_id">
+	 insert into mem_dayManage(
+	mem_day_timeMethod, mem_day_date, mem_day_pointMultiple, mem_day_executePrice, mem_day_noExecutePrice, 
+	mem_day_discountMethod, mem_day_discount, mem_day_startDate, mem_day_endDate, mem_day_type, 
+	mem_day_noDiscountMethod, mem_day_noDiscount, status, create_user, create_time, 
+	last_modify_user, last_modify_time,department_ids,mem_day_priority)
+	values(
+	#{mem_day_timeMethod}, #{mem_day_date}, #{mem_day_pointMultiple}, #{mem_day_executePrice}, #{mem_day_noExecutePrice}, 
+	#{mem_day_discountMethod}, #{mem_day_discount,jdbcType=NUMERIC}, #{mem_day_startDate,}, #{mem_day_endDate,jdbcType=TIMESTAMP}, #{mem_day_type}, 
+	#{mem_day_noDiscountMethod}, #{mem_day_noDiscount,jdbcType=NUMERIC}, #{status}, #{create_user}, #{create_time}, 
+	#{last_modify_user}, #{last_modify_time},#{department_ids},#{mem_day_priority});
+	</insert>
+
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="MemDayManage">
+		 update mem_dayManage
+		<set>
+			<if test="mem_day_timeMethod != null">
+			mem_day_timeMethod = #{mem_day_timeMethod},
+			</if>
+			<if test="mem_day_date != null">
+			mem_day_date = #{mem_day_date},
+			</if>
+			<if test="mem_day_pointMultiple != null">
+			mem_day_pointMultiple = #{mem_day_pointMultiple},
+			</if>
+			<if test="mem_day_executePrice != null">
+			mem_day_executePrice = #{mem_day_executePrice},
+			</if>
+			<if test="mem_day_noExecutePrice != null">
+			mem_day_noExecutePrice = #{mem_day_noExecutePrice},
+			</if>
+			<if test="mem_day_discountMethod != null">
+			mem_day_discountMethod = #{mem_day_discountMethod},
+			</if>
+			<if test="mem_day_discount != null">
+			mem_day_discount = #{mem_day_discount},
+			</if>
+			<if test="mem_day_startDate != null">
+			mem_day_startDate = #{mem_day_startDate},
+			</if>
+			<if test="mem_day_endDate != null">
+			mem_day_endDate = #{mem_day_endDate},
+			</if>
+			<if test="mem_day_type != null">
+			mem_day_type = #{mem_day_type},
+			</if>
+			<if test="mem_day_noDiscountMethod != null">
+			mem_day_noDiscountMethod = #{mem_day_noDiscountMethod},
+			</if>
+			<if test="mem_day_noDiscount != null">
+			mem_day_noDiscount = #{mem_day_noDiscount},
+			</if>
+			<if test="status != null">
+			status = #{status},
+			</if>
+			<if test="create_user != null">
+			create_user = #{create_user},
+			</if>
+			<if test="create_time != null">
+			create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+			</if>
+			<if test="department_ids != null">
+			department_ids = #{department_ids},
+			</if>
+			<if test="mem_day_priority != null">
+			mem_day_priority = #{mem_day_priority},
+			</if>
+	</set>where mem_day_id = #{mem_day_id}
+	</update>
+	
+      <update id="savePriority" parameterType="java.util.List">
+		<foreach collection="list" item="memDayManage" index="index" open="" separator=";" close="" > 
+			update mem_dayManage  set mem_day_priority = #{memDayManage.mem_day_priority} 
+			where mem_day_id = #{memDayManage.mem_day_id}
+		</foreach>
+		
+	</update>
+	
+	<!-- 返回当前数据库表中最大优先级  -->
+	<select id="getMaxPriority"  resultType="Integer">
+		select max(mem_dayManage.mem_day_priority)+1
+		from mem_dayManage 
+		WHERE mem_dayManage.status=0
+	</select>
+</mapper> 

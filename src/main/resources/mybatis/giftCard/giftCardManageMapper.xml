@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.giftCard.persist.GiftCardDao">
+	<!-- 获取会员卡 -->
+	<select id="get" parameterType="Integer" resultType="GiftCardManage">
+		select *
+		from gift_cardManage
+		where gift_card_id = #{id} 
+	</select>
+
+
+	<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="list" parameterType="map" resultType="GiftCardManage">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+			from gift_cardManage
+		<where>
+			status = 0
+			<if test="gift_card_id!=null">
+			and gift_card_id like #{gift_card_id}
+			</if>
+			<if test="gift_card_fulfilAmount!=null">
+			and gift_card_fulfilAmount like #{gift_card_fulfilAmount}
+			</if>
+			<if test="gift_card_offsetAmount!=null">
+			and gift_card_offsetAmount like #{gift_card_offsetAmount}
+			</if>
+			<if test="department_id!=null">
+			and department_id = #{department_id}
+			</if>
+			<if test="status!=null">
+			and status like #{status}
+			</if>
+			<if test="create_user!=null">
+			and create_user like #{create_user}
+			</if>
+			<if test="create_time!=null">
+			and create_time like #{create_time}
+			</if>
+			<if test="last_modify_user!=null">
+			and last_modify_user like #{last_modify_user}
+			</if>
+			<if test="last_modify_time!=null">
+			and last_modify_time like #{last_modify_time}
+			</if>
+			<if test="offset != null and offset !=0">
+			and gift_card_id not in(select top ${offset} gift_card_id from gift_cardManage where status = 0
+				<if test="gift_card_id!=null">
+				and gift_card_id like #{gift_card_id}
+				</if>
+				<if test="gift_card_fulfilAmount!=null">
+				and gift_card_fulfilAmount like #{gift_card_fulfilAmount}
+				</if>
+				<if test="gift_card_offsetAmount!=null">
+				and gift_card_offsetAmount like #{gift_card_offsetAmount}
+				</if>
+				<if test="department_id!=null">
+				and department_id like #{department_id}
+				</if>
+				<if test="status!=null">
+				and status like #{status}
+				</if>
+				<if test="create_user!=null">
+				and create_user like #{create_user}
+				</if>
+				<if test="create_time!=null">
+				and create_time like #{create_time}
+				</if>
+				<if test="last_modify_user!=null">
+				and last_modify_user like #{last_modify_user}
+				</if>
+				<if test="last_modify_time!=null">
+				and last_modify_time like #{last_modify_time}
+				</if>
+			)
+			</if>
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="count" parameterType="GiftCardManage" resultType="int">
+		select count(gift_card_id) as count 
+		from gift_cardManage
+		<where>
+			<if test="gift_card_id!=null">
+			and gift_card_id like #{gift_card_id}
+			</if>
+			<if test="gift_card_fulfilAmount!=null">
+			and gift_card_fulfilAmount like #{gift_card_fulfilAmount}
+			</if>
+			<if test="gift_card_offsetAmount!=null">
+			and gift_card_offsetAmount like #{gift_card_offsetAmount}
+			</if>
+			<if test="department_id!=null">
+			and department_id like #{department_id}
+			</if>
+			<if test="status!=null">
+			and status like #{status}
+			</if>
+			<if test="create_user!=null">
+			and create_user like #{create_user}
+			</if>
+			<if test="create_time!=null">
+			and create_time like #{create_time}
+			</if>
+			<if test="last_modify_user!=null">
+			and last_modify_user like #{last_modify_user}
+			</if>
+			<if test="last_modify_time!=null">
+			and last_modify_time like #{last_modify_time}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+	<insert id="add" parameterType="GiftCardManage" useGeneratedKeys="true" keyProperty="gift_card_id">
+		 insert into gift_cardManage(
+		gift_card_fulfilAmount, gift_card_offsetAmount, department_id, status, create_user, 
+		create_time, last_modify_user, last_modify_time)
+		values(
+		#{gift_card_fulfilAmount}, #{gift_card_offsetAmount}, #{department_id}, #{status}, #{create_user}, 
+		#{create_time}, #{last_modify_user}, #{last_modify_time});
+	</insert>
+
+
+
+
+
+
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="GiftCardManage">
+		 update gift_cardManage
+		<set>
+			<if test="gift_card_fulfilAmount != null">
+			gift_card_fulfilAmount = #{gift_card_fulfilAmount},
+			</if>
+			<if test="gift_card_offsetAmount != null">
+			gift_card_offsetAmount = #{gift_card_offsetAmount},
+			</if>
+			<if test="department_id != null">
+			department_id = #{department_id},
+			</if>
+			<if test="status != null">
+			status = #{status},
+			</if>
+			<if test="create_user != null">
+			create_user = #{create_user},
+			</if>
+			<if test="create_time != null">
+			create_time = #{create_time},
+			</if>
+			<if test="last_modify_user != null">
+			last_modify_user = #{last_modify_user},
+			</if>
+			<if test="last_modify_time != null">
+			last_modify_time = #{last_modify_time},
+			</if>
+	</set>where gift_card_id = #{gift_card_id}
+	</update>
+
+	<!-- 根据id删除表中数据 -->
+	<update id="delete" parameterType="int">
+		update gift_cardManage
+		<set>
+				status = 1
+		</set>
+		where gift_card_id = #{gift_card_id}
+	</update>
+	
+	
+		<!-- 根据id删除表中数据 -->
+	<select id="getOffsetAmount" parameterType="map" resultType="Double">
+		select max(gift_card_offsetAmount)
+		from gift_cardManage
+		where department_id = #{department_id} and gift_card_fulfilAmount &lt;= #{gift_card_fulfilAmount}
+	</select>
+</mapper> 

@@ -1,0 +1,970 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.accept.persist.PurAcceptCheckDao">
+	<!-- 获取收货数据 -->
+	<select id="getByOrderListID" parameterType="Integer" resultType="PurAcceptCheck">
+		select *
+		from pur_accept_check
+		where pur_orderList_id = #{id}
+	</select>
+	<!-- 根据小单号收货数据 -->
+	<select id="get" parameterType="Integer" resultType="PurAcceptCheck">
+		select *
+		from pur_accept_check
+		where accept_check_id = #{id}
+	</select>
+	<!-- 根据收货表ID获取产品-->
+	<select id="getProductByAcceptId" parameterType="Integer" resultType="ProInfoManage">
+		select pim.*
+		from pur_accept_check pac,pur_order_list pol,pro_infoManage pim
+		where pac.accept_check_id = #{id} and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id
+	</select>
+	
+	<!-- 获取某个小单的所有到货数量 -->
+	<select id="getSumByOrderListId" parameterType="Integer" resultType="Integer">
+		select sum(accept_acceptNumber)
+		from pur_accept_check
+		where pur_orderList_id = #{id}
+	</select>
+	
+	<!-- 根据id数组获取多条收货数据 -->
+	<select id="getByIds" parameterType="java.util.List" resultType="PurAcceptCheckVO">
+		select *
+		from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim,pur_order as po
+		where
+		 pol.status = 0 and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id
+		 and pac.pur_order_id = po.id and accept_check_id in
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")" > 
+		  	#{item}
+   		</foreach>  
+	</select>
+	
+	<select id="getByStatus" parameterType="PurAcceptCheck" resultType="PurAcceptCheck">
+		select *
+		from pur_accept_check
+		where accept_status = #{accept_status}
+	</select>
+	
+	
+	<!-- 返回当前数据库表中最大入库票号   wubin-->
+	<select id="getMaxIntakeTicket"  resultType="Integer">
+		select max(cast(substring(accept_intakeTicket,10,14) as INT)) 
+		from pur_accept_check
+		where substring(accept_intakeTicket,2,8) = #{date}
+	</select>
+	
+	<!-- 查询不合格品 -->
+	<select id="unqualified" parameterType="PurAcceptCheckVO" resultType="PurAcceptCheckVO">
+		
+
+			<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim,pur_order as po
+		<where>
+		 pol.status = 0 and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id and pac.pur_order_id = po.id
+		 <if test="pur_order_id!=null">
+		and pur_order_id = #{pur_order_id}
+		</if>
+		<if test="accept_rejectStatus!=null">
+		and accept_rejectStatus = #{accept_rejectStatus}
+		</if>
+		<if test="accept_acceptStatus!=null">
+		and accept_acceptStatus = #{accept_acceptStatus}
+		</if>
+	    <if test="accept_quantityStatus!=null">
+		and pac.accept_quantityStatus = #{accept_quantityStatus}
+		</if>
+		<if test="offset != null and offset !=0">
+				and accept_check_id not in(select top ${offset} from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim
+				where pol.status = 0 and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id
+				 <if test="pur_order_id!=null">
+				and pur_order_id = #{pur_order_id}
+				</if>
+				<if test="accept_rejectStatus!=null">
+				and accept_rejectStatus = #{accept_rejectStatus}
+				</if>
+				<if test="accept_acceptStatus!=null">
+				and accept_acceptStatus = #{accept_acceptStatus}
+				</if>
+				<if test="accept_quantityStatus!=null">
+				and accept_quantityStatus is null<!-- 查询已收货而未质检的小单 -->
+				</if>
+				<if test="ticket_id!=null">
+				and pol.ticket_id = #{ticket_id}
+				</if>
+				<if test="product_code!=null">
+				and pim.product_code like #{product_code}
+				</if>
+				<if test="supply_code!=null">
+				and po.supply_code = #{supply_code}
+				</if>
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+				
+		</if>
+		</where>
+		<if test="sort != null and order != null">
+		order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<!-- 分页查询 ，返回List<HashMap>对象，他人误用，本人独享 -->
+	<select id="list" parameterType="PurAcceptCheckVO" resultType="PurAcceptCheckVO">
+		<if test="rows!=null">
+			 select top ${rows}*
+		</if>
+		<if test="rows == null">
+			select *
+		</if>
+			from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim,pur_order as po
+		<where>
+			pol.status = 0 and pac.pur_orderList_id = pol.id 
+			and pol.product_id = pim.product_id and pac.pur_order_id = po.id 
+			and pac.accept_intakeTicket is null	
+			<if test="accept_check_id!=null">
+			and accept_check_id like #{accept_check_id}
+			</if>
+			<if test="pur_order_id!=null">
+			and pur_order_id like #{pur_order_id}
+			</if>
+			<if test="pur_orderList_id!=null">
+			and pur_orderList_id like #{pur_orderList_id}
+			</if>
+			<if test="accept_tempCtrlMode!=null">
+			and accept_tempCtrlMode like #{accept_tempCtrlMode}
+			</if>
+			<if test="accept_tempCtrlSituation!=null">
+			and accept_tempCtrlSituation like #{accept_tempCtrlSituation}
+			</if>
+			<if test="accept_startTemp!=null">
+			and accept_startTemp like #{accept_startTemp}
+			</if>
+			<if test="accept_arrivalTemp!=null">
+			and accept_arrivalTemp like #{accept_arrivalTemp}
+			</if>
+			<if test="accept_ambientTemp!=null">
+			and accept_ambientTemp like #{accept_ambientTemp}
+			</if>
+			<if test="accept_transMode!=null">
+			and accept_transMode like #{accept_transMode}
+			</if>
+			<if test="accept_transCompany!=null">
+			and accept_transCompany like #{accept_transCompany}
+			</if>
+			<if test="accept_sum!=null">
+			and accept_sum like #{accept_sum}
+			</if>
+			<if test="accept_groupNo!=null">
+			and accept_groupNo like #{accept_groupNo}
+			</if>
+			<if test="accept_acceptDate!=null">
+			and accept_acceptDate like #{accept_acceptDate}
+			</if>
+			<if test="accept_arrivalNumber!=null">
+			and accept_arrivalNumber like #{accept_arrivalNumber}
+			</if>
+			<if test="accept_acceptNumber!=null">
+			and accept_acceptNumber like #{accept_acceptNumber}
+			</if>
+			<if test="accept_acceptPerson!=null">
+			and accept_acceptPerson like #{accept_acceptPerson}
+			</if>
+			<if test="accept_rejectNumber!=null">
+			and accept_rejectNumber like #{accept_rejectNumber}
+			</if>
+			<if test="accept_rejectReason!=null">
+			and accept_rejectReason like #{accept_rejectReason}
+			</if>
+			<if test="accept_rejectCheckPerson!=null">
+			and accept_rejectCheckPerson like #{accept_rejectCheckPerson}
+			</if>
+			<if test="accept_rejectCheckDate!=null">
+			and accept_rejectCheckDate like #{accept_rejectCheckDate}
+			</if>
+			<if test="accept_batchCode!=null">
+			and accept_batchCode like #{accept_batchCode}
+			</if>
+			<if test="department_id!=null">
+			and department_id like #{department_id}
+			</if>
+			<if test="accept_checkQualitedNumber!=null">
+			and accept_checkQualitedNumber like #{accept_checkQualitedNumber}
+			</if>
+			<if test="accept_checkUnqualitedNumber!=null">
+			and accept_checkUnqualitedNumber like #{accept_checkUnqualitedNumber}
+			</if>
+			<if test="accept_checkUnqualitedReason!=null">
+			and accept_checkUnqualitedReason like #{accept_checkUnqualitedReason}
+			</if>
+			<if test="accept_treatMeasures!=null">
+			and accept_treatMeasures like #{accept_treatMeasures}
+			</if>
+			<if test="accept_checkQualityPerson!=null">
+			and accept_checkQualityPerson like #{accept_checkQualityPerson}
+			</if>
+			<if test="accept_checkQualityDate!=null">
+			and accept_checkQualityDate like #{accept_checkQualityDate}
+			</if>
+			<if test="accept_batchSmallCode!=null">
+			and accept_batchSmallCode like #{accept_batchSmallCode}
+			</if>
+			<if test="accept_expirationDate!=null">
+			and accept_expirationDate like #{accept_expirationDate}
+			</if>
+			<if test="accept_productionDate!=null">
+			and accept_productionDate like #{accept_productionDate}
+			</if>
+			<if test="accept_quantityCondition!=null">
+			and accept_quantityCondition like #{accept_quantityCondition}
+			</if>
+			<if test="accept_checkConclusion!=null">
+			and accept_checkConclusion like #{accept_checkConclusion}
+			</if>
+			<if test="accept_sampleNumber!=null">
+			and accept_sampleNumber like #{accept_sampleNumber}
+			</if>
+			<if test="accept_sampleUnit!=null">
+			and accept_sampleUnit like #{accept_sampleUnit}
+			</if>
+			<if test="accept_sterilizationbNum!=null">
+			and accept_sterilizationbNum like #{accept_sterilizationbNum}
+			</if>
+			<if test="accept_sterilizationbDate!=null">
+			and accept_sterilizationbDate like #{accept_sterilizationbDate}
+			</if>
+			<if test="accept_goodNumber!=null">
+			and accept_goodNumber like #{accept_goodNumber}
+			</if>
+			<if test="accept_quantityPrintType!=null">
+			and accept_quantityPrintType like #{accept_quantityPrintType}
+			</if>
+			<if test="accept_goodsticket!=null">
+			and accept_goodsticket like #{accept_goodsticket}
+			</if>
+			<if test="accept_sealmoldphoto!=null">
+			and accept_sealmoldphoto like #{accept_sealmoldphoto}
+			</if>
+			<if test="accept_specialCheckConclusion!=null">
+			and accept_specialCheckConclusion like #{accept_specialCheckConclusion}
+			</if>
+			<if test="accept_specialQuantityCondition!=null">
+			and accept_specialQuantityCondition like #{accept_specialQuantityCondition}
+			</if>
+			<if test="accept_checkStockPerson!=null">
+			and accept_checkStockPerson like #{accept_checkStockPerson}
+			</if>
+			<if test="accept_checkStockTime!=null">
+			and accept_checkStockTime like #{accept_checkStockTime}
+			</if>
+			<if test="accept_acceptStatus !=null">
+			and accept_acceptStatus = #{accept_acceptStatus}
+			</if>
+			<if test="accept_rejectStatus !=null">
+			and accept_rejectStatus = #{accept_rejectStatus}
+			</if>
+			<if test="accept_quantityStatus !=null">
+			and accept_quantityStatus = #{accept_quantityStatus}
+			</if>
+			<if test="accept_quantityCheckStatus !=null">
+			and accept_quantityCheckStatus = #{accept_quantityCheckStatus}
+			</if>
+			<if test="accept_specialStatus !=null">
+			and accept_specialStatus = #{accept_specialStatus}
+			</if>
+			<if test="accept_stockStatus !=null">
+			and accept_stockStatus = #{accept_stockStatus}
+			</if>	
+			<if test="offset != null and offset !=0">	
+				and accept_check_id not in(select top ${offset} accept_check_id from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim,pur_order as po
+				where pol.status = 0 and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id and pac.pur_order_id = po.id
+				<if test="accept_check_id!=null">
+				and accept_check_id like #{accept_check_id}
+				</if>
+				<if test="pur_order_id!=null">
+				and pur_order_id like #{pur_order_id}
+				</if>
+				<if test="pur_orderList_id!=null">
+				and pur_orderList_id like #{pur_orderList_id}
+				</if>
+				<if test="accept_tempCtrlMode!=null">
+				and accept_tempCtrlMode like #{accept_tempCtrlMode}
+				</if>
+				<if test="accept_tempCtrlSituation!=null">
+				and accept_tempCtrlSituation like #{accept_tempCtrlSituation}
+				</if>
+				<if test="accept_startTemp!=null">
+				and accept_startTemp like #{accept_startTemp}
+				</if>
+				<if test="accept_arrivalTemp!=null">
+				and accept_arrivalTemp like #{accept_arrivalTemp}
+				</if>
+				<if test="accept_ambientTemp!=null">
+				and accept_ambientTemp like #{accept_ambientTemp}
+				</if>
+				<if test="accept_transMode!=null">
+				and accept_transMode like #{accept_transMode}
+				</if>
+				<if test="accept_transCompany!=null">
+				and accept_transCompany like #{accept_transCompany}
+				</if>
+				<if test="accept_sum!=null">
+				and accept_sum like #{accept_sum}
+				</if>
+				<if test="accept_groupNo!=null">
+				and accept_groupNo like #{accept_groupNo}
+				</if>
+				<if test="accept_acceptDate!=null">
+				and accept_acceptDate like #{accept_acceptDate}
+				</if>
+				<if test="accept_arrivalNumber!=null">
+				and accept_arrivalNumber like #{accept_arrivalNumber}
+				</if>
+				<if test="accept_acceptNumber!=null">
+				and accept_acceptNumber like #{accept_acceptNumber}
+				</if>
+				<if test="accept_acceptPerson!=null">
+				and accept_acceptPerson like #{accept_acceptPerson}
+				</if>
+				<if test="accept_rejectNumber!=null">
+				and accept_rejectNumber like #{accept_rejectNumber}
+				</if>
+				<if test="accept_rejectReason!=null">
+				and accept_rejectReason like #{accept_rejectReason}
+				</if>
+				<if test="accept_rejectCheckPerson!=null">
+				and accept_rejectCheckPerson like #{accept_rejectCheckPerson}
+				</if>
+				<if test="accept_rejectCheckDate!=null">
+				and accept_rejectCheckDate like #{accept_rejectCheckDate}
+				</if>
+				<if test="accept_batchCode!=null">
+				and accept_batchCode like #{accept_batchCode}
+				</if>
+				<if test="department_id!=null">
+				and department_id like #{department_id}
+				</if>
+				<if test="accept_checkQualitedNumber!=null">
+				and accept_checkQualitedNumber like #{accept_checkQualitedNumber}
+				</if>
+				<if test="accept_checkUnqualitedNumber!=null">
+				and accept_checkUnqualitedNumber like #{accept_checkUnqualitedNumber}
+				</if>
+				<if test="accept_checkUnqualitedReason!=null">
+				and accept_checkUnqualitedReason like #{accept_checkUnqualitedReason}
+				</if>
+				<if test="accept_treatMeasures!=null">
+				and accept_treatMeasures like #{accept_treatMeasures}
+				</if>
+				<if test="accept_checkQualityPerson!=null">
+				and accept_checkQualityPerson like #{accept_checkQualityPerson}
+				</if>
+				<if test="accept_checkQualityDate!=null">
+				and accept_checkQualityDate like #{accept_checkQualityDate}
+				</if>
+				<if test="accept_batchSmallCode!=null">
+				and accept_batchSmallCode like #{accept_batchSmallCode}
+				</if>
+				<if test="accept_expirationDate!=null">
+				and accept_expirationDate like #{accept_expirationDate}
+				</if>
+				<if test="accept_productionDate!=null">
+				and accept_productionDate like #{accept_productionDate}
+				</if>
+				<if test="accept_quantityCondition!=null">
+				and accept_quantityCondition like #{accept_quantityCondition}
+				</if>
+				<if test="accept_checkConclusion!=null">
+				and accept_checkConclusion like #{accept_checkConclusion}
+				</if>
+				<if test="accept_sampleNumber!=null">
+				and accept_sampleNumber like #{accept_sampleNumber}
+				</if>
+				<if test="accept_sampleUnit!=null">
+				and accept_sampleUnit like #{accept_sampleUnit}
+				</if>
+				<if test="accept_sterilizationbNum!=null">
+				and accept_sterilizationbNum like #{accept_sterilizationbNum}
+				</if>
+				<if test="accept_sterilizationbDate!=null">
+				and accept_sterilizationbDate like #{accept_sterilizationbDate}
+				</if>
+				<if test="accept_goodNumber!=null">
+				and accept_goodNumber like #{accept_goodNumber}
+				</if>
+				<if test="accept_quantityPrintType!=null">
+				and accept_quantityPrintType like #{accept_quantityPrintType}
+				</if>
+				<if test="accept_goodsticket!=null">
+				and accept_goodsticket like #{accept_goodsticket}
+				</if>
+				<if test="accept_sealmoldphoto!=null">
+				and accept_sealmoldphoto like #{accept_sealmoldphoto}
+				</if>
+				<if test="accept_specialCheckConclusion!=null">
+				and accept_specialCheckConclusion like #{accept_specialCheckConclusion}
+				</if>
+				<if test="accept_specialQuantityCondition!=null">
+				and accept_specialQuantityCondition like #{accept_specialQuantityCondition}
+				</if>
+				<if test="accept_checkStockPerson!=null">
+				and accept_checkStockPerson like #{accept_checkStockPerson}
+				</if>
+				<if test="accept_checkStockTime!=null">
+				and accept_checkStockTime like #{accept_checkStockTime}
+				</if>
+				<if test="accept_acceptStatus !=null">
+				and accept_acceptStatus like #{accept_acceptStatus}
+				</if>
+				<if test="accept_rejectStatus !=null">
+				and accept_rejectStatus like #{accept_rejectStatus}
+				</if>
+				<if test="accept_quantityStatus !=null">
+				and accept_quantityStatus like #{accept_quantityStatus}
+				</if>
+				<if test="accept_quantityCheckStatus !=null">
+				and accept_quantityCheckStatus like #{accept_quantityCheckStatus}
+				</if>
+				<if test="accept_specialStatus !=null">
+				and accept_specialStatus like #{accept_specialStatus}
+				</if>
+				<if test="accept_stockStatus !=null">
+				and accept_stockStatus like #{accept_stockStatus}
+				</if>
+				<if test="sort != null and order != null">
+					order by ${sort} ${order}
+				</if>
+				)
+			</if>		
+		</where>
+		<if test="sort != null and order != null">
+			order by ${sort} ${order}
+		</if>
+	</select>
+
+
+
+	<!-- 查询 质量审核、拒收审核 详细信息， -->
+	<select id="listDetail" parameterType="PurAcceptCheckVO" resultType="PurAcceptCheckVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim,pur_order as po
+		<where>
+		 pol.status = 0 and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id and pac.pur_order_id = po.id
+		<if test="accept_rejectStatus!=null">
+		and accept_rejectStatus = #{accept_rejectStatus}
+		</if>
+		<if test="accept_acceptStatus!=null">
+		and accept_acceptStatus = #{accept_acceptStatus}
+		</if>
+		<if test="accept_stockStatus!=null">
+		and accept_stockStatus = #{accept_stockStatus}
+		</if>
+		<if test="accept_quantityStatus!=null">
+		and accept_quantityStatus = #{accept_quantityStatus}
+		</if>
+		<if test="accept_quantityCheckStatus!=null">
+		and accept_quantityCheckStatus = #{accept_quantityCheckStatus}
+		</if>
+		<if test="accept_specialStatus!=null">
+		and accept_specialStatus = #{accept_specialStatus}
+		</if>
+		<if test="ticket_id!=null">
+		and pol.ticket_id = #{ticket_id}
+		</if>
+		<if test="pur_order_id!=null">
+		and pur_order_id = #{pur_order_id}
+		</if>
+		<if test="product_code!=null">
+		and pim.product_code like #{product_code}
+		</if>
+		<if test="supply_code!=null">
+		and po.supply_code like #{supply_code}
+		</if>
+		<if test="product_commonname!=null">
+		and pim.product_commonname like #{product_commonname}
+		</if>
+		<if test="offset != null and offset !=0">
+				and accept_check_id not in(select top ${offset} accept_check_id
+				from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim,pur_order as po
+				 where pol.status = 0 and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id and pac.pur_order_id = po.id
+				<if test="accept_rejectStatus!=null">
+				and accept_rejectStatus = #{accept_rejectStatus}
+				</if>
+				<if test="accept_acceptStatus!=null">
+				and accept_acceptStatus = #{accept_acceptStatus}
+				</if>
+				<if test="accept_stockStatus!=null">
+				and accept_stockStatus = #{accept_stockStatus}
+				</if>
+				<if test="accept_quantityStatus!=null">
+				and accept_quantityStatus = #{accept_quantityStatus}
+				</if>
+				<if test="accept_quantityCheckStatus!=null">
+				and accept_quantityCheckStatus = #{accept_quantityCheckStatus}
+				</if>
+				<if test="accept_specialStatus!=null">
+				and accept_specialStatus = #{accept_specialStatus}
+				</if>
+				<if test="ticket_id!=null">
+				and pol.ticket_id = #{ticket_id}
+				</if>
+				<if test="pur_order_id!=null">
+				and pur_order_id = #{pur_order_id}
+				</if>
+				<if test="product_code!=null">
+				and pim.product_code like #{product_code}
+				</if>
+				<if test="supply_code!=null">
+				and po.supply_code like #{supply_code}
+				</if>
+				<if test="product_commonname!=null">
+				and pim.product_commonname like #{product_commonname}
+				</if>
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+				
+		</if>
+		</where>
+		<if test="sort != null and order != null">
+		order by ${sort} ${order}
+		</if>
+	</select>
+				
+	<!-- 查询 质量审核、拒收审核 详细信息条数 -->
+		<select id="countDetail" parameterType="PurAcceptCheckVO" resultType="int">
+		select count(accept_check_id) as count 
+		from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim,pur_order as po
+		<where>
+			 pol.status = 0 and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id and pac.pur_order_id = po.id
+			<if test="accept_rejectStatus!=null">
+			and accept_rejectStatus = #{accept_rejectStatus}
+			</if>
+			<if test="accept_acceptStatus!=null">
+			and accept_acceptStatus = #{accept_acceptStatus}
+			</if>
+			<if test="accept_stockStatus!=null">
+				and accept_stockStatus = #{accept_stockStatus}
+			</if>
+			<if test="product_code!=null">
+			and pim.product_code like #{product_code}
+			</if>
+			<if test="supply_code!=null">
+			and po.supply_code like #{supply_code}
+			</if>
+			<if test="product_commonname!=null">
+			and pim.product_commonname like #{product_commonname}
+			</if>
+			<if test="ticket_id!=null">
+			and pol.ticket_id = #{ticket_id}
+			</if>
+			<if test="product_code!=null">
+			and pim.product_code = #{product_code}
+			</if>
+			<if test="supply_code!=null">
+			and po.supply_code = #{supply_code}
+		</if>
+		</where>
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+		<select id="count" parameterType="PurAcceptCheck" resultType="int">
+		select count(accept_check_id) as count 
+		from pur_accept_check as pac,pur_order_list as pol,pro_infoManage as pim,pur_order as po
+		<where>
+			pol.status = 0 and pac.pur_orderList_id = pol.id and pol.product_id = pim.product_id and pac.pur_order_id = po.id
+		<if test="accept_acceptStatus !=null">
+		and accept_acceptStatus = #{accept_acceptStatus}
+		</if>
+		<if test="accept_rejectStatus !=null">
+		and accept_rejectStatus = #{accept_rejectStatus}
+		</if>
+		<if test="accept_quantityStatus !=null">
+		and accept_quantityStatus = #{accept_quantityStatus}
+		</if>
+		<if test="accept_quantityCheckStatus !=null">
+		and accept_quantityCheckStatus = #{accept_quantityCheckStatus}
+		</if>
+		<if test="accept_specialStatus !=null">
+		and accept_specialStatus = #{accept_specialStatus}
+		</if>
+		<if test="accept_stockStatus !=null">
+		and accept_stockStatus = #{accept_stockStatus}
+		</if>
+		
+		</where>
+	</select>
+	
+	<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+<insert id="add" parameterType="PurAcceptCheck" useGeneratedKeys="true" keyProperty="accept_check_id">
+	insert into pur_accept_check(
+	pur_order_id, pur_orderList_id, accept_tempCtrlMode, accept_tempCtrlSituation, accept_startTemp, 
+	accept_arrivalTemp, accept_ambientTemp, accept_transMode, accept_transCompany, accept_sum, 
+	accept_groupNo, accept_acceptDate, accept_arrivalNumber, accept_acceptNumber, accept_acceptPerson, 
+	accept_rejectNumber, accept_rejectReason, accept_rejectCheckPerson, accept_rejectCheckDate, accept_batchCode, 
+	department_id, accept_checkQualitedNumber, accept_checkUnqualitedNumber, accept_checkUnqualitedReason, accept_treatMeasures, 
+	accept_checkQualityPerson, accept_checkQualityDate, accept_batchSmallCode, accept_expirationDate, accept_productionDate, 
+	accept_quantityCondition, accept_checkConclusion, accept_sampleNumber, accept_sampleUnit, accept_sterilizationbNum, 
+	accept_sterilizationbDate, accept_goodNumber, accept_quantityPrintType, accept_goodsticket, accept_sealmoldphoto, 
+	accept_specialCheckConclusion, accept_specialQuantityCondition, accept_intakeTicket, accept_checkStockPerson, accept_checkStockTime,
+	accept_acceptStatus,accept_rejectStatus,accept_quantityStatus,accept_quantityCheckStatus,accept_specialStatus,accept_stockStatus,accept_startPlace,accept_startTime)
+	values(
+	#{pur_order_id}, #{pur_orderList_id}, #{accept_tempCtrlMode}, #{accept_tempCtrlSituation}, #{accept_startTemp}, 
+	#{accept_arrivalTemp}, #{accept_ambientTemp}, #{accept_transMode}, #{accept_transCompany}, #{accept_sum}, 
+	#{accept_groupNo}, #{accept_acceptDate}, #{accept_arrivalNumber}, #{accept_acceptNumber}, #{accept_acceptPerson}, 
+	#{accept_rejectNumber}, #{accept_rejectReason}, #{accept_rejectCheckPerson}, #{accept_rejectCheckDate}, #{accept_batchCode}, 
+	#{department_id}, #{accept_checkQualitedNumber}, #{accept_checkUnqualitedNumber}, #{accept_checkUnqualitedReason}, #{accept_treatMeasures}, 
+	#{accept_checkQualityPerson}, #{accept_checkQualityDate}, #{accept_batchSmallCode}, #{accept_expirationDate}, #{accept_productionDate}, 
+	#{accept_quantityCondition}, #{accept_checkConclusion}, #{accept_sampleNumber}, #{accept_sampleUnit}, #{accept_sterilizationbNum}, 
+	#{accept_sterilizationbDate}, #{accept_goodNumber}, #{accept_quantityPrintType}, #{accept_goodsticket}, #{accept_sealmoldphoto}, 
+	#{accept_specialCheckConclusion}, #{accept_specialQuantityCondition}, #{accept_intakeTicket}, #{accept_checkStockPerson}, #{accept_checkStockTime},
+	 #{accept_acceptStatus},#{accept_rejectStatus},#{accept_quantityStatus},#{accept_quantityCheckStatus},#{accept_specialStatus},#{accept_stockStatus},#{accept_startPlace},#{accept_startTime});
+</insert>	
+	
+	<!-- 更新表中数据，返回受影响的记录条数 -->
+	<update id="update" parameterType="PurAcceptCheck">
+	 update pur_accept_check
+		<set>
+			<if test="pur_order_id != null">
+			pur_order_id = #{pur_order_id},
+			</if>
+			<if test="pur_orderList_id != null">
+			pur_orderList_id = #{pur_orderList_id},
+			</if>
+			<if test="accept_tempCtrlMode != null">
+			accept_tempCtrlMode = #{accept_tempCtrlMode},
+			</if>
+			<if test="accept_tempCtrlSituation != null">
+			accept_tempCtrlSituation = #{accept_tempCtrlSituation},
+			</if>
+			<if test="accept_startTemp != null">
+			accept_startTemp = #{accept_startTemp},
+			</if>
+			<if test="accept_arrivalTemp != null">
+			accept_arrivalTemp = #{accept_arrivalTemp},
+			</if>
+			<if test="accept_ambientTemp != null">
+			accept_ambientTemp = #{accept_ambientTemp},
+			</if>
+			<if test="accept_transMode != null">
+			accept_transMode = #{accept_transMode},
+			</if>
+			<if test="accept_transCompany != null">
+			accept_transCompany = #{accept_transCompany},
+			</if>
+			<if test="accept_sum != null">
+			accept_sum = #{accept_sum},
+			</if>
+			<if test="accept_groupNo != null">
+			accept_groupNo = #{accept_groupNo},
+			</if>
+			<if test="accept_acceptDate != null">
+			accept_acceptDate = #{accept_acceptDate},
+			</if>
+			<if test="accept_arrivalNumber != null">
+			accept_arrivalNumber = #{accept_arrivalNumber},
+			</if>
+			<if test="accept_acceptNumber != null">
+			accept_acceptNumber = #{accept_acceptNumber},
+			</if>
+			<if test="accept_acceptPerson != null">
+			accept_acceptPerson = #{accept_acceptPerson},
+			</if>
+			<if test="accept_rejectNumber != null">
+			accept_rejectNumber = #{accept_rejectNumber},
+			</if>
+			<if test="accept_rejectReason != null">
+			accept_rejectReason = #{accept_rejectReason},
+			</if>
+			<if test="accept_rejectCheckPerson != null">
+			accept_rejectCheckPerson = #{accept_rejectCheckPerson},
+			</if>
+			<if test="accept_rejectCheckDate != null">
+			accept_rejectCheckDate = #{accept_rejectCheckDate},
+			</if>
+			<if test="accept_batchCode != null">
+			accept_batchCode = #{accept_batchCode},
+			</if>
+			<if test="department_id != null">
+			department_id = #{department_id},
+			</if>
+			<if test="accept_checkQualitedNumber != null">
+			accept_checkQualitedNumber = #{accept_checkQualitedNumber},
+			</if>
+			<if test="accept_checkUnqualitedNumber != null">
+			accept_checkUnqualitedNumber = #{accept_checkUnqualitedNumber},
+			</if>
+			<if test="accept_checkUnqualitedReason != null">
+			accept_checkUnqualitedReason = #{accept_checkUnqualitedReason},
+			</if>
+			<if test="accept_treatMeasures != null">
+			accept_treatMeasures = #{accept_treatMeasures},
+			</if>
+			<if test="accept_checkQualityPerson != null">
+			accept_checkQualityPerson = #{accept_checkQualityPerson},
+			</if>
+			<if test="accept_checkQualityDate != null">
+			accept_checkQualityDate = #{accept_checkQualityDate},
+			</if>
+			<if test="accept_batchSmallCode != null">
+			accept_batchSmallCode = #{accept_batchSmallCode},
+			</if>
+			<if test="accept_expirationDate != null">
+			accept_expirationDate = #{accept_expirationDate},
+			</if>
+			<if test="accept_productionDate != null">
+			accept_productionDate = #{accept_productionDate},
+			</if>
+			<if test="accept_quantityCondition != null">
+			accept_quantityCondition = #{accept_quantityCondition},
+			</if>
+			<if test="accept_checkConclusion != null">
+			accept_checkConclusion = #{accept_checkConclusion},
+			</if>
+			<if test="accept_sampleNumber != null">
+			accept_sampleNumber = #{accept_sampleNumber},
+			</if>
+			<if test="accept_sampleUnit != null">
+			accept_sampleUnit = #{accept_sampleUnit},
+			</if>
+			<if test="accept_sterilizationbNum != null">
+			accept_sterilizationbNum = #{accept_sterilizationbNum},
+			</if>
+			<if test="accept_sterilizationbDate != null">
+			accept_sterilizationbDate = #{accept_sterilizationbDate},
+			</if>
+			<if test="accept_goodNumber != null">
+			accept_goodNumber = #{accept_goodNumber},
+			</if>
+			<if test="accept_quantityPrintType != null">
+			accept_quantityPrintType = #{accept_quantityPrintType},
+			</if>
+			<if test="accept_goodsticket != null">
+			accept_goodsticket = #{accept_goodsticket},
+			</if>
+			<if test="accept_sealmoldphoto != null">
+			accept_sealmoldphoto = #{accept_sealmoldphoto},
+			</if>
+			<if test="accept_specialCheckConclusion != null">
+			accept_specialCheckConclusion = #{accept_specialCheckConclusion},
+			</if>
+			<if test="accept_specialQuantityCondition != null">
+			accept_specialQuantityCondition = #{accept_specialQuantityCondition},
+			</if>
+			<if test="accept_intakeTicket !=null">
+			accept_intakeTicket = #{accept_intakeTicket},
+			</if>
+			<if test="accept_checkStockPerson != null">
+			accept_checkStockPerson = #{accept_checkStockPerson},
+			</if>
+			<if test="accept_checkStockTime != null">
+			accept_checkStockTime = #{accept_checkStockTime},
+			</if>
+			<if test="accept_acceptStatus !=null">
+			accept_acceptStatus = #{accept_acceptStatus},
+			</if>
+			<if test="accept_rejectStatus !=null">
+			accept_rejectStatus = #{accept_rejectStatus},
+			</if>
+			<if test="accept_quantityStatus !=null">
+			accept_quantityStatus = #{accept_quantityStatus},
+			</if>
+			<if test="accept_quantityCheckStatus !=null">
+			accept_quantityCheckStatus = #{accept_quantityCheckStatus},
+			</if>
+			<if test="accept_specialStatus !=null">
+			accept_specialStatus = #{accept_specialStatus},
+			</if>
+			<if test="accept_stockStatus !=null">
+			accept_stockStatus = #{accept_stockStatus},
+			</if>
+			
+	</set>where accept_check_id = #{accept_check_id}
+	</update>
+
+
+    <delete id="delete" parameterType="Integer">
+		delete from   pur_accept_check
+		where accept_check_id = #{id}
+	</delete>
+
+
+	
+	
+	<update id="specialVarietyCheck"  parameterType="PurAcceptCheck">
+	 update pur_accept_check
+	 <set>
+	       <if test="accept_specialQuantityCondition != null">
+			accept_specialQuantityCondition = #{accept_specialQuantityCondition},
+			</if>
+            <if test="accept_specialCheckConclusion != null">
+			accept_specialCheckConclusion = #{accept_specialCheckConclusion},
+			</if>
+            <if test="accept_specialStatus != null">
+			accept_specialStatus = #{accept_specialStatus},
+			</if>
+			<if test="accept_quantityStatus != null">
+			accept_quantityStatus = #{accept_quantityStatus},
+			</if>
+	 </set>
+	    where accept_check_id=#{accept_check_id}
+	</update>
+
+	<!-- 查询收货确认大单下小单信息条数 -->
+		<select id="countOrderList" parameterType="PurOrder" resultType="int">
+		select count(*)
+		from pur_order_list as pol left join pur_accept_check as pac on 
+		pac.pur_orderList_id = pol.id
+		<where>
+			 pol.status = 0
+			<if test="ticket_id != null">
+			and ticket_id = #{ticket_id}
+			</if>
+		</where>
+	</select>
+	<!-- 分页查询收货确认大单下小单，返回List<HashMap>对象， -->
+	<select id="listOrderList" parameterType="PurOrder" resultType="PurAcceptCheckVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+		from pur_order_list as pol left join pur_accept_check as pac on 
+		pac.pur_orderList_id = pol.id
+		<where>
+		 pol.status = 0
+		<if test="ticket_id != null">
+		and ticket_id = #{ticket_id}
+		</if>
+		<if test="offset != null and offset !=0">
+				and accept_check_id not in(
+				select top ${rows}* from pur_order_list as pol left join pur_accept_check as pac on 
+				pac.pur_orderList_id = pol.id
+				<where>
+					 pol.status = 0
+					<if test="ticket_id != null">
+					and ticket_id = #{ticket_id}
+					</if>
+				</where>
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+				
+		</if>
+		</where>
+		<if test="sort != null and order != null">
+		order by ${sort} ${order}
+		</if>
+	</select>
+	
+	<!-- 更新表中入库票号 -->
+	<update id="updateTicket" parameterType="java.util.List">
+	<foreach collection="list" item="item" index="index" open="" separator=";" close="" > 
+		  update pur_accept_check
+		  	<set>
+				accept_intakeTicket = #{item.accept_intakeTicket},
+				accept_quantityPrintType = #{item.accept_quantityPrintType},
+				accept_stockStatus = #{item.accept_stockStatus},
+				accept_checkStockPerson = #{item.accept_checkStockPerson},
+				accept_checkStockTime = #{item.accept_checkStockTime},
+			</set>where accept_check_id = #{item.accept_check_id} and accept_intakeTicket is null
+   	</foreach>  
+	</update>
+	
+	<select id="getQuantityCheckStatus" parameterType="Integer" resultType="int">
+	select accept_quantitycheckstatus 
+	    from pur_accept_check
+		<where>
+		accept_check_id=#{id}
+		</where>
+	</select>
+	
+	<select id="PurSpecialVarietyList" parameterType="com.goldcow.emanage.accept.vo.PurSupAndProVO" resultType="com.goldcow.emanage.accept.vo.PurSpecialVarietyCheckVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+	    </if>
+		  from pur_accept_check,pur_order_list,pro_infoManage
+		<where>
+		     pur_accept_check.pur_orderList_id=pur_order_list.id and
+             pur_order_list.product_id= pro_infoManage.product_id 
+		     and pur_order_list.status=0
+		     and pur_accept_check.accept_quantityStatus != 1
+		     and pur_accept_check.accept_quantityCheckStatus = 0
+		     <if test="supply_id!=null">
+		     <!-- 从属供货商-->
+		     and ticket_id in (select DISTINCT ticket_id from pur_order where supply_id=#{supply_id})
+		     </if>
+		     <if test="product_id!=null">
+		     <!--产品ID-->
+		     and pur_order_list.product_id=#{product_id}
+		     </if>
+		     <!-- 是特殊药品 -->
+             and accept_specialStatus=2
+             <if test="offset != null and offset !=0">
+				   and pur_orderList_id not in(select top ${offset} pur_orderList_id from pur_accept_check,pur_order_list ,pro_infoManage
+				   where   pur_accept_check.pur_orderList_id=pur_order_list.id and
+                   pur_order_list.product_id= pro_infoManage.product_id 
+		           and pur_order_list.status=0
+		           and pur_accept_check.accept_quantityStatus != 1
+		           and pur_accept_check.accept_quantityCheckStatus = 0
+                   <if test="supply_id!=null">
+		           <!-- 从属供货商-->
+		           and ticket_id in (select DISTINCT ticket_id from pur_order where supply_id=#{supply_id})
+		           </if>
+		           <if test="product_id!=null">
+		           <!--产品ID-->
+		           and  pur_order_list.product_id=#{product_id}
+		           </if>
+		           <!-- 是特殊药品 -->
+                   and accept_specialStatus=2
+				   <if test="sort != null and order != null">
+				   order by ${sort} ${order}
+				   </if>
+				   )
+		    </if>
+         </where>
+         <if test="sort != null and order != null">
+		   order by ${sort} ${order}
+	     </if>
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="PurSpecialVarietyListCount" parameterType="com.goldcow.emanage.accept.vo.PurSupAndProVO" resultType="int">
+		select count(id) as count 
+		  from pur_accept_check,pur_order_list
+		<where>
+		     pur_accept_check.pur_orderList_id=pur_order_list.id
+		     and status=0
+		     and pur_accept_check.accept_quantityStatus != 1
+		     and pur_accept_check.accept_quantityCheckStatus = 0
+		     <if test="supply_id!=null">
+		     <!-- 从属供货商-->
+		     and ticket_id in (select DISTINCT ticket_id from pur_order where supply_id=#{supply_id})
+		     </if>
+		     <if test="product_id!=null">
+		     <!--产品ID-->
+		     and pur_order_list.product_id=#{product_id}
+		     </if>
+		     <!-- 是特殊药品 -->
+             and accept_specialStatus=2
+         </where>
+	</select>
+</mapper> 

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation=" 
+          http://www.springframework.org/schema/beans 
+          http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+          http://www.springframework.org/schema/tx 
+          http://www.springframework.org/schema/tx/spring-tx-4.2.xsd 
+          http://www.springframework.org/schema/context 
+          http://www.springframework.org/schema/context/spring-context-4.2.xsd 
+          http://www.springframework.org/schema/util 
+		  http://www.springframework.org/schema/util/spring-util-4.2.xsd 
+          http://www.springframework.org/schema/aop 
+          http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- 使用Spring加载读取properties配置文件参数.解析 properties后缀名文件.读取jdbc配置 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+		p:location="classpath:spring/jdbc.properties" />
+	<!-- 通过解析的jdbc.properties配置文件来创建数据库连接池 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
+		p:url="${jdbc.databaseurl}" p:defaultCatalog="" p:username="${jdbc.username}"
+		p:password="${jdbc.password}" p:validationQuery="select 1"
+		p:testWhileIdle="true" p:timeBetweenEvictionRunsMillis="3600000"
+		p:minEvictableIdleTimeMillis="18000000" p:testOnBorrow="true" />
+
+	<!-- 事务控制 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:advice id="userTxAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="delete*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="remove*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="submit*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="check*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="do*" propagation="REQUIRED" read-only="false"
+				rollback-for="java.lang.Exception" />
+			<tx:method name="*" propagation="SUPPORTS" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config proxy-target-class="false">
+		<aop:pointcut id="pc"
+			expression="execution(public * com.goldcow.emanage.*.service.*.*(..))" /> <!--把事务控制在Service层 -->
+		<aop:advisor pointcut-ref="pc" advice-ref="userTxAdvice" />
+	</aop:config>
+	
+	<!-- 文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+		p:defaultEncoding="utf-8">
+		<property name="resolveLazily" value="true" />
+		<property name="maxUploadSize" value="100000000" />
+	</bean>
+	<!-- 日志处理.拦截以Service结尾的请求 <bean id="throwsAdvice" class="com.goldcow.sframe.util.aspect.ThrowableManage" 
+		/> <bean id="beanNameAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator"> 
+		<property name="beanNames"> <list> <value>*Service</value> </list> </property> 
+		<property name="interceptorNames"> <value>throwsAdvice</value> </property> 
+		</bean> -->
+	<aop:aspectj-autoproxy />
+
+	<!-- 验证码组件配置 -->
+	<!-- <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha"> -->
+	<!-- <property name="config"> -->
+	<!-- <bean class="com.google.code.kaptcha.util.Config"> -->
+	<!-- <constructor-arg> -->
+	<!-- <props> -->
+	<!-- <prop key="kaptcha.border">no</prop> -->
+	<!-- <prop key="kaptcha.border.color">105,179,90</prop> -->
+	<!-- <prop key="kaptcha.textproducer.font.color">red</prop> -->
+	<!-- <prop key="kaptcha.image.width">250</prop> -->
+	<!-- <prop key="kaptcha.textproducer.font.size">120</prop> -->
+	<!-- <prop key="kaptcha.image.height">160</prop> -->
+	<!-- <prop key="kaptcha.session.key">code</prop> -->
+	<!-- <prop key="kaptcha.textproducer.char.length">4</prop> -->
+	<!-- <prop key="kaptcha.textproducer.font.names">宋体,宋体,宋体</prop> -->
+	<!-- </props> -->
+	<!-- </constructor-arg> -->
+	<!-- </bean> -->
+	<!-- </property> -->
+	<!-- </bean> -->
+
+
+
+	<!-- MyBatis配置 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
+		<property name="typeAliasesPackage" value="com.goldcow.emanage.util.gen.entity" />
+		<!-- 显式指定Mapper文件位置 -->
+		<property name="mapperLocations" value="classpath:mybatis/*/*Mapper.xml" />
+	</bean>
+	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.goldcow" />
+		<property name="annotationClass"
+			value="com.goldcow.sframe.util.mybatis.MyBatisRepository" />
+	</bean>
+	<!-- <import resource="appServlet/mail-context.xml"/> -->
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<context:component-scan base-package="com.goldcow">
+		<context:exclude-filter type="regex"
+			expression="com.goldcow.emanage.*.web.*" />
+	</context:component-scan>
+
+	<beans profile="dev">
+		<context:property-placeholder location="classpath:spring/jdbc.properties" />
+	</beans>
+</beans>

@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 指向Dao接口 -->
+<mapper namespace="com.goldcow.emanage.refund.persist.RefundDao">
+
+<select id="getStockListtoRefund" parameterType="Refund" resultType="RefundVO">
+    <if test="rows!=null">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null">
+		select *
+	</if>
+		from stock_info,pro_infoManage,sup_infoManage 
+	<where>
+        stock_info.product_id=pro_infoManage.product_id and stock_info.sup_id=sup_infoManage.sup_id and stock_storageNumber>0 
+        <if test="product_id!=null and product_id!=0">
+           and stock_info.product_id=#{product_id}
+        </if>
+        <if test="offset != null and offset !=0">
+           and stock_info_id not in(select top ${offset} stock_info_id  
+           from stock_info,pro_infoManage,sup_infoManage 
+           where
+           	stock_info.product_id=pro_infoManage.product_id 
+           	and stock_info.sup_id=sup_infoManage.sup_id 
+           	and stock_storageNumber>0 
+           <if test="product_id!=null and product_id!=0">
+           and stock_info.product_id=#{product_id}
+           </if>
+           <if test="sort != null and order != null">
+				order by ${sort} ${order}
+		   </if>
+		   )
+           </if>
+      </where>
+      <if test="sort != null and order != null">
+	   order by ${sort} ${order}
+     </if>
+</select>
+
+
+<select id="getStockListtoRefundCount" parameterType="Refund" resultType="Integer">
+	  select count(1) from stock_info,pro_infoManage,sup_infoManage 
+	  <where>
+        stock_info.product_id=pro_infoManage.product_id and stock_info.sup_id=sup_infoManage.sup_id and stock_storageNumber>0 
+        <if test="product_id!=null  and product_id!=0">
+           and stock_info.product_id=#{product_id}
+        </if>
+      </where>
+</select>
+
+  <!-- 查询refund_info表 -->
+<select id="list" parameterType="map" resultType="Refund">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if>
+		from refund_info
+	<where>
+		 status = 0
+	    <if test="refund_status!=null">
+		and refund_status = #{refund_status}
+		</if>
+		<if test="refund_ticketId!=null">
+		and refund_ticketId = #{refund_ticketId}
+		</if>
+		
+		<if test="offset != null">
+				and refund_id not in(select top ${offset} refund_id from refund_info where status = 0
+				<if test="refund_ticketId!=null">
+				and refund_ticketId = #{refund_ticketId}
+				</if>
+				<if test="refund_status!=null">
+				and refund_status = #{refund_status}
+				</if>
+				
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+				</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+</select>
+
+<!-- 查询VO -->
+<select id="listVO" parameterType="Refund" resultType="RefundVO">
+	 <if test="rows!=null">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null">
+		select *
+	</if>
+		from refund_info left join pro_infoManage on refund_info.product_id=pro_infoManage.product_id
+		left join sup_infoManage on refund_info.sup_id=sup_infoManage.sup_id
+	<where>
+          refund_info.status = 0
+        <if test="product_id!=null and product_id!=0">
+           and refund_info.product_id=#{product_id}
+        </if>
+         <if test="refund_ticketId != null">
+           and refund_info.refund_ticketId like #{refund_ticketId}
+        </if>
+          <if test="product_name != null">
+           and pro_infoManage.product_name like #{product_name}
+        </if>
+          <if test="sup_name != null">
+           and sup_infoManage.sup_name like #{sup_name}
+        </if>
+          <if test="refund_number != null">
+           and refund_info.refund_number = #{refund_number}
+        </if>
+          <if test="refund_payCheck != null">
+           and refund_info.refund_payCheck = #{refund_payCheck}
+        </if>
+          <if test="refund_deliveryCheck != null">
+           and refund_info.refund_deliveryCheck = #{refund_deliveryCheck}
+        </if>
+        
+        <if test="offset != null and offset !=0">
+           and refund_id not in(select top ${offset} refund_id  
+         from refund_info left join pro_infoManage on refund_info.product_id=pro_infoManage.product_id
+		left join sup_infoManage on refund_info.sup_id=sup_infoManage.sup_id
+           <if test="product_id!=null and product_id!=0">
+           and refund_info.product_id=#{product_id}
+           </if>
+            <if test="refund_ticketId != null">
+           and refund_info.refund_ticketId like #{refund_ticketId}
+        </if>
+           <if test="product_name != null">
+           and pro_infoManage.product_name like #{product_name}
+        </if>
+          <if test="sup_name != null">
+           and sup_infoManage.sup_name like #{sup_name}
+        </if>
+          <if test="refund_number != null">
+           and refund_info.refund_number = #{refund_number}
+        </if>
+          <if test="refund_payCheck != null">
+           and refund_info.refund_payCheck = #{refund_payCheck}
+        </if>
+          <if test="refund_deliveryCheck != null">
+           and refund_info.refund_deliveryCheck = #{refund_deliveryCheck}
+        </if>
+           <if test="sort != null and order != null">
+				order by ${sort} ${order}
+		   </if>
+		   )
+           </if>
+      </where>
+      <if test="sort != null and order != null">
+	   order by ${sort} ${order}
+     </if>
+</select>
+
+<!-- count    -->
+<select id="count" parameterType="Refund" resultType="int">
+	select count(refund_id) as count 
+		from refund_info
+		<where>
+			 status = 0
+			<if test="refund_status!=null">
+			and refund_status = #{refund_status}
+			</if>
+			<if test="refund_ticketId != null">
+			and refund_ticketId like #{refund_ticketId}
+			</if>
+		
+		</where>
+</select>
+
+<!-- 分页查询 ，返回List<HashMap>对象， -->
+	<select id="getStockProList" resultType="ProInfoManage">
+		<if test="bean.rows != null and bean.rows !=0">
+		select top ${bean.rows}*
+		</if>
+		<if test="bean.rows == null or bean.rows ==0">
+		select *
+		</if>
+		from pro_infoManage
+		<where>
+			status = 0
+			<if test="bean.product_code!=null">
+				and product_code like #{bean.product_code}
+			</if>
+			<if test="code!=null">
+				and product_code like ${code}
+			</if>
+			<if test="bean.product_check != null">
+					and product_check = #{bean.product_check}
+			</if>
+			<if test="bean.product_chnpy != null">
+					and product_chnpy like #{bean.product_chnpy}
+			</if>
+			<if test="bean.product_dsurveillanceid != null">
+				<if test="bean.product_dsurveillanceid == -1">
+					and product_dsurveillanceid is null
+				</if>
+				<if test="bean.product_dsurveillanceid == -2">
+					and product_dsurveillanceid >0
+				</if>
+			</if>
+			<if test="bean.offset != null and bean.offset !=0">
+				and product_id not in(select top ${offset} product_id from pro_infoManage where status = 0
+				<if test="bean.product_code!=null">
+					and product_code like #{bean.product_code}
+				</if>
+				<if test="code!=null">
+					and product_code like #{code}
+				</if>
+				<if test="bean.product_check != null">
+					and product_check = #{bean.product_check}
+				</if>
+				<if test="bean.product_chnpy != null">
+					and product_chnpy like #{bean.product_chnpy}
+				</if>
+				<if test="bean.product_dsurveillanceid != null">
+					<if test="bean.product_dsurveillanceid == -1">
+						and product_dsurveillanceid is null
+					</if>
+					<if test="bean.product_dsurveillanceid == -2">
+						and product_dsurveillanceid >0
+					</if>
+				</if>
+				<if test="bean.sort != null and bean.order != null">
+					order by ${bean.sort} ${bean.order}
+				</if>
+			)
+			</if>			
+		</where>
+		<if test="bean.sort != null and bean.order != null">
+			order by ${bean.sort} ${bean.order}
+		</if>
+	</select>
+	
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="getStockProListCount" parameterType="ProInfoManage" resultType="int">
+		select count(product_id) as count 
+		from pro_infoManage
+		<where>
+			status = 0
+			<if test="product_code != null">
+				and product_code like #{product_code}
+			</if>
+			<if test="product_check != null">
+				and product_check = #{product_check}
+			</if>
+			<if test="product_dsurveillanceid != null">
+				and product_dsurveillanceid = #{product_dsurveillanceid}
+			</if>
+		</where>
+	</select>
+
+
+<!-- SELECT *FROM sup_infoManage WHERE sup_id IN (SELECT DISTINCT sup_id FROM refund_info WHERE refund_status = 1); -->
+<!-- wyc -->
+<!-- 从数据库中取出需要审核的供方列表-->
+	<select id="getDeliveryToCheckList" parameterType="SupInfoManageVO" resultType="SupInfoManageVO">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if> 
+		from  sup_infoManage
+	<where>
+		 sup_id in (select distinct sup_id from refund_info where refund_register = #{refund_register}  and refund_payCheck = #{refund_payCheck}  and status !=#{status} )
+		    <if test="sup_id!=null and sup_id!=0">
+          		and refund_info.sup_id=#{sup_id} 
+			</if>	
+		<if test="offset != null and offset !=0 ">
+				and sup_id not in(select top ${offset} sup_id
+				from sup_infoManage
+				where sup_id in (select distinct sup_id from refund_info where refund_register = #{refund_register}  and refund_payCheck = #{refund_payCheck} and status !=#{status} )
+				<if test="refund_id!=null and refund_id!=0">
+          		 and refund_info.sup_id=#{sup_id} 
+         		</if> 
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+</select>
+
+<!-- 查询数据条数，直接返回int类型条数 -->
+<select id="getDeliveryToCheckListCount" parameterType="SupInfoManageVO" resultType="Integer">
+	  select count(1) from  sup_infoManage
+	  <where>  
+	    sup_id in (select distinct sup_id from refund_info where refund_register = #{refund_register}  and refund_payCheck = #{refund_payCheck} and status !=#{status} ) 
+        <if test="sup_id!=null  and sup_id!=0">
+          and refund_info.sup_id=#{sup_id}
+        </if>
+      </where>
+</select>
+	
+<!-- wyc -->
+<!-- 从数据库中取出需要审核的该供方所有小单的列表-->	
+<select id="getDeliveryToCheckListDetail" parameterType="RefundVO" resultType="RefundVO">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if> 
+		from  refund_info,sup_infoManage
+	<where>
+		 refund_info.sup_id=sup_infoManage.sup_id 
+			<if test="sup_id!=null and sup_id!=0">
+          		 and refund_register = #{refund_register}
+			</if>
+			<if test="sup_id!=null and sup_id!=0">
+           		 and refund_payCheck = #{refund_payCheck}
+			</if>
+			
+			<if test="status!=null and status!=0">
+          		 and refund_info.status !=#{status} 
+         	</if>	
+			
+			<if test="sup_id!=null and sup_id!=0">
+          		 and refund_info.sup_id=#{sup_id} 
+         	</if>
+			
+		    <if test="sup_id!=null and sup_id!=0">
+           and refund_info.sup_id=#{sup_id} 
+			</if>
+		<if test="offset != null and offset !=0 ">
+				and sup_id not in(select top ${offset} sup_id
+				from refund_info
+				where refund_info.sup_id=sup_infoManage.sup_id 
+				
+				<if test="sup_id!=null and sup_id!=0">
+           			and refund_register = #{refund_register}
+				</if>
+				<if test="sup_id!=null and sup_id!=0">
+          			 and refund_payCheck = #{refund_payCheck}
+				</if>
+
+				<if test="status!=null and status!=0">
+          			 and refund_info.status !=#{status} 
+         		</if>				
+				
+				
+				<if test="sup_id!=null and sup_id!=0">
+          		 and refund_info.sup_id=#{sup_id} 
+         		</if> 
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+</select>
+
+<!-- wyc -->
+<!-- 查询数据条数，直接返回int类型条数 -->
+<select id="getDeliveryToCheckListDetailCount" parameterType="RefundVO" resultType="Integer">
+	  select count(1) from  refund_info,sup_infoManage
+	  <where>  
+	    refund_info.sup_id=sup_infoManage.sup_id 
+	    
+	    <if test="sup_id!=null and sup_id!=0">
+           	and refund_register = #{refund_register}
+		</if>
+		<if test="sup_id!=null and sup_id!=0">
+          	and refund_payCheck = #{refund_payCheck}
+		</if>
+		<if test="status!=null and status!=0">
+          	and refund_info.status !=#{status} 
+         </if>	
+        <if test="sup_id!=null  and sup_id!=0">
+          and refund_info.sup_id=#{sup_id}
+        </if>
+      </where>
+</select>	
+
+<!-- wyc -->
+<!-- 更新返货信息表中的所有状态为2 表示审核通过  不过可能需要修改一下，看看是不是需要更新一下操作员这个属性？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？-->
+	<update id="passAuditToSetStatus"  parameterType="RefundVO">
+	 update refund_info
+	 <set>
+	       <if test="refund_id != null">
+	    		<if test="refund_payCheck!=null">
+          			refund_payCheck = #{refund_payCheck}
+				</if>
+				<if test="refund_payCheckTime!=null">
+          			,refund_payCheckTime = #{refund_payCheckTime}
+				</if>
+				<!-- 这个地方有问题 -->
+				<if test="refund_payCheckPerson!=null">
+          			 ,refund_payCheckPerson = #{refund_payCheckPerson}
+				</if>
+			</if>
+	 </set>
+	    where refund_id=#{refund_id}
+	</update>
+
+
+<!-- select * from sup_infoManage where sup_infoManage.sup_id  in (select distinct sup_id from refund_info where refund_info.sup_id in ( select sup_id from sup_infoManage where sup_code like '%00%') and refund_info.refund_status = 1)  -->
+<!-- ，返回所有存在退货记录的供方 分页查询 ，返回List<HashMap>对象-->
+	<select id="getRefundSupplyInfo" parameterType="SupInfoManageVO" resultType="SupInfoManageVO">
+		<if test="rows != null and rows !=0">
+		select top ${rows}*
+		</if>
+		<if test="rows == null or rows ==0">
+		select *
+		</if>
+			from sup_infoManage 
+		<where>
+			sup_infoManage.sup_id  in (select distinct sup_id from refund_info where refund_info.sup_id in ( select sup_id from sup_infoManage where
+			<if test="sup_code != null">
+				sup_code like #{sup_code}
+			</if>
+			<if test="sup_name != null">
+				sup_name like #{sup_name}
+			</if>
+			<if test="sup_shortname != null">
+				sup_shortname like #{sup_shortname}
+			</if>
+			<if test="sup_chnpy != null">
+				sup_chnpy like #{sup_chnpy}
+			</if>
+			<if test="sup_check != null">
+				and sup_check = #{sup_check}
+			</if>
+			<if test="sup_drugid != null">
+				<if test="sup_drugid == -1">
+				and sup_drugid is null
+				</if>
+				<if test="sup_drugid == -2">
+				and sup_drugid >0
+				</if>
+			</if>
+			) 			
+			<if test="refund_register != null">
+				and  refund_register = #{refund_register} 
+			</if>
+			<if test="refund_payCheck != null">
+				and refund_payCheck = #{refund_payCheck}
+			</if>
+			<if test="status!=null and status!=0">
+          		and status !=#{status} 
+         	</if>
+			)
+			<if test="offset != null and offset !=0">
+				and sup_id not in(select top ${offset} sup_id from sup_infoManage sup_infoManage.sup_id  in (select distinct sup_id from refund_info where refund_info.sup_id in ( select sup_id from sup_infoManage where
+			<if test="sup_code != null">
+				 sup_code like #{sup_code}
+			</if>
+			<if test="sup_name != null">
+				 sup_name like #{sup_name}
+			</if>
+			<if test="sup_shortname != null">
+				 sup_shortname like #{sup_shortname}
+			</if>
+			<if test="sup_chnpy != null">
+				 sup_chnpy like #{sup_chnpy}
+			</if>
+			<if test="sup_check != null">
+				and sup_check = #{sup_check}
+			</if>
+				<if test="sup_drugid != null">
+					<if test="sup_drugid == -1">
+					and sup_drugid is null
+					</if>
+					<if test="sup_drugid == -2">
+					and sup_drugid >0
+					</if>
+				</if>
+			) 			
+			<if test="refund_register != null">
+				and  refund_register = #{refund_register} 
+			</if>
+			<if test="refund_payCheck != null">
+				and refund_payCheck = #{refund_payCheck}
+			</if>
+			<if test="status!=null and status!=0">
+          		and status !=#{status} 
+         	</if>
+			)
+				<if test="sort != null and order != null">
+					order by sup_infoManage.sup_id ${order}
+				</if>
+				)
+			</if>
+		</where>
+		
+		<if test="sort != null and order != null">
+			order by sup_infoManage.sup_id ${order}
+		</if>
+	</select>
+	
+	<!-- 查询数据条数，直接返回int类型条数 -->
+	<select id="getRefundSupplyInfoCount" parameterType="SupInfoManage" resultType="int">
+		select
+		count(1) as count from sup_infoManage 
+		<where>
+			sup_infoManage.sup_id  in (select distinct sup_id from refund_info where refund_info.sup_id in ( select sup_id from sup_infoManage where
+
+			<if test="sup_code != null">
+				sup_code like #{sup_code}
+			</if>
+			<if test="sup_name != null">
+				sup_name like #{sup_name}
+			</if>
+			<if test="sup_shortname != null">
+				sup_shortname like #{sup_shortname}
+			</if>
+			<if test="sup_chnpy != null">
+				sup_chnpy like #{sup_chnpy}
+			</if>
+			<if test="sup_check != null">
+				and sup_check = #{sup_check}
+			</if>
+			<if test="sup_drugid != null">
+				<if test="sup_drugid == -1">
+				and sup_drugid is null
+				</if>
+				<if test="sup_drugid == -2">
+				and sup_drugid >0
+				</if>
+			</if>
+			) 
+			<if test="refund_register != null">
+				and  refund_register = #{refund_register} 
+			</if>
+			<if test="refund_payCheck != null">
+				and refund_payCheck = #{refund_payCheck}
+			</if>
+			<if test="status!=null and status!=0">
+          		and status !=#{status} 
+         	</if>
+			)
+		</where>
+	</select>
+
+
+<!-- wyc -->
+<!-- 从数据库中取出有该供方编码所存在的退货记录-->	
+<!-- select *from refund_info where sup_id = (select sup_id from sup_infoManage where sup_code = '0004') and refund_status = 1--> 
+<!-- select *from refund_info where sup_id = (select sup_id from sup_infoManage where sup_code = '0004') and refund_register = 0 and refund_payCheck = 1  -->
+<select id="searchRefundItemBySupcode" parameterType="RefundVO" resultType="RefundVO">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if> 
+		from  refund_info
+	<where>
+				<if test="refund_register != null">
+				    refund_register = #{refund_register} 
+				</if>
+				<if test="refund_payCheck != null">
+					and refund_payCheck = #{refund_payCheck}
+				</if>
+				
+				<if test="status!=null and status!=0">
+          			 and refund_info.status !=#{status} 
+         		</if>
+		    <if test="sup_id!=null and sup_id!=0">
+           and refund_info.sup_id=#{sup_id} 
+			</if>
+		<if test="offset != null and offset !=0 ">
+				and sup_id not in(select top ${offset} sup_id
+				from refund_info
+				where 
+				
+				<if test="refund_register != null">
+				    refund_register = #{refund_register} 
+				</if>
+				<if test="refund_payCheck != null">
+					and refund_payCheck = #{refund_payCheck}
+				</if>
+				
+				<if test="status!=null and status!=0">
+          			 and refund_info.status !=#{status} 
+         		</if>
+				
+				<if test="sup_id!=null and sup_id!=0">
+          		 and refund_info.sup_id=#{sup_id} 
+         		</if>
+         		
+         		 
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	</where>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+</select>
+
+
+<!-- 查询数据条数，直接返回int类型条数 -->
+<select id="searchRefundItemBySupcodeCount" parameterType="SupInfoManage" resultType="Integer">
+	  select count(1) from  refund_info
+	  <where>  
+			<if test="refund_register != null">
+				 refund_register = #{refund_register} 
+			</if>
+			<if test="refund_payCheck != null">
+				 and refund_payCheck = #{refund_payCheck}
+			</if>
+			<if test="status!=null and status!=0">
+          		 and status!=#{status} 
+         	</if>
+        <if test="sup_id!=null  and sup_id!=0">
+          and refund_info.sup_id=#{sup_id}
+        </if>
+      </where>
+</select>	
+
+
+
+	<!-- wjj -->
+	<!-- 从数据库中取出返货条数 -->
+	<select id="getDeliveryList" parameterType="Refund" resultType="RefundVO">
+	<if test="rows!=null and rows!=0 ">
+		 select top ${rows}*
+	</if>
+	<if test="rows == null or rows == 0">
+		select *
+	</if> 
+		from  refund_info as refund, stock_info as stock, pro_infoManage as pro,sup_infoManage as sup
+	where
+		 refund.product_id =  pro.product_id and refund.stock_info_id = stock.stock_info_id and refund.sup_id =  sup.sup_id
+		 and refund.refund_register =#{refund_register} and refund.refund_payCheck=#{refund_payCheck} 
+		 and refund.refund_deliveryCheck=#{refund_deliveryCheck} and refund.status=#{status}
+		    <if test="refund_id!=null and refund_id!=0">
+            and refund_info.refund_id=#{refund_id}
+			</if>
+			<if test="refund_ticketId!=null">
+			and refund.refund_ticketId like #{refund_ticketId}
+			</if>
+		<if test="offset != null and offset != 0">
+				and refund_id not in(select top ${offset} refund_id 
+				from refund_info as refund,stock_info as stock,pro_infoManage as pro,sup_infoManage as sup
+				where 
+ 					refund.product_id =  pro.product_id and refund.stock_info_id = stock.stock_info_id
+		 			and refund.sup_id =  sup.sup_id  and  refund.refund_register =#{refund_register} and refund.refund_payCheck=#{refund_payCheck} and refund.refund_deliveryCheck=#{refund_deliveryCheck} and refund.status=#{status}
+				<if test="refund_id!=null and refund_id!=0">
+          		 and refund_info.refund_id=#{refund_id}
+         		</if> 
+         		<if test="refund_ticketId!=null">
+				and refund.refund_ticketId like #{refund_ticketId}
+				</if>
+				<if test="sort != null and order != null">
+				order by ${sort} ${order}
+				</if>
+				)
+		</if>
+	<if test="sort != null and order != null">
+		order by ${sort} ${order}
+	</if>
+</select>
+<!-- 更新付货信息表中的所有状态为0 表示付货通过  -->
+	<update id="saveDeliveryStatus"  parameterType="Refund">
+	 update refund_info
+	 <set>
+	       <if test="refund_deliveryPerson != null">
+			refund_deliveryPerson =#{refund_deliveryPerson},
+			</if>
+			<if test="refund_deliveryCheck != null">
+			refund_deliveryCheck =#{refund_deliveryCheck},
+			</if>
+			<if test="refund_registerDate != null">
+			refund_registerDate =#{refund_registerDate}
+			</if>
+	 </set>
+	    where refund_id=#{refund_id}
+	</update>
+
+	<!-- 查询数据条数，直接返回int类型条数 -->
+<select id="getDeliveryCount" parameterType="Refund" resultType="Integer">
+	  select count(1) from refund_info
+	  <where>  
+	    refund_register =#{refund_register} and refund_payCheck=#{refund_payCheck} and refund_deliveryCheck=#{refund_deliveryCheck} and status=0
+        <if test="refund_id!=null  and refund_id!=0">
+          and refund_id=#{refund_id}
+        </if>
+      </where>
+</select>
+
+
+		<!-- 向表中插入数据，并在将主键值赋到实体中，返回受影响的记录条数。如果不需要返回主键，无需配置useGeneratedKeys、keyProperty项 -->
+     <insert id="add" parameterType="Refund" useGeneratedKeys="true" keyProperty="id">
+	 	insert into refund_info(
+		refund_ticketId, refund_registerDate, refund_chiefPerson, refund_reason, refund_operator, 
+		sup_id, refund_accountMethod, refund_account, refund_accountId, refund_accountTime, 
+		refund_accountPerson, refund_review, refund_reviewTime, refund_reviewPerson,
+		product_id, refund_number, refund_unitPrice, refund_settlePrice, 
+		refund_money, refund_deliveryCheck, refund_deliveryTime, refund_custodian, refund_checkout, refund_checkoutTime, 
+		refund_checkoutPerson, refund_date, refund_invoiceNumber, refund_invoiceMoney, 
+		refund_invoiceQuantity, refund_invoiceTaxRate, refund_discountPoint, refund_printTimes, refund_receive, 
+		refund_storeApplyNumber, refund_payCheck, refund_payCheckPerson, refund_payCheckTime, status, 
+		stock_info_id,refund_register,refund_cancel,refund_cancelPerson,refund_cancelDate)
+		values(
+		#{refund_ticketId}, #{refund_registerDate}, #{refund_chiefPerson}, #{refund_reason}, #{refund_operator}, 
+		#{sup_id}, #{refund_accountMethod}, #{refund_account}, #{refund_accountId}, #{refund_accountTime}, 
+		#{refund_accountPerson}, #{refund_review}, #{refund_reviewTime}, #{refund_reviewPerson}, 
+	   #{product_id}, #{refund_number}, #{refund_unitPrice}, #{refund_settlePrice}, 
+		#{refund_money}, #{refund_deliveryCheck}, #{refund_deliveryTime}, #{refund_custodian}, #{refund_checkout}, #{refund_checkoutTime}, 
+		#{refund_checkoutPerson}, #{refund_date}, #{refund_invoiceNumber}, #{refund_invoiceMoney},
+		#{refund_invoiceQuantity}, #{refund_invoiceTaxRate}, #{refund_discountPoint}, #{refund_printTimes}, #{refund_receive}, 
+		#{refund_storeApplyNumber}, #{refund_payCheck}, #{refund_payCheckPerson}, #{refund_payCheckTime}, #{status}, 
+		#{stock_info_id},#{refund_register},#{refund_cancel},#{refund_cancelPerson},#{refund_cancelDate});
+   </insert>
+   
+   <!-- 更新表中数据 -->
+	<update id="update" parameterType="Refund">
+	 update refund_info
+	<set>
+		<if test="refund_settlePrice != null">
+		refund_settlePrice = #{refund_settlePrice},
+		</if>
+		<if test="refund_money != null">
+		refund_money = #{refund_money},
+		</if>
+		<if test="refund_deliveryCheck != null">
+		refund_deliveryCheck = #{refund_deliveryCheck},
+		</if>
+		<if test="refund_deliveryTime !=null">
+		refund_deliveryTime = #{refund_deliveryTime},
+		</if>
+		<if test="refund_payCheck !=null">
+		refund_payCheck = #{refund_payCheck},
+		</if>
+		<if test="refund_payCheckPerson !=null">
+		refund_payCheckPerson = #{refund_payCheckPerson},
+		</if>
+		<if test="refund_payCheckTime !=null">
+		refund_payCheckTime = #{refund_payCheckTime},
+		</if>
+		<if test="refund_cancel !=null">
+		refund_cancel = #{refund_cancel},
+		</if>
+		<if test="refund_cancelPerson !=null">
+		refund_cancelPerson = #{refund_cancelPerson},
+		</if>
+		<if test="refund_cancelDate !=null">
+		refund_cancelDate = #{refund_cancelDate},
+		</if>
+		<if test="refund_register !=null">
+		refund_register = #{refund_register},
+		</if>
+		<if test="status !=null">
+		status = #{status},
+		</if>
+		<if test="refund_status !=null">
+		refund_status = #{refund_status},
+		</if>
+		
+		
+		</set>where refund_id = #{refund_id}
+	</update>
+	
+	<!-- 得到一条退货记录 -->
+	<select id="get" parameterType="Integer" resultType="Refund">
+		select *
+		from refund_info
+		where refund_id = #{refund_id}
+	</select>
+</mapper>
