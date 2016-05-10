@@ -97,6 +97,7 @@ public class WholeSaleOrderBatchServiceImpl implements IWholeSaleOrderBatchServi
 	 */
 	@Override
 	public void delete(Integer id, HttpServletRequest request) {
+		
 		/*RetailOrderBatch bean = this.getById(id);
 		log.debug("删除零售订单产品批次信息");
 		System.out.println("id++++++++++++++++++++++++++++"+id);

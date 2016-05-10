@@ -7,12 +7,13 @@ import com.goldcow.sframe.util.mybatis.BaseEntity;
 /**
  * 零售产品批次实体类
  * 
- * @author cyx
- * @version v1.0
- * @since 2015-12-23
+ * @author zyx
+ * @version v1.5
+ * @since 2016-05-12
  */
 public class WholeSaleOrderBatch extends DataGridModel implements BaseEntity{
 	private static final long serialVersionUID = 1L;
+	
 	/** 出库小号 */
 	private Integer wholeSale_batch_id;			//零售产品批次主键
 	/** 票号 */

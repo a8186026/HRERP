@@ -112,6 +112,8 @@ public class ProWholeSalePriceController {
 			model.addAttribute("stockInfo", stockInfo);
 			model.addAttribute("method", "PUT");
 			model.addAttribute("formUrl", "/product/wholeSalePrice/proPrice/" + id);
+			
+			
 			SysUtil.getToken(request);
 			return "product/proWholeSalePrice/proWholeSalePriceUpdate.jsp";
 		} else {
@@ -129,12 +131,13 @@ public class ProWholeSalePriceController {
 	 */
 	@RequestMapping(value = "proPrice/{id}", method = RequestMethod.PUT)
 	@ResponseBody
-	public Map<String, Object> update(HttpServletRequest request, @PathVariable("id") Integer id, ProInfoManage bean) {
+	public Map<String, Object> update(HttpServletRequest request, @PathVariable("id") Integer id, StockInfo bean) {
 		Map<String, Object> result = Maps.newHashMap();
 		request.getParameterMap();
 		if (SysUtil.hasRight(request, "proInfoManage", GlobalVal.MENU_FUNCTION.UPDATE)) {
 				// 修改产品价格
-				proInfoManageService.update(bean, request);
+				//proInfoManageService.update(bean, request);
+			   stockInfoService.update(bean, request);
 				result.put("result", "success");
 				result.put("message", "操作成功！");
 		} else {

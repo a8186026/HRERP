@@ -40,6 +40,25 @@ $(function() {
 	//var userHabits0 = new userHabits();
 	//userHabits0.loadColumns("retailOrder","product_info_dg","editWindow1",false,true);
 	
+	
+	//结款方式
+	 $('#input_sale_clerk').combobox({
+		 url : global_param.context_name + "/system/combobox/lists?pid=883",
+			method :"get",
+			valueField : "cbs_chn",
+			textField : "cbs_chn",
+			editable:false
+		});
+	 //送货方式
+	 $('#wholeSale_order_departStyle').combobox({
+		 url : global_param.context_name + "/system/combobox/lists?pid=883",
+			method :"get",
+			valueField : "cbs_chn",
+			textField : "cbs_chn",
+			editable:false
+         });
+	 
+	 
 	//为所有文本框添加  点击全选 事件
 	$(".easyui-validatebox").click(function(){
 		this.select();

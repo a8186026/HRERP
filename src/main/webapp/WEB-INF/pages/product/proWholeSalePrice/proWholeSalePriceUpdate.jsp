@@ -36,7 +36,7 @@
 		<div region="center" border="false" class="Dialog-Bg">
 			<div class="Dialog-formDiv clearfix">
 			<form:form id="_proInfoPriceForm" action="${formUrl}" method="${method}" onsubmit="return false;">
-				<input name="product_id" type="hidden" value="${stockInfo.product_id}" />
+				<input name="stock_info_id" type="hidden" value="${stockInfo.stock_info_id}" />
 				<div style="border:none;position:relative;top:0px;margin-top:10px;margin-bottom:5px;margin-left:5px;width:570px">批发价格设置：</div>
 				        	<div style="width:570px;height:170px;margin-left:5px;border:1px solid #CCCCCC">
 				        	<div class="float-l">

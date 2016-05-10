@@ -8,12 +8,13 @@ import com.goldcow.sframe.util.mybatis.BaseEntity;
 /**
  * 批发产品实体类
  * 
- * @author cyx
- * @version v1.0
- * @since 2015-12-23
+ * @author zyx
+ * @version v1.1
+ * @since 2016-5-12
  */
 public class WholeSaleOrderProduct extends DataGridModel implements BaseEntity{
 	private static final long serialVersionUID = 1L;
+	
 	/** 批发产品ID */
 	private Integer wholeSale_order_product_id;			//自增主键
 	/** 票号 */

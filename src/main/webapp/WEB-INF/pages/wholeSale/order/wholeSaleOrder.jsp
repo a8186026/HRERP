@@ -55,10 +55,10 @@
 						<form id="order" name="order" action="${orderUrl}" method="${method}">
 							<input name="SPRING_TOKEN" type="hidden"
 								value="${sessionScope.SPRING_TOKEN}" /> 
-							<input id="orderUrl" value="${orderUrl}" type="hidden" /> 
+						<%-- 	<input id="orderUrl" value="${orderUrl}" type="hidden" /> 
 							<input id="method" value="${method}" type="hidden" />
 							<input id="mem_card_discount" type="hidden" />
-							<input id="listvo" value="${listvo}" type="hidden" />
+							<input id="listvo" value="${listvo}" type="hidden" /> --%>
 
                           <!--  <div style="margin-top: -15px;"> -->
                            
@@ -113,19 +113,19 @@
 							
 							<div class="float-l">
 								<div class="Dialog-form-title">
-									<label for="input_sale_clerk" class="field">结款：</label>
+									<label for="wholeSale_order_settlementStyle" class="field">结款：</label>
 								</div>
 								<div class="Dialog-form-item">
-									<input id="input_sale_clerk" name="input_sale_clerk"
+									<input id="wholeSale_order_settlementStyle" name="wholeSale_order_settlementStyle"
 									class="easyui-combobox" style="width:152px" type="text"/>
 								</div>
 							</div>
 							<div class="float-l">
 								<div class="Dialog-form-title">
-									<label for="input_sale_clerk" class="field">送货方式：</label>
+									<label for="wholeSale_order_departStyle" class="field">送货方式：</label>
 								</div>
 								<div class="Dialog-form-item">
-									<input id="input_sale_clerk" name="input_sale_clerk"
+									<input id="wholeSale_order_departStyle" name="wholeSale_order_departStyle"
 									class="easyui-combobox" style="width:152px" type="text"/>
 								</div>
 							</div>

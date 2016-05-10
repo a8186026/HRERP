@@ -23,7 +23,7 @@ import com.goldcow.sframe.util.SysUtil;
 import com.google.common.collect.Maps;
 
 /**
- * 门店调货
+ * 
  * @author dht
  *
  */
